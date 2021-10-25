@@ -2,7 +2,8 @@ import "../styles/globals.css";
 
 import { store } from "@/state";
 import { Provider } from "react-redux";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
+import Modal from "@/containers/modal";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -13,6 +14,7 @@ const App = ({ Component, pageProps }) => {
       <div className="flex w-full flex-col sm:flex-row py-24 z-20 justify-center items-center my-0 mx-auto">
         <Component {...pageProps} />
       </div>
+      <Modal />
     </Provider>
   );
 };

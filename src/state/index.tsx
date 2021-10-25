@@ -1,10 +1,10 @@
 import { configureStore, Action, ThunkAction } from "@reduxjs/toolkit";
 
-import counterReducer from "./counter";
+import modalReducer from "./modal/slice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    modal: modalReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ thunk: true }),
   devTools: true,
