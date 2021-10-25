@@ -1,4 +1,6 @@
-import { store, wrapper } from "@/state";
+import "../styles/globals.css";
+
+import { store } from "@/state";
 import { Provider } from "react-redux";
 
 const App = ({ Component, pageProps }) => {
