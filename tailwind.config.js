@@ -15,7 +15,14 @@ module.exports = {
         pink: {
           ...colors.pink,
           primary: "#F14D5D",
+        },
+        gray: {
+          ...colors.gray,
+          steel: "#3F4147",
         }
+      },
+      borderWidth: {
+        1: "1px",
       },
     },
   },

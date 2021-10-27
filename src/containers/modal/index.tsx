@@ -54,7 +54,7 @@ const Modal: React.FC = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl border-1">
               {title && (
                 <Dialog.Title
                   as="h3"
@@ -63,7 +63,7 @@ const Modal: React.FC = () => {
                   {title}
                 </Dialog.Title>
               )}
-              {body(handleCloseModal)}
+              {body}
             </div>
           </Transition.Child>
         </div>

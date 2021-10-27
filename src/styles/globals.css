@@ -2,8 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply antialiased;
+/** Spinner Start */
+@keyframes circle--animation {
+  0%,
+  25% {
+    stroke-dashoffset: 280;
+    transform: rotate(0);
+  }
+
+  50%,
+  75% {
+    stroke-dashoffset: 75;
+    transform: rotate(45deg);
+  }
+
+  100% {
+    stroke-dashoffset: 280;
+    transform: rotate(360deg);
   }
 }
+
+@keyframes svg--animation {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+svg.spinner {
+  animation: 2s linear infinite svg--animation;
+}
+
+circle {
+  fill: transparent;
+  stroke-dasharray: 283;
+  stroke-linecap: round;
+  transform-origin: 50% 50%;
+  stroke-dashoffset: 280;
+  animation: 1.4s ease-in-out infinite both circle--animation;
+}
+/** Spinner End */

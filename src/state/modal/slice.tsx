@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export enum ModalType {
-  CONNECT_WALLET,
+  WALLET_CONNECT,
 }
 
 interface IModalState {
@@ -11,7 +11,7 @@ interface IModalState {
 
 const initialState: IModalState = {
   isOpen: false,
-  modalType: ModalType.CONNECT_WALLET,
+  modalType: ModalType.WALLET_CONNECT,
 };
 
 const modalSlice = createSlice({
