@@ -1,6 +1,7 @@
 import "@celo-tools/use-contractkit/lib/styles.css";
 import "../styles/globals.css";
 
+import Head from "next/head";
 import { ContractKitProvider, NetworkNames } from "@celo-tools/use-contractkit";
 import { store } from "@/state";
 import { Provider } from "react-redux";
@@ -25,10 +26,14 @@ const App = ({ Component, pageProps }) => {
       }}
     >
       <Provider store={store}>
+        <Head>
+          <title>TokenKid</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
           <Navbar />
         </div>
-        <div className="flex w-full flex-col sm:flex-row py-24 z-20 justify-center items-center my-0 mx-auto">
+        <div className="flex w-full flex-col sm:flex-row">
           <Component {...pageProps} />
         </div>
         <Modal />
