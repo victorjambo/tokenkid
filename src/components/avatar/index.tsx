@@ -1,6 +1,8 @@
 import React from "react";
 
-const GradientAvatar: React.FC = () => {
+const GradientAvatar: React.FC<{ size?: string }> = ({
+  size = "h-10 w-10",
+}) => {
   const address = "0x45F93f95e81C5C135499e61Be79653f7e421b674";
 
   function djb2Hash(str) {
@@ -19,7 +21,7 @@ const GradientAvatar: React.FC = () => {
 
   return (
     <div
-      className="h-10 w-10 rounded-full"
+      className={`${size} rounded-full`}
       style={{
         background: `linear-gradient(hsl(${hue1}deg, 100%, 50%), hsl(${hue2}deg, 30%, 70%)`,
       }}
