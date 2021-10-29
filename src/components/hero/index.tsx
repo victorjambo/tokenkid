@@ -3,10 +3,7 @@ import { ArrowCircleRightIcon } from "@heroicons/react/solid";
 
 const Hero: React.FC = () => {
   return (
-    <div
-      id="hero"
-      className="w-full bg-gradient-to-b from-transparent to-blue-dark pt-16 text-white"
-    >
+    <div className="w-full bg-gradient-to-b from-transparent to-blue-dark pt-16 text-white">
       <div className="container mx-auto flex flex-row py-12 sm:py-24 items-center">
         <div className="w-1/2">
           <span className="text-lg text-pink-primary pb-3">
@@ -23,10 +20,10 @@ const Hero: React.FC = () => {
           </p>
           <div className="flex flex-row space-x-5">
             <button className="px-6 py-3 rounded-lg transition duration-500 ease-in-out bg-pink-primary hover:bg-blue-lightblue transform hover:-translate-y-1 hover:scale-110">
-              Explore More
+              Explore
             </button>
             <button className="px-6 py-3 rounded-lg hover:bg-pink-primary bg-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-              Connect NFT
+              Create
             </button>
           </div>
         </div>

@@ -20,6 +20,7 @@ module.exports = {
         gray: {
           ...colors.gray,
           steel: "#3F4147",
+          state: "#E5E5E5",
         },
         "white-back": "#F6F6F6",
       },
