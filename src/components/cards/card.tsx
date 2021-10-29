@@ -14,7 +14,7 @@ const Card: React.FC = () => {
         <div className="absolute top-6 left-5 rounded-lg text-black">
           <div className="absolute inset-0 rounded-full bg-white" />
           <div className="flex flex-row font-medium py-2 pl-2 pr-4">
-            <Link href="/">
+            <Link href="/profile">
               <div className="flex flex-row items-center w-full z-10 text-center space-x-2 cursor-pointer hover:text-pink-primary">
                 <GradientAvatar />
                 <div className="text-sm">Created by @Victor.eth</div>

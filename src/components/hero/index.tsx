@@ -1,3 +1,4 @@
+import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { ArrowCircleRightIcon } from "@heroicons/react/solid";
 
@@ -22,9 +23,11 @@ const Hero: React.FC = () => {
             <button className="px-6 py-3 rounded-lg transition duration-500 ease-in-out bg-pink-primary hover:bg-blue-lightblue transform hover:-translate-y-1 hover:scale-110">
               Explore
             </button>
-            <button className="px-6 py-3 rounded-lg hover:bg-pink-primary bg-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-              Create
-            </button>
+            <Link href="/create">
+              <span className="cursor-pointer px-6 py-3 rounded-lg hover:bg-pink-primary bg-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                Create
+              </span>
+            </Link>
           </div>
         </div>
         <div className="w-1/2 flex flex-row space-x-4">
@@ -58,7 +61,9 @@ const Hero: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <ArrowCircleRightIcon className="w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+              <Link href="/assets">
+                <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+              </Link>
             </div>
           </div>
           <div className="mt-10">
@@ -89,7 +94,9 @@ const Hero: React.FC = () => {
                   <div className="text-sm text-gray-400">Created by @sam</div>
                 </div>
               </div>
-              <ArrowCircleRightIcon className="w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+              <Link href="/assets">
+                <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+              </Link>
             </div>
           </div>
         </div>
