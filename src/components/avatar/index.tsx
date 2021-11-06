@@ -1,10 +1,9 @@
 import React from "react";
 
-const GradientAvatar: React.FC<{ size?: string }> = ({
+const GradientAvatar: React.FC<{ address?: string, size?: string }> = ({
+  address = "0x505D61759efFF407939606b47Ca721E2A18f3ea2",
   size = "h-10 w-10",
 }) => {
-  const address = "0x505D61759efFF407939606b47Ca721E2A18f3ea2";
-
   function djb2Hash(str) {
     const len = str.length;
     let hash = 5381;
