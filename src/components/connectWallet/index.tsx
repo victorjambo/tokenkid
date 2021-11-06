@@ -19,10 +19,13 @@ const classNames = (...classes) => {
 }
 
 const ConnectWallet: React.FC = () => {
-  const x = useContractKit();
-  // console.log(x);
+  const { address, account, connect, destroy, initialised, kit } = useContractKit();
 
-  const { address, account, connect, destroy, initialised, kit } = x;
+  const _address = account ? {
+    address
+  } : {
+    t: false
+  }
   
   const handleConnection = () => {
     connect().catch((e) => console.log((e as Error).message));
@@ -39,7 +42,7 @@ const ConnectWallet: React.FC = () => {
       >
         {initialised && account ? (
           <div className="flex flex-row items-center">
-            <GradientAvatar address={address} size="w-10 h-10" />
+            <GradientAvatar {...{ size: "w-10 h-10", ..._address }} />
             <span className="px-4">{shortAddress(address)}</span>
           </div>
         ) : (
@@ -56,7 +59,7 @@ const ConnectWallet: React.FC = () => {
 
       <Menu as="div" className="relative">
         <div>
-          <Menu.Button className="flex text-sm rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-lightblue">
+          <Menu.Button className={`${(initialised && account) ? "" : "hidden"} flex text-sm rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-lightblue`}>
             <ChevronDownIcon className="rounded-full w-8 h-8 text-pink-primary" />
           </Menu.Button>
         </div>
@@ -78,7 +81,7 @@ const ConnectWallet: React.FC = () => {
                     "py-4 px-4 text-sm flex flex-row items-center space-x-2 text-gray-700"
                   )}
                 >
-                  <GradientAvatar address={address} size="w-10 h-10" />
+                  <GradientAvatar {...{ size: "w-10 h-10", ..._address }} />
                   <span className="">{shortAddress(address)}</span>
                 </div>
               )}
@@ -92,7 +95,6 @@ const ConnectWallet: React.FC = () => {
                     const acs = await accounts.getAccountSummary(address);
                     const cUSD = await kit.contracts.getStableToken();
                     console.log({acs, cUSD});
-                    
                   }}
                   className={classNames(
                     active ? "bg-gray-100" : "",
@@ -107,7 +109,10 @@ const ConnectWallet: React.FC = () => {
               {({ active }) => (
                 <div>
                   <button
-                    onClick={() => destroy()}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      destroy().catch((err) => console.log((err as Error).message))
+                    }}
                     className={classNames(
                       active ? "bg-gray-100" : "",
                       "w-full block px-4 py-2 text-sm text-gray-700 text-left"

@@ -1,6 +1,6 @@
 import React from "react";
 
-const GradientAvatar: React.FC<{ address?: string, size?: string }> = ({
+const GradientAvatar: React.FC<{ address?: string, size?: string, t?: boolean }> = ({
   address = "0x505D61759efFF407939606b47Ca721E2A18f3ea2",
   size = "h-10 w-10",
 }) => {
