@@ -8,6 +8,7 @@ import { store } from "@/state";
 import Navbar from "@/components/navbar";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
+import PageHeader from "@/containers/pageHeader";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -27,10 +28,7 @@ const App = ({ Component, pageProps }) => {
       }}
     >
       <Provider store={store}>
-        <Head>
-          <title>TokenKid</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+        <PageHeader />
         <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
           <Navbar />
         </div>
