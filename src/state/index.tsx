@@ -1,10 +1,12 @@
 import { configureStore, Action, ThunkAction } from "@reduxjs/toolkit";
 
-import modalReducer from "./modal/slice";
+import modal from "./modal/slice";
+import wallet from "./wallet/slice";
 
 export const store = configureStore({
   reducer: {
-    modal: modalReducer,
+    modal,
+    wallet,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ thunk: true }),
   devTools: true,

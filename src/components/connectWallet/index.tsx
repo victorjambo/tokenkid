@@ -1,19 +1,16 @@
+import Web3 from "web3";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import GradientAvatar from "../avatar";
-import Web3 from "web3";
 import { StableToken } from "@celo/contractkit";
 import { generateAddress } from "@/utils/generateAddress";
 import { classNames } from "@/utils/classNames";
 import { shortAddress } from "@/utils/shortAddress";
-
-const defaultBalances = {
-  celo: "0",
-  cUSD: "0",
-  cEUR: "0",
-};
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "@/state";
+import { setAccountBalances } from "@/state/wallet/slice";
+import GradientAvatar from "../avatar";
 
 const ConnectWallet: React.FC = () => {
   const {
@@ -27,9 +24,13 @@ const ConnectWallet: React.FC = () => {
     walletType,
   } = useContractKit();
 
-  const _address = generateAddress(account, address);
+  const dispatch = useDispatch();
 
-  const [accountBalances, setAccountBalances] = useState(defaultBalances);
+  const {
+    wallet: { accountBalances },
+  } = useSelector((state: AppState) => state);
+
+  const _address = generateAddress(account, address);
 
   const fetchAccountBalances = useCallback(async () => {
     if (!initialised || !account) return;
@@ -45,12 +46,14 @@ const ConnectWallet: React.FC = () => {
       ceurToken.balanceOf(address),
     ]);
 
-    setAccountBalances({
-      celo: Web3.utils.fromWei(celo.toFixed()),
-      cUSD: Web3.utils.fromWei(cUSD.toFixed()),
-      cEUR: Web3.utils.fromWei(cEUR.toFixed()),
-    })
-  }, [address, kit])
+    dispatch(
+      setAccountBalances({
+        celo: Web3.utils.fromWei(celo.toFixed()),
+        cUSD: Web3.utils.fromWei(cUSD.toFixed()),
+        cEUR: Web3.utils.fromWei(cEUR.toFixed()),
+      })
+    );
+  }, [address, kit]);
 
   useEffect(() => {
     void fetchAccountBalances();
@@ -113,13 +116,16 @@ const ConnectWallet: React.FC = () => {
                   <span className="">{shortAddress(address)}</span>
                 </div>
                 <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">CELO:</span> {accountBalances.celo}
+                  <span className="text-xs text-gray-500">CELO:</span>{" "}
+                  {accountBalances.celo}
                 </div>
                 <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">cUSD:</span> {accountBalances.cUSD}
+                  <span className="text-xs text-gray-500">cUSD:</span>{" "}
+                  {accountBalances.cUSD}
                 </div>
                 <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">cEUR:</span> {accountBalances.cEUR}
+                  <span className="text-xs text-gray-500">cEUR:</span>{" "}
+                  {accountBalances.cEUR}
                 </div>
                 <div className="text-sm text-blue-lightblue">
                   <span className="text-xs text-gray-500">Network:</span> {name}
