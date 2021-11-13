@@ -1,32 +1,61 @@
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { Menu, Popover, Transition } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment, useEffect } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import GradientAvatar from "../avatar";
+import Web3 from "web3";
+import { StableToken } from "@celo/contractkit";
+import { generateAddress } from "@/utils/generateAddress";
+import { classNames } from "@/utils/classNames";
+import { shortAddress } from "@/utils/shortAddress";
 
-enum StableToken {
-  cUSD = "cUSD",
-  cEUR = "cEUR"
-}
-
-const shortAddress = (address: string) => {
-  if (!address) return;
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+const defaultBalances = {
+  celo: "0",
+  cUSD: "0",
+  cEUR: "0",
 };
 
-const classNames = (...classes) => {
-  return classes.filter(Boolean).join(" ");
-}
-
 const ConnectWallet: React.FC = () => {
-  const { address, account, connect, destroy, initialised, kit } = useContractKit();
+  const {
+    address,
+    account,
+    connect,
+    destroy,
+    initialised,
+    kit,
+    network: { name },
+    walletType,
+  } = useContractKit();
 
-  const _address = account ? {
-    address
-  } : {
-    t: false
-  }
-  
+  const _address = generateAddress(account, address);
+
+  const [accountBalances, setAccountBalances] = useState(defaultBalances);
+
+  const fetchAccountBalances = useCallback(async () => {
+    if (!initialised || !account) return;
+    const [celoToken, cusdToken, ceurToken] = await Promise.all([
+      kit.contracts.getGoldToken(),
+      kit.contracts.getStableToken(StableToken.cUSD),
+      kit.contracts.getStableToken(StableToken.cEUR),
+    ]);
+
+    const [celo, cUSD, cEUR] = await Promise.all([
+      celoToken.balanceOf(address),
+      cusdToken.balanceOf(address),
+      ceurToken.balanceOf(address),
+    ]);
+
+    setAccountBalances({
+      celo: Web3.utils.fromWei(celo.toFixed()),
+      cUSD: Web3.utils.fromWei(cUSD.toFixed()),
+      cEUR: Web3.utils.fromWei(cEUR.toFixed()),
+    })
+  }, [address, kit])
+
+  useEffect(() => {
+    void fetchAccountBalances();
+  }, [fetchAccountBalances]);
+
   const handleConnection = () => {
     connect().catch((e) => console.log((e as Error).message));
   };
@@ -59,7 +88,11 @@ const ConnectWallet: React.FC = () => {
 
       <Menu as="div" className="relative">
         <div>
-          <Menu.Button className={`${(initialised && account) ? "" : "hidden"} flex text-sm rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-lightblue`}>
+          <Menu.Button
+            className={`${
+              initialised && account ? "" : "hidden"
+            } flex text-sm rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-lightblue`}
+          >
             <ChevronDownIcon className="rounded-full w-8 h-8 text-pink-primary" />
           </Menu.Button>
         </div>
@@ -72,38 +105,30 @@ const ConnectWallet: React.FC = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
             <Menu.Item>
-              {({ active }) => (
-                <div
-                  className={classNames(
-                    active ? "bg-gray-100" : "",
-                    "py-4 px-4 text-sm flex flex-row items-center space-x-2 text-gray-700"
-                  )}
-                >
-                  <GradientAvatar {...{ size: "w-10 h-10", ..._address }} />
+              <div className="py-4 px-4 space-y-2">
+                <div className="text-sm flex flex-row items-center space-x-2 text-gray-700">
+                  <GradientAvatar {...{ size: "w-5 h-5", ..._address }} />
                   <span className="">{shortAddress(address)}</span>
                 </div>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const accounts = await kit.contracts.getAccounts();
-                    const acs = await accounts.getAccountSummary(address);
-                    const cUSD = await kit.contracts.getStableToken();
-                    console.log({acs, cUSD});
-                  }}
-                  className={classNames(
-                    active ? "bg-gray-100" : "",
-                    "w-full text-left block px-4 py-2 text-sm text-gray-700"
-                  )}
-                >
-                  Settings
-                </button>
-              )}
+                <div className="text-lg text-blue-lightblue">
+                  <span className="text-xs text-gray-500">CELO:</span> {accountBalances.celo}
+                </div>
+                <div className="text-lg text-blue-lightblue">
+                  <span className="text-xs text-gray-500">cUSD:</span> {accountBalances.cUSD}
+                </div>
+                <div className="text-lg text-blue-lightblue">
+                  <span className="text-xs text-gray-500">cEUR:</span> {accountBalances.cEUR}
+                </div>
+                <div className="text-sm text-blue-lightblue">
+                  <span className="text-xs text-gray-500">Network:</span> {name}
+                </div>
+                <div className="text-sm text-blue-lightblue">
+                  <span className="text-xs text-gray-500">Wallet:</span>{" "}
+                  {walletType}
+                </div>
+              </div>
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
@@ -111,7 +136,9 @@ const ConnectWallet: React.FC = () => {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      destroy().catch((err) => console.log((err as Error).message))
+                      destroy().catch((err) =>
+                        console.log((err as Error).message)
+                      );
                     }}
                     className={classNames(
                       active ? "bg-gray-100" : "",
