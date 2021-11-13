@@ -1,5 +1,5 @@
+import Dropzone from "react-dropzone";
 import PageHeader from "@/containers/pageHeader";
-import React from "react";
 
 const Create: React.FC = () => {
   return (
@@ -11,10 +11,19 @@ const Create: React.FC = () => {
           <div className="flex flex-col bg-white py-10 px-5 rounded-lg space-y-6">
             <div className="flex flex-col">
               <label>Upload File</label>
-              <input
-                className="px-4 py-2 border rounded-md w-full"
-                placeholder="Upload File"
-              />
+              <Dropzone maxFiles={1} onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                {({ getRootProps, getInputProps }) => (
+                  <div
+                    {...getRootProps()}
+                    className="w-full border-dashed border-2 h-32 rounded flex justify-center items-center cursor-pointer"
+                  >
+                    <input {...getInputProps()} />
+                    <span className="block text-gray-400">
+                      Drag 'n' drop file here, or click to select files
+                    </span>
+                  </div>
+                )}
+              </Dropzone>
             </div>
             <div className="flex flex-col">
               <label>Choose Item Category</label>
