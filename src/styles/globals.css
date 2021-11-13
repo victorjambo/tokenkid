@@ -44,3 +44,9 @@ circle {
   animation: 1.4s ease-in-out infinite both circle--animation;
 }
 /** Spinner End */
+
+@layer components {
+  .popup-hover {
+    @apply transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105;
+  }
+}

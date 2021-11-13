@@ -2,11 +2,12 @@ import "@celo-tools/use-contractkit/lib/styles.css";
 import "../styles/globals.css";
 
 import Head from "next/head";
+import { Provider } from "react-redux";
 import { ContractKitProvider, NetworkNames } from "@celo-tools/use-contractkit";
 import { store } from "@/state";
-import { Provider } from "react-redux";
 import Navbar from "@/components/navbar";
 import Modal from "@/containers/modal";
+import Footer from "@/components/footer";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -36,6 +37,7 @@ const App = ({ Component, pageProps }) => {
         <div className="flex w-full flex-col sm:flex-row">
           <Component {...pageProps} />
         </div>
+        <Footer />
         <Modal />
       </Provider>
     </ContractKitProvider>

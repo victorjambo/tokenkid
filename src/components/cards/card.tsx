@@ -3,7 +3,7 @@ import GradientAvatar from "@/components/avatar";
 
 const Card: React.FC = () => {
   return (
-    <div className="text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+    <div className="text-white popup-hover">
       <div className="relative">
         <Link href="/assets">
           <img
