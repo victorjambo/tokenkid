@@ -42,7 +42,7 @@ const Hero: React.FC = () => {
                 <div className="flex flex-row font-medium">
                   <div className="w-1/2 flex flex-col z-10">
                     <div>Start Bid</div>
-                    <div>15,00 ETH</div>
+                    <div>15.00 CELO</div>
                   </div>
                   <div className="w-1/2 flex flex-col z-10">
                     <div>Remaining Time</div>
@@ -77,7 +77,7 @@ const Hero: React.FC = () => {
                 <div className="flex flex-row font-medium">
                   <div className="w-1/2 flex flex-col z-10">
                     <div>Start Bid</div>
-                    <div>15,00 ETH</div>
+                    <div>15.00 CELO</div>
                   </div>
                   <div className="w-1/2 flex flex-col z-10">
                     <div>Remaining Time</div>

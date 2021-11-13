@@ -34,8 +34,8 @@ const Card: React.FC = () => {
           <Link href="/assets">Love In The Air</Link>
         </div>
         <div className="flex flex-row border-1 rounded-md py-2 px-4 justify-between">
-          <div>110 ETH 12/14</div>
-          <div>Bid 70 ETH</div>
+          <div>110 CELO 12/14</div>
+          <div>Bid 70 CELO</div>
         </div>
         <div className="flex flex-wrap flex-row items-center space-x-2">
           <div className="flex flex-row">

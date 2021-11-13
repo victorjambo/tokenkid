@@ -31,13 +31,13 @@ const Assets: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <div className="text-sm text-gray-400">Highest Bid</div>
-            <div className="text-lg font-semibold">15,00 ETH</div>
+            <div className="text-lg font-semibold">15.00 CELO</div>
           </div>
         </div>
 
-        <div className="bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold">
+        <button className="bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold">
           Place bid
-        </div>
+        </button>
 
         <div className="bg-white-back py-9 px-5">
           <div className="text-black text-2xl font-bold pb-8">History</div>
@@ -47,7 +47,7 @@ const Assets: React.FC = () => {
               <div className="flex flex-row items-center space-x-3">
                 <div className=" border-2 border-pink-primary rounded-full"><GradientAvatar /></div>
                 <div className="flex flex-col">
-                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 ETH</span></div>
+                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 CELO</span></div>
                   <div className="text-pink-primary">@Jack</div>
                 </div>
               </div>
@@ -58,7 +58,7 @@ const Assets: React.FC = () => {
               <div className="flex flex-row items-center space-x-3">
                 <div className=" border-2 border-pink-primary rounded-full"><GradientAvatar /></div>
                 <div className="flex flex-col">
-                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 ETH</span></div>
+                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 CELO</span></div>
                   <div className="text-pink-primary">@Jack</div>
                 </div>
               </div>
@@ -69,7 +69,7 @@ const Assets: React.FC = () => {
               <div className="flex flex-row items-center space-x-3">
                 <div className=" border-2 border-pink-primary rounded-full"><GradientAvatar /></div>
                 <div className="flex flex-col">
-                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 ETH</span></div>
+                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 CELO</span></div>
                   <div className="text-pink-primary">@Jack</div>
                 </div>
               </div>
@@ -80,7 +80,7 @@ const Assets: React.FC = () => {
               <div className="flex flex-row items-center space-x-3">
                 <div className=" border-2 border-pink-primary rounded-full"><GradientAvatar /></div>
                 <div className="flex flex-col">
-                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 ETH</span></div>
+                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 CELO</span></div>
                   <div className="text-pink-primary">@Jack</div>
                 </div>
               </div>
@@ -91,7 +91,7 @@ const Assets: React.FC = () => {
               <div className="flex flex-row items-center space-x-3">
                 <div className=" border-2 border-pink-primary rounded-full"><GradientAvatar /></div>
                 <div className="flex flex-col">
-                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 ETH</span></div>
+                  <div className="text-gray-600">Bid Placed For <span className="text-black">235 CELO</span></div>
                   <div className="text-pink-primary">@Jack</div>
                 </div>
               </div>
