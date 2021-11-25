@@ -132,6 +132,7 @@ const ConnectWallet: React.FC = () => {
                       const price = new BN((9000000000000000000).toString());
                       // tokenKidFactoryContract.changeTokenPrice(0, price, kit.defaultAccount);
                       // tokenKidFactoryContract.toggleOnSale(0, kit.defaultAccount);
+                      // Try setting allowance first
                       // tokenKidFactoryContract.buyToken(0, price, "0x874069fa1eb16d44d622f2e0ca25eea172369bc1", kit.defaultAccount);
                       const token = await tokenKidFactoryContract.getMintedToken(0);
                       console.log({token});
