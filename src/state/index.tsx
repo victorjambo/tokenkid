@@ -8,7 +8,8 @@ export const store = configureStore({
     modal,
     wallet,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ thunk: true }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ thunk: true, serializableCheck: false }),
   devTools: true,
 });
 

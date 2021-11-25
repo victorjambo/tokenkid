@@ -1,4 +1,6 @@
-module.exports = [
+import { AbiItem } from "web3-utils";
+
+export const IERC20_ABI: AbiItem[] = [
   {
     anonymous: false,
     inputs: [

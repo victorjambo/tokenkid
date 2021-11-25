@@ -1,4 +1,6 @@
-module.exports = [
+import { AbiItem } from "web3-utils";
+
+export const ERC20_ABI: AbiItem[] = [
   {
     constant: true,
     inputs: [],

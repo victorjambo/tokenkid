@@ -1,67 +1,35 @@
-import Web3 from "web3";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { StableToken } from "@celo/contractkit";
+import { Fragment } from "react";
 import { generateAddress } from "@/utils/generateAddress";
 import { classNames } from "@/utils/classNames";
 import { shortAddress } from "@/utils/shortAddress";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { AppState } from "@/state";
-import { setAccountBalances } from "@/state/wallet/slice";
 import GradientAvatar from "../avatar";
+import { useContractsContext } from "@/context/contractsContext";
+import BN from "bn.js";
 
 const ConnectWallet: React.FC = () => {
   const {
     address,
     account,
-    connect,
-    destroy,
     initialised,
-    kit,
     network: { name },
     walletType,
+    getConnectedKit
   } = useContractKit();
 
-  const dispatch = useDispatch();
+  const kit = getConnectedKit()
+
+  const { handleConnection, handleDestroy, tokenKidFactoryContract } = useContractsContext();
 
   const {
     wallet: { accountBalances },
   } = useSelector((state: AppState) => state);
 
   const _address = generateAddress(account, address);
-
-  const fetchAccountBalances = useCallback(async () => {
-    if (!initialised || !account) return;
-    const [celoToken, cusdToken, ceurToken] = await Promise.all([
-      kit.contracts.getGoldToken(),
-      kit.contracts.getStableToken(StableToken.cUSD),
-      kit.contracts.getStableToken(StableToken.cEUR),
-    ]);
-
-    const [celo, cUSD, cEUR] = await Promise.all([
-      celoToken.balanceOf(address),
-      cusdToken.balanceOf(address),
-      ceurToken.balanceOf(address),
-    ]);
-
-    dispatch(
-      setAccountBalances({
-        celo: Web3.utils.fromWei(celo.toFixed()),
-        cUSD: Web3.utils.fromWei(cUSD.toFixed()),
-        cEUR: Web3.utils.fromWei(cEUR.toFixed()),
-      })
-    );
-  }, [address, kit]);
-
-  useEffect(() => {
-    void fetchAccountBalances();
-  }, [fetchAccountBalances]);
-
-  const handleConnection = () => {
-    connect().catch((e) => console.log((e as Error).message));
-  };
 
   return (
     <div className="flex-shrink-0 flex flex-row space-x-4 items-center">
@@ -142,9 +110,49 @@ const ConnectWallet: React.FC = () => {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      destroy().catch((err) =>
-                        console.log((err as Error).message)
-                      );
+                      const price = new BN((2000000000000000000).toString())
+                      tokenKidFactoryContract.safeMint("Test", price, "http://google.com/", kit.defaultAccount)
+                    }}
+                    className={classNames(
+                      active ? "bg-gray-100" : "",
+                      "w-full block px-4 py-2 text-sm text-gray-700 text-left"
+                    )}
+                  >
+                    SafeMint
+                  </button>
+                </div>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <div>
+                  <button
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      const price = new BN((9000000000000000000).toString());
+                      // tokenKidFactoryContract.changeTokenPrice(0, price, kit.defaultAccount);
+                      // tokenKidFactoryContract.toggleOnSale(0, kit.defaultAccount);
+                      // tokenKidFactoryContract.buyToken(0, price, "0x874069fa1eb16d44d622f2e0ca25eea172369bc1", kit.defaultAccount);
+                      const token = await tokenKidFactoryContract.getMintedToken(0);
+                      console.log({token});
+                    }}
+                    className={classNames(
+                      active ? "bg-gray-100" : "",
+                      "w-full block px-4 py-2 text-sm text-gray-700 text-left"
+                    )}
+                  >
+                    CLICKME
+                  </button>
+                </div>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDestroy();
                     }}
                     className={classNames(
                       active ? "bg-gray-100" : "",

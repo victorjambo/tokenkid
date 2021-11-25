@@ -2,7 +2,6 @@
   "name": "tokenkid",
   "version": "1.0.0",
   "description": "ERC721 Token Factory",
-  "main": "index.js",
   "directories": {
     "test": "tests"
   },

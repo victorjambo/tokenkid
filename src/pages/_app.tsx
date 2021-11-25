@@ -1,7 +1,6 @@
 import "@celo-tools/use-contractkit/lib/styles.css";
 import "../styles/globals.css";
 
-import Head from "next/head";
 import { Provider } from "react-redux";
 import { ContractKitProvider, NetworkNames } from "@celo-tools/use-contractkit";
 import { store } from "@/state";
@@ -9,6 +8,7 @@ import Navbar from "@/components/navbar";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
+import CreateInvestmentClubProvider from "@/context/contractsContext";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -28,15 +28,17 @@ const App = ({ Component, pageProps }) => {
       }}
     >
       <Provider store={store}>
-        <PageHeader />
-        <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
-          <Navbar />
-        </div>
-        <div className="flex w-full flex-col sm:flex-row">
-          <Component {...pageProps} />
-        </div>
-        <Footer />
-        <Modal />
+        <CreateInvestmentClubProvider>
+          <PageHeader />
+          <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
+            <Navbar />
+          </div>
+          <div className="flex w-full flex-col sm:flex-row">
+            <Component {...pageProps} />
+          </div>
+          <Footer />
+          <Modal />
+        </CreateInvestmentClubProvider>
       </Provider>
     </ContractKitProvider>
   );

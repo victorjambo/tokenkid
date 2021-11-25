@@ -62,7 +62,9 @@ const Hero: React.FC = () => {
                 </div>
               </div>
               <Link href="/assets">
-                <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+                <span>
+                  <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+                </span>
               </Link>
             </div>
           </div>
@@ -95,7 +97,9 @@ const Hero: React.FC = () => {
                 </div>
               </div>
               <Link href="/assets">
-                <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+                <span>
+                  <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
+                </span>
               </Link>
             </div>
           </div>
