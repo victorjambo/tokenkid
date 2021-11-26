@@ -624,7 +624,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contract/contracts/TokenKidFactory.sol": "TokenKidFactory"
+			"TokenKidFactory.sol": "TokenKidFactory"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -638,6 +638,14 @@
 		"remappings": []
 	},
 	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xc1452b054778f1926419196ef12ae200758a4ee728df69ae1cd13e5c16ca7df7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4cb252ec7657ba7a91be688cbd263090aa5379e504f488a62d06198e0d630322",
+				"dweb:/ipfs/QmW56fDiDirhWfWiKrycXE5UY6tTNtFrYx39ipnSs8mkYb"
+			]
+		},
 		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
 			"keccak256": "0x7d2b8ba4b256bfcac347991b75242f9bc37f499c5236af50cf09d0b35943dc0c",
 			"license": "MIT",
@@ -726,20 +734,12 @@
 				"dweb:/ipfs/QmcsVgLgzWdor3UnAztUkXKNGcysm1MPneWksF72AvnwBx"
 			]
 		},
-		"contract/contracts/IERC20.sol": {
-			"keccak256": "0x9720342060fa43e13547f687c6b8e2eadcc6915c124eda49f4d068fd330779a1",
-			"license": "UNLICENSED",
-			"urls": [
-				"bzz-raw://b49dc1fca77ca5f16c735c99624c2e03e7560ef74b941a85626d2b2486e1b802",
-				"dweb:/ipfs/Qmdwhc8TKZ4VRPGKJ5xoz6M85zZ541WFJ6FKNWR2e2xyAz"
-			]
-		},
-		"contract/contracts/TokenKidFactory.sol": {
-			"keccak256": "0x1f24141246a048e540550029a3925d4b965afb664e8d8d4766512242032cd3e6",
+		"TokenKidFactory.sol": {
+			"keccak256": "0x6ee09186bcdaa8cb3f823d7ef2a6f5d1f2404fb7424f1e51f91bc86f750d7f07",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8052aae0a9c368fb975ff7036f8a48d77ad5cb7d4b83d74156db3bd882c36cdf",
-				"dweb:/ipfs/QmbLHYSDeJRerwfemSKxoq3q2GacDbB3XwfSE7FNXf6ZUP"
+				"bzz-raw://b19bcab5246c6a1b1023f30e308c9e99aa12a0e6c5d14a4e433e144f40e420f3",
+				"dweb:/ipfs/QmQWzxqGZYNTCzycgwEVQgcn3ywJKtmmAGam5ZpDhJ2L4o"
 			]
 		}
 	},

@@ -1,9 +1,9 @@
 // Source: Mainnet => https://explorer.bitquery.io/celo_rc1/tokens
-// Source: Alfajores =>https://explorer.bitquery.io/celo_alfajores/tokens
+// Source: Alfajores => https://explorer.bitquery.io/celo_alfajores/tokens
 
 export const tokenAddresses = {
   Alfajores: {
-    tokenFactory: "0x7d4F4C5322a8dF038E26141930B523F53fF1Cf53",
+    tokenFactory: "0x37e9bDe5eC43e2a68a774Fbb4CCd0478bAfFf3fa",
     ERC20Tokens: {
       cUSD: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
       cEUR: "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f",
