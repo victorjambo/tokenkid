@@ -3,7 +3,7 @@
 
 export const tokenAddresses = {
   Alfajores: {
-    tokenFactory: "0x37e9bDe5eC43e2a68a774Fbb4CCd0478bAfFf3fa",
+    tokenFactory: "0x37e9bDe5eC43e2a68a774Fbb4CCd0478bAfFf3fa", // https://alfajores-blockscout.celo-testnet.org/address/0x37e9bDe5eC43e2a68a774Fbb4CCd0478bAfFf3fa/contracts
     ERC20Tokens: {
       cUSD: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
       cEUR: "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f",
