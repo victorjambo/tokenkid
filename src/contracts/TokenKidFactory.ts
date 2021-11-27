@@ -7,15 +7,19 @@ import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 
 class TokenKidFactoryContract {
   private token: string;
+  private getConnectedKit: () => any;
   public tokenKidFactory: Contract;
 
-  constructor(name: string, web3: Web3) {
+  constructor(name: string, getConnectedKit: () => any) {
     this.token = tokenAddresses[name].tokenFactory;
-    this.initialize(web3);
+    this.getConnectedKit = getConnectedKit
+    this.initialize();
   }
 
-  initialize = (web3: Web3) => {
+  initialize = async () => {
     try {
+      const kit = await this.getConnectedKit();
+      const web3 = kit?.connection?.web3 as Web3;
       this.tokenKidFactory = new web3.eth.Contract(
         TOKEN_KID_FACTORY_ABI,
         this.token
@@ -30,22 +34,24 @@ class TokenKidFactoryContract {
     tokenName: string,
     price: number | BN,
     tokenURI: string,
-    defaultAccount: string
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
   ) => {
-    await new Promise((resolve, reject) => {
+    const kit = await this.getConnectedKit();
+    await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .safeMint(tokenName, price, tokenURI)
-        .send({ from: defaultAccount })
+        .send({ from: kit.defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          console.log({ transactionHash });
+          onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
-          console.log({ receipt });
+          onReceipt(receipt);
           resolve(receipt);
         })
         .on("error", (error) => {
-          console.log({ error });
-          reject(error);
+          onError(error);
         });
     });
   };
@@ -54,22 +60,24 @@ class TokenKidFactoryContract {
     tokenId: number,
     price: number | BN,
     token: string,
-    defaultAccount: string
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
   ) => {
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .buyToken(tokenId, price, token)
-        .send({ gas: '80000', gasPrice: '80000', from: defaultAccount })
+        .send({ gas: "80000", from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          console.log({ transactionHash });
+          onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
-          console.log({ receipt });
+          onReceipt(receipt);
           resolve(receipt);
         })
         .on("error", (error) => {
-          console.log({ error });
-          reject(error);
+          onError(error);
         });
     });
   };
@@ -86,44 +94,60 @@ class TokenKidFactoryContract {
   changeTokenPrice = async (
     tokenId: number,
     price: number | BN,
-    defaultAccount: string
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
   ) => {
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .changeTokenPrice(tokenId, price)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          console.log({ transactionHash });
+          onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
-          console.log({ receipt });
+          onReceipt(receipt);
           resolve(receipt);
         })
         .on("error", (error) => {
-          console.log({ error });
-          reject(error);
+          onError(error);
         });
     });
   };
 
-  toggleOnSale = async (tokenId: number, defaultAccount: string) => {
-    await new Promise((resolve, reject) => {
+  toggleOnSale = async (
+    tokenId: number,
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
+  ) => {
+    await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .toggleOnSale(tokenId)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          console.log({ transactionHash });
+          onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
-          console.log({ receipt });
+          onReceipt(receipt);
           resolve(receipt);
         })
         .on("error", (error) => {
-          console.log({ error });
-          reject(error);
+          onError(error);
         });
     });
   };
 }
 
 export default TokenKidFactoryContract;
+
+/** usage example
+ * const price = new BN((9000000000000000000).toString());
+ * tokenKidFactoryContract.changeTokenPrice(0, price, kit.defaultAccount);
+ * tokenKidFactoryContract.toggleOnSale(0, kit.defaultAccount);
+ * // setting allowance first
+ * tokenKidFactoryContract.buyToken(0, price, "0x874069fa1eb16d44d622f2e0ca25eea172369bc1", kit.defaultAccount);
+ * const token = await tokenKidFactoryContract.getMintedToken(0);
+ */

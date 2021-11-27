@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { AppState } from "@/state";
 import GradientAvatar from "../avatar";
 import { useContractsContext } from "@/context/contractsContext";
-import BN from "bn.js";
 
 const ConnectWallet: React.FC = () => {
   const {
@@ -18,12 +17,9 @@ const ConnectWallet: React.FC = () => {
     initialised,
     network: { name },
     walletType,
-    getConnectedKit
   } = useContractKit();
 
-  const kit = getConnectedKit()
-
-  const { handleConnection, handleDestroy, tokenKidFactoryContract } = useContractsContext();
+  const { handleConnection, handleDestroy } = useContractsContext();
 
   const {
     wallet: { accountBalances },
@@ -103,49 +99,6 @@ const ConnectWallet: React.FC = () => {
                   {walletType}
                 </div>
               </div>
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <div>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const price = new BN((2000000000000000000).toString())
-                      tokenKidFactoryContract.safeMint("Test", price, "http://google.com/", kit.defaultAccount)
-                    }}
-                    className={classNames(
-                      active ? "bg-gray-100" : "",
-                      "w-full block px-4 py-2 text-sm text-gray-700 text-left"
-                    )}
-                  >
-                    SafeMint
-                  </button>
-                </div>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <div>
-                  <button
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      const price = new BN((9000000000000000000).toString());
-                      // tokenKidFactoryContract.changeTokenPrice(0, price, kit.defaultAccount);
-                      // tokenKidFactoryContract.toggleOnSale(0, kit.defaultAccount);
-                      // Try setting allowance first
-                      // tokenKidFactoryContract.buyToken(0, price, "0x874069fa1eb16d44d622f2e0ca25eea172369bc1", kit.defaultAccount);
-                      const token = await tokenKidFactoryContract.getMintedToken(0);
-                      console.log({token});
-                    }}
-                    className={classNames(
-                      active ? "bg-gray-100" : "",
-                      "w-full block px-4 py-2 text-sm text-gray-700 text-left"
-                    )}
-                  >
-                    CLICKME
-                  </button>
-                </div>
-              )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (

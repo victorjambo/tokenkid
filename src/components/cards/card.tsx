@@ -1,3 +1,4 @@
+// https://blog.infura.io/ipfs-0-5-is-here-with-a-new-improved-gateway/
 import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 

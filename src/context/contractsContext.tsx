@@ -27,18 +27,15 @@ const CreateInvestmentClubProvider: React.FC = ({ children }) => {
     kit,
     network: { name },
     walletType,
+    getConnectedKit
   } = useContractKit();
-
-  const {
-    connection: { web3 },
-  } = kit;
 
   const [tokenKidFactoryContract, setTokenKidFactoryContract] = useState(null);
 
   useEffect(() => {
     if (walletType !== "Unauthenticated") {
       // Initialize contracts
-      setTokenKidFactoryContract(new TokenKidFactoryContract(name, web3));
+      setTokenKidFactoryContract(new TokenKidFactoryContract(name, getConnectedKit));
     } else {
       setTokenKidFactoryContract(null);
     }
