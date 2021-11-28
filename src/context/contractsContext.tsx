@@ -24,10 +24,10 @@ const ContractsProvider: React.FC = ({ children }) => {
     connect,
     destroy,
     initialised,
-    kit,
     network: { name },
     walletType,
-    getConnectedKit
+    getConnectedKit,
+    performActions,
   } = useContractKit();
 
   const [tokenKidFactoryContract, setTokenKidFactoryContract] = useState(null);
@@ -44,27 +44,30 @@ const ContractsProvider: React.FC = ({ children }) => {
   const dispatch = useDispatch();
 
   const fetchAccountBalances = useCallback(async () => {
-    if (!initialised || !account) return;
-    const [celoToken, cusdToken, ceurToken] = await Promise.all([
-      kit.contracts.getGoldToken(),
-      kit.contracts.getStableToken(StableToken.cUSD),
-      kit.contracts.getStableToken(StableToken.cEUR),
-    ]);
+    await performActions(async (kit) => {
+      const { defaultAccount } = kit;
+      if (!defaultAccount) return;
+      const [celoToken, cusdToken, ceurToken] = await Promise.all([
+        kit.contracts.getGoldToken(),
+        kit.contracts.getStableToken(StableToken.cUSD),
+        kit.contracts.getStableToken(StableToken.cEUR),
+      ]);
 
-    const [celo, cUSD, cEUR] = await Promise.all([
-      celoToken.balanceOf(address),
-      cusdToken.balanceOf(address),
-      ceurToken.balanceOf(address),
-    ]);
-
-    dispatch(
-      setAccountBalances({
-        celo: Web3.utils.fromWei(celo.toFixed()),
-        cUSD: Web3.utils.fromWei(cUSD.toFixed()),
-        cEUR: Web3.utils.fromWei(cEUR.toFixed()),
-      })
-    );
-  }, [address, kit]);
+      const [celo, cUSD, cEUR] = await Promise.all([
+        celoToken.balanceOf(defaultAccount),
+        cusdToken.balanceOf(defaultAccount),
+        ceurToken.balanceOf(defaultAccount),
+      ]);
+  
+      dispatch(
+        setAccountBalances({
+          celo: Web3.utils.fromWei(celo.toFixed()),
+          cUSD: Web3.utils.fromWei(cUSD.toFixed()),
+          cEUR: Web3.utils.fromWei(cEUR.toFixed()),
+        })
+      );
+    });
+  }, []);
 
   useEffect(() => {
     void fetchAccountBalances();

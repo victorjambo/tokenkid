@@ -104,10 +104,7 @@ const ConnectWallet: React.FC = () => {
               {({ active }) => (
                 <div>
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDestroy();
-                    }}
+                    onClick={handleDestroy}
                     className={classNames(
                       active ? "bg-gray-100" : "",
                       "w-full block px-4 py-2 text-sm text-gray-700 text-left"
