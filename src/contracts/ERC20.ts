@@ -1,4 +1,4 @@
-import ERC20_ABI from "../abi/ERC20";
+import { ERC20_ABI } from "../abi/ERC20";
 
 class ERC20Contract {
   constructor() {
