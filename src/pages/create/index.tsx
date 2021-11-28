@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import PageHeader from "@/containers/pageHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ipfs, IPFS_BASE_URL } from "@/utils/ipfs";
 import { useContractsContext } from "@/context/contractsContext";
 import { classNames } from "@/utils/classNames";
@@ -16,30 +16,33 @@ type Inputs = {
   tokenImage: any;
 };
 
+const defaultState = {
+  upload: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+  txHash: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+  mint: {
+    loading: false,
+    done: false,
+    error: false,
+  },
+};
+
 const Create: React.FC = () => {
   const [cid, setCID] = useState(null);
   const [txHash, setTxHash] = useState("s");
   const [txError, setTxError] = useState(null); // txError.message
   const [receipt, setRecipt] = useState(null);
-  const [showStatusBadge, setShowStatusBadge] = useState(false);
-
-  const [loadingStates, setLoadingStates] = useState({
-    uploading: false,
-    fetchingTxHash: false,
-    minting: false,
-  });
-
-  const [doneStates, setDoneStates] = useState({
-    uploading: false,
-    fetchingTxHash: false,
-    minting: false,
-  });
-
-  const [errorStates, setErrorStates] = useState({
-    uploading: "failed to upload",
-    fetchingTxHash: "",
-    minting: "",
-  });
+  const [showAlert, setShowAlert] = useState(false);
+  const [states, setStates] = useState(defaultState);
+  const [showActivity, setShowActivity] = useState(false);
+  const [showWall, setShowWall] = useState(false);
 
   const { tokenKidFactoryContract } = useContractsContext();
 
@@ -51,11 +54,16 @@ const Create: React.FC = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { tokenImage, tokenName, tokenPrice } = data;
+    setShowWall(true);
+    setShowActivity(true);
 
     // upload image to infura ipfs
     // const cidPath = "QmPHjS67XiuMkWmuaV5gkjV7i8ksicEtVr4592HeApyFix";
     const cidPath = await uploadImgToInfuraIPFFS(tokenImage[0]);
     const tokenURI = `${IPFS_BASE_URL}${cidPath}/`;
+
+    // Waiting for transaction Hash
+    updateState("txHash", "loading", true);
 
     // Convert price to wei
     const priceInWei = Web3.utils.toWei(new BN(tokenPrice.toString()));
@@ -71,34 +79,61 @@ const Create: React.FC = () => {
   };
 
   const uploadImgToInfuraIPFFS = async (image) => {
+    updateState("upload", "loading", true);
     if (cid) {
+      updateState("upload", "loading", false);
       return cid.path;
     }
-
-    const _cid = await ipfs.add(image);
-    setCID(_cid);
-    return _cid.path;
+    
+    try {
+      const _cid = await ipfs.add(image);
+      setCID(_cid);
+      updateState("upload", "loading", false);
+      updateState("upload", "done", true);
+      return _cid.path;
+    } catch (error) {
+      setTxError({message: "Error uploading image. Check console"});
+      setShowAlert(true);
+      return;
+    }
   };
 
   const onTransactionHash = (hash: string) => {
     setTxHash(hash);
+    updateState("txHash", "loading", false);
+    updateState("txHash", "done", true);
+    updateState("mint", "loading", true);
   };
 
   const onTransactionError = (err) => {
     setTxError(err);
+    setShowAlert(true);
+    setStates(defaultState);
+    setShowWall(false);
   };
 
   const onReceipt = (_receipt) => {
     setRecipt(_receipt);
+    updateState("mint", "loading", false);
+    updateState("mint", "done", true);
   };
+
+  const updateState = (noun: string, pronoun: string, verb: boolean) => {
+    setStates(prev => {
+      return {
+        ...prev,
+        [noun]: {
+          ...prev[noun],
+          [pronoun]: verb,
+        }
+      }
+    });
+  }
 
   return (
     <>
       <PageHeader title="Create" />
       <div className="bg-white-back w-full pt-24 pb-96">
-        <button onClick={() => setShowStatusBadge((prev) => !prev)}>
-          TOGGLE
-        </button>
         <div className="container m-auto">
           <div className="flex flex-row mb-6 space-x-20">
             <div className="flex flex-col w-full">
@@ -131,7 +166,6 @@ const Create: React.FC = () => {
                       placeholder="Token Name"
                       {...register("tokenName", {
                         required: true,
-                        pattern: /^[A-Za-z]+$/i,
                       })}
                     />
                     <p className="text-red-400 text-sm">
@@ -150,7 +184,7 @@ const Create: React.FC = () => {
                       )}
                       placeholder="Token Price"
                       type="number"
-                      {...register("tokenPrice", { required: true })}
+                      {...register("tokenPrice", { required: true, min: 1 })}
                     />
                     <p className="text-red-400 text-sm">
                       {errors.tokenPrice && "Required Field"}
@@ -168,8 +202,9 @@ const Create: React.FC = () => {
                   />
                   <div
                     className={classNames(
-                      "absolute inset-0 bg-white opacity-50 cursor-wait rounded-lg",
-                      showStatusBadge ? "" : "hidden"
+                      "absolute inset-0 bg-white opacity-50 rounded-lg",
+                      showWall ? "" : "hidden",
+                      states.mint.done ? "cursor-not-allowed" : "cursor-wait"
                     )}
                   />
                 </div>
@@ -177,7 +212,7 @@ const Create: React.FC = () => {
             </div>
 
             <Transition
-              show={showStatusBadge}
+              show={showActivity}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
               enterFrom="translate-x-full"
               enterTo="translate-x-0"
@@ -188,34 +223,31 @@ const Create: React.FC = () => {
               <div className="flex flex-col whitespace-nowrap">
                 <div className="text-3xl pb-4">&nbsp;</div>
                 <div className="flex flex-col bg-white py-10 px-5 rounded-lg space-y-6">
-                  <Alert variant="error" closable={true}>
-                    This is an error alert
-                  </Alert>
                   <div className="text-2xl">Activity</div>
+                  <Alert
+                    variant="error"
+                    closable={true}
+                    show={showAlert}
+                    setShow={setShowAlert}
+                  >
+                    {txError?.message}
+                  </Alert>
                   <div className="flex flex-row items-center space-x-2">
-                    <StateIcon
-                      loading={loadingStates.uploading}
-                      done={doneStates.uploading}
-                      error={!!errorStates.uploading}
-                    />
+                    <StateIcon states={states.upload} />
                     <span>
-                      {loadingStates.uploading
+                      {states.upload.loading
                         ? "Uploading image "
                         : "Image uploaded "}
                       to <code>ipfs</code>
                     </span>
                   </div>
                   <div className="flex flex-row items-center space-x-2">
-                    <StateIcon
-                      loading={loadingStates.fetchingTxHash}
-                      done={doneStates.fetchingTxHash}
-                      error={!!errorStates.fetchingTxHash}
-                    />
+                    <StateIcon states={states.txHash} />
                     <span>
-                      {loadingStates.fetchingTxHash
+                      {states.txHash.loading
                         ? "Approving Transaction "
                         : "Transaction Approved "}
-                      {doneStates.fetchingTxHash && txHash && (
+                      {states.txHash.done && txHash && (
                         <a
                           href={`https://alfajores-blockscout.celo-testnet.org/tx/${txHash}`}
                           target="_blank"
@@ -228,13 +260,9 @@ const Create: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex flex-row items-center space-x-2">
-                    <StateIcon
-                      loading={loadingStates.minting}
-                      done={doneStates.minting}
-                      error={!!errorStates.minting}
-                    />
+                    <StateIcon states={states.mint} />
                     <span>
-                      {loadingStates.minting
+                      {states.mint.loading
                         ? "Minting Token"
                         : "Woohoo! Token Minted"}
                     </span>

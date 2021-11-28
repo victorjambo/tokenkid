@@ -6,12 +6,15 @@ import {
 import Spinner from "../spinner";
 
 interface IStateIcon {
-  loading: boolean;
-  done: boolean;
-  error: boolean;
+  states: {
+    loading: boolean;
+    done:  boolean;
+    error:  boolean;
+  }
 }
 
-const StateIcon: React.FC<IStateIcon> = ({ loading, done, error }) => {
+const StateIcon: React.FC<IStateIcon> = ({ states }) => {
+  const { loading, done, error } = states;
   return (
     <>
       {loading ? (

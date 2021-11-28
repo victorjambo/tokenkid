@@ -1,7 +1,8 @@
 import { Transition } from "@headlessui/react";
-import { useState } from "react";
 
 interface AlertProps {
+  show: boolean;
+  setShow?: (arg0: boolean) => void;
   className?: string;
   closable?: boolean;
   title?: string;
@@ -18,19 +19,20 @@ const colorMap = {
 };
 
 const Alert: React.FC<AlertProps> = ({
+  show,
+  setShow,
   title,
   children,
   className = "",
   closable = false,
   variant = "default"
 }) => {
-  const [show, setShow] = useState(true);
   const color = colorMap[variant];
   const baseClasses = `
-    whitespace-nowrap
     border-l-4 
     p-4 
     flex 
+    whitespace-normal
     items-center 
     justify-between 
     space-x-4
