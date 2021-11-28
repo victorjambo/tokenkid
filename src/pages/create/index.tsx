@@ -1,14 +1,12 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import PageHeader from "@/containers/pageHeader";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ipfs, IPFS_BASE_URL } from "@/utils/ipfs";
 import { useContractsContext } from "@/context/contractsContext";
 import { classNames } from "@/utils/classNames";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Transition } from "@headlessui/react";
-import StateIcon from "@/components/stateIcon";
-import Alert from "@/components/alert";
+import Activity from "@/components/activity";
 
 type Inputs = {
   tokenName: string;
@@ -84,7 +82,7 @@ const Create: React.FC = () => {
       updateState("upload", "loading", false);
       return cid.path;
     }
-    
+
     try {
       const _cid = await ipfs.add(image);
       setCID(_cid);
@@ -92,7 +90,7 @@ const Create: React.FC = () => {
       updateState("upload", "done", true);
       return _cid.path;
     } catch (error) {
-      setTxError({message: "Error uploading image. Check console"});
+      setTxError({ message: "Error uploading image. Check console" });
       setShowAlert(true);
       return;
     }
@@ -119,16 +117,16 @@ const Create: React.FC = () => {
   };
 
   const updateState = (noun: string, pronoun: string, verb: boolean) => {
-    setStates(prev => {
+    setStates((prev) => {
       return {
         ...prev,
         [noun]: {
           ...prev[noun],
           [pronoun]: verb,
-        }
-      }
+        },
+      };
     });
-  }
+  };
 
   return (
     <>
@@ -211,65 +209,14 @@ const Create: React.FC = () => {
               </form>
             </div>
 
-            <Transition
+            <Activity
               show={showActivity}
-              enter="transform transition ease-in-out duration-500 sm:duration-700"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transform transition ease-in-out duration-500 sm:duration-700"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full opacity-0"
-            >
-              <div className="flex flex-col whitespace-nowrap">
-                <div className="text-3xl pb-4">&nbsp;</div>
-                <div className="flex flex-col bg-white py-10 px-5 rounded-lg space-y-6">
-                  <div className="text-2xl">Activity</div>
-                  <Alert
-                    variant="error"
-                    closable={true}
-                    show={showAlert}
-                    setShow={setShowAlert}
-                  >
-                    {txError?.message}
-                  </Alert>
-                  <div className="flex flex-row items-center space-x-2">
-                    <StateIcon states={states.upload} />
-                    <span>
-                      {states.upload.loading
-                        ? "Uploading image "
-                        : "Image uploaded "}
-                      to <code>ipfs</code>
-                    </span>
-                  </div>
-                  <div className="flex flex-row items-center space-x-2">
-                    <StateIcon states={states.txHash} />
-                    <span>
-                      {states.txHash.loading
-                        ? "Approving Transaction "
-                        : "Transaction Approved "}
-                      {states.txHash.done && txHash && (
-                        <a
-                          href={`https://alfajores-blockscout.celo-testnet.org/tx/${txHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-700"
-                        >
-                          View Transaction
-                        </a>
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex flex-row items-center space-x-2">
-                    <StateIcon states={states.mint} />
-                    <span>
-                      {states.mint.loading
-                        ? "Minting Token"
-                        : "Woohoo! Token Minted"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Transition>
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
+              txError={txError}
+              states={states}
+              txHash={txHash}
+            />
           </div>
         </div>
       </div>
