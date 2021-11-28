@@ -7,6 +7,7 @@ import { useContractsContext } from "@/context/contractsContext";
 import { classNames } from "@/utils/classNames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Activity from "@/components/activity";
+import { ICreateStates, IReceipt } from "@/types";
 
 type Inputs = {
   tokenName: string;
@@ -14,7 +15,7 @@ type Inputs = {
   tokenImage: any;
 };
 
-const defaultState = {
+const defaultState: ICreateStates = {
   upload: {
     loading: false,
     done: false,
@@ -36,9 +37,9 @@ const Create: React.FC = () => {
   const [cid, setCID] = useState(null);
   const [txHash, setTxHash] = useState("s");
   const [txError, setTxError] = useState(null); // txError.message
-  const [receipt, setRecipt] = useState(null);
+  const [receipt, setRecipt] = useState<IReceipt>(null);
   const [showAlert, setShowAlert] = useState(false);
-  const [states, setStates] = useState(defaultState);
+  const [states, setStates] = useState<ICreateStates>(defaultState);
   const [showActivity, setShowActivity] = useState(false);
   const [showWall, setShowWall] = useState(false);
 
@@ -216,6 +217,7 @@ const Create: React.FC = () => {
               txError={txError}
               states={states}
               txHash={txHash}
+              receipt={receipt}
             />
           </div>
         </div>

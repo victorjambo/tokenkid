@@ -3,30 +3,16 @@ import StateIcon from "@/components/stateIcon";
 import Alert from "@/components/alert";
 import { ArrowRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { ICreateStates, IReceipt } from "@/types";
 
 interface IProps {
   show: boolean;
   showAlert: boolean;
   setShowAlert: (arg: boolean) => void;
   txError: { message: string };
-  states: {
-    upload: {
-      loading: boolean;
-      done: boolean;
-      error: boolean;
-    };
-    txHash: {
-      loading: boolean;
-      done: boolean;
-      error: boolean;
-    };
-    mint: {
-      loading: boolean;
-      done: boolean;
-      error: boolean;
-    };
-  };
+  states: ICreateStates;
   txHash: string;
+  receipt: IReceipt;
 }
 
 const Activity: React.FC<IProps> = ({
@@ -36,7 +22,9 @@ const Activity: React.FC<IProps> = ({
   txError,
   states,
   txHash,
+  receipt,
 }) => {
+  const tokenId = receipt?.events?.Transfer?.returnValues?.tokenId;
   return (
     <Transition
       show={show}
@@ -94,9 +82,9 @@ const Activity: React.FC<IProps> = ({
                 : "Mint Token"}
             </span>
           </div>
-          {states.mint.done && (
-            <div className="flex flex-row items-center text-blue-600 hover:text-blue-700 text-lg">
-              <Link href="/assets">
+          {states.mint.done && tokenId && (
+            <div className="flex flex-row items-center text-blue-600 hover:text-blue-700 text-lg cursor-pointer">
+              <Link href={`/assets/${tokenId}`}>
                 <div className="flex flex-row items-center">
                   <span className="pr-2">View Token</span>
                   <ArrowRightIcon className="w-5 h-5" />
