@@ -10,13 +10,4 @@ module.exports = {
     config.plugins.push(new webpack.IgnorePlugin(/^electron$/));
     return config;
   },
-
-  async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        destination: '/',
-      },
-    ];
-  },
 };
