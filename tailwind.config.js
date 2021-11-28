@@ -36,6 +36,9 @@ module.exports = {
       height: {
         hero: "586px",
       },
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
     },
   },
   variants: {

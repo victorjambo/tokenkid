@@ -8,7 +8,7 @@ import Navbar from "@/components/navbar";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
-import CreateInvestmentClubProvider from "@/context/contractsContext";
+import ContractsProvider from "@/context/contractsContext";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }) => {
       }}
     >
       <Provider store={store}>
-        <CreateInvestmentClubProvider>
+        <ContractsProvider>
           <PageHeader />
           <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
             <Navbar />
@@ -38,7 +38,7 @@ const App = ({ Component, pageProps }) => {
           </div>
           <Footer />
           <Modal />
-        </CreateInvestmentClubProvider>
+        </ContractsProvider>
       </Provider>
     </ContractKitProvider>
   );

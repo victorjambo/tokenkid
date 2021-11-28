@@ -17,7 +17,7 @@ const ContractsContext = createContext<Partial<ContractsProviderProps>>({});
 export const useContractsContext = (): Partial<ContractsProviderProps> =>
   useContext(ContractsContext);
 
-const CreateInvestmentClubProvider: React.FC = ({ children }) => {
+const ContractsProvider: React.FC = ({ children }) => {
   const {
     address,
     account,
@@ -91,4 +91,4 @@ const CreateInvestmentClubProvider: React.FC = ({ children }) => {
   );
 };
 
-export default CreateInvestmentClubProvider;
+export default ContractsProvider;
