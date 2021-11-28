@@ -41,15 +41,15 @@ const Alert: React.FC<AlertProps> = ({
     <Transition
       show={show}
       enter="transition ease-out duration-100 transform"
-      enterFrom={`opacity-0`}
-      enterTo={`opacity-100`}
-      leave={`transition ease-in duration-200 transform`}
-      leaveFrom={`opacity-100`}
-      leaveTo={`opacity-0`}
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition ease-in duration-200 transform"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
     >
       <div className={`${baseClasses} ${className}`} role="alert">
         <div>
-          {title && <p className={`font-semibold`}>{title}</p>}
+          {title && <p className="font-semibold">{title}</p>}
           {children}
         </div>
         {closable && <button onClick={() => setShow(false)}>&times;</button>}

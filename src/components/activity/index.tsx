@@ -94,11 +94,16 @@ const Activity: React.FC<IProps> = ({
                 : "Mint Token"}
             </span>
           </div>
-          <div className="flex flex-row items-center text-blue-600 hover:text-blue-700 text-lg">
-            <Link href="/assets">
-              View Token <ArrowRightIcon className="w-5 h-5" />
-            </Link>
-          </div>
+          {states.mint.done && (
+            <div className="flex flex-row items-center text-blue-600 hover:text-blue-700 text-lg">
+              <Link href="/assets">
+                <div className="flex flex-row items-center">
+                  <span className="pr-2">View Token</span>
+                  <ArrowRightIcon className="w-5 h-5" />
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </Transition>
