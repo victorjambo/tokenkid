@@ -1,15 +1,28 @@
 import Web3 from "web3";
 import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { useDispatch } from "react-redux";
 import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
+import { ITokenKid } from "@/state/wallet/types";
+import { useRouter } from "next/router";
 
 interface ContractsProviderProps {
   handleConnection: () => void;
   handleDestroy: () => void;
   tokenKidFactoryContract: TokenKidFactoryContract;
+  fetchMintedToken: (tokenId: number) => Promise<ITokenKid>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const ContractsContext = createContext<Partial<ContractsProviderProps>>({});
@@ -19,23 +32,25 @@ export const useContractsContext = (): Partial<ContractsProviderProps> =>
 
 const ContractsProvider: React.FC = ({ children }) => {
   const {
-    address,
-    account,
     connect,
     destroy,
-    initialised,
     network: { name },
     walletType,
     getConnectedKit,
     performActions,
   } = useContractKit();
 
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
   const [tokenKidFactoryContract, setTokenKidFactoryContract] = useState(null);
 
   useEffect(() => {
     if (walletType !== "Unauthenticated") {
       // Initialize contracts
-      setTokenKidFactoryContract(new TokenKidFactoryContract(name, getConnectedKit));
+      setTokenKidFactoryContract(
+        new TokenKidFactoryContract(name, getConnectedKit)
+      );
     } else {
       setTokenKidFactoryContract(null);
     }
@@ -58,7 +73,7 @@ const ContractsProvider: React.FC = ({ children }) => {
         cusdToken.balanceOf(defaultAccount),
         ceurToken.balanceOf(defaultAccount),
       ]);
-  
+
       dispatch(
         setAccountBalances({
           celo: Web3.utils.fromWei(celo.toFixed()),
@@ -86,7 +101,9 @@ const ContractsProvider: React.FC = ({ children }) => {
       value={{
         handleConnection,
         handleDestroy,
-        tokenKidFactoryContract
+        tokenKidFactoryContract,
+        loading,
+        setLoading,
       }}
     >
       {children}
