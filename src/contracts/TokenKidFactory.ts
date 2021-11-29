@@ -156,15 +156,78 @@ class TokenKidFactoryContract {
         });
     });
   };
+
+  getApproved = async (tokenId: number): Promise<any> => {
+    try {
+      return await this.tokenKidFactory.methods
+        .getApproved(tokenId)
+        .call();
+    } catch (error) {
+      console.log({ error }); // TODO: handle this
+      return null;
+    }
+  };
+
+  isApprovedForAll = async (owner: string): Promise<any> => {
+    try {
+      return await this.tokenKidFactory.methods
+        .isApprovedForAll(owner, this.token)
+        .call();
+    } catch (error) {
+      console.log({ error }); // TODO: handle this
+      return null;
+    }
+  };
+
+  approve = async (
+    tokenId: number,
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
+  ) => {
+    await new Promise((resolve) => {
+      this.tokenKidFactory.methods
+        .approve(this.token, tokenId)
+        .send({ from: defaultAccount })
+        .on("transactionHash", (transactionHash) => {
+          onTransactionHash(transactionHash);
+        })
+        .on("receipt", (receipt) => {
+          onReceipt(receipt);
+          resolve(receipt);
+        })
+        .on("error", (error) => {
+          onError(error);
+          resolve(error);
+        });
+    });
+  };
+
+  setApprovalForAll = async (
+    _approved: boolean,
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
+  ) => {
+    await new Promise((resolve) => {
+      this.tokenKidFactory.methods
+        .setApprovalForAll(this.token, _approved)
+        .send({ from: defaultAccount })
+        .on("transactionHash", (transactionHash) => {
+          onTransactionHash(transactionHash);
+        })
+        .on("receipt", (receipt) => {
+          onReceipt(receipt);
+          resolve(receipt);
+        })
+        .on("error", (error) => {
+          onError(error);
+          resolve(error);
+        });
+    });
+  };
 }
 
 export default TokenKidFactoryContract;
-
-/** usage example
- * const price = new BN((9000000000000000000).toString());
- * tokenKidFactoryContract.changeTokenPrice(0, price, kit.defaultAccount);
- * tokenKidFactoryContract.toggleOnSale(0, kit.defaultAccount);
- * // setting allowance first
- * tokenKidFactoryContract.buyToken(0, price, "0x874069fa1eb16d44d622f2e0ca25eea172369bc1", kit.defaultAccount);
- * const token = await tokenKidFactoryContract.getMintedToken(0);
- */

@@ -15,6 +15,7 @@ import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
 import { ITokenKid } from "@/state/wallet/types";
 import ERC20Contract from "@/contracts/ERC20";
+import { tokenAddresses } from "@/utils/tokenMapping";
 
 interface ContractsProviderProps {
   handleConnection: () => void;
@@ -24,6 +25,7 @@ interface ContractsProviderProps {
   fetchMintedToken: (tokenId: number) => Promise<ITokenKid>;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
+  contractAddress: string;
 }
 
 const ContractsContext = createContext<Partial<ContractsProviderProps>>({});
@@ -44,6 +46,8 @@ const ContractsProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [tokenKidFactoryContract, setTokenKidFactoryContract] = useState(null);
   const [ERC20, setERC20] = useState(null);
+
+  const contractAddress = tokenAddresses[name].tokenFactory;
 
   useEffect(() => {
     if (walletType !== "Unauthenticated") {
@@ -107,6 +111,7 @@ const ContractsProvider: React.FC = ({ children }) => {
         ERC20,
         loading,
         setLoading,
+        contractAddress,
       }}
     >
       {children}

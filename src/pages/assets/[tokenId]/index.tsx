@@ -28,9 +28,15 @@ const Assets: React.FC = () => {
 
   const [tokeninfo, setTokeninfo] = useState<ITokenKid>(defaultTokenInfo);
   const [currentAllowance, setCurrentAllowance] = useState(null);
+  const [approved, setApproved] = useState(null);
 
-  const { tokenKidFactoryContract, loading, setLoading, ERC20 } =
-    useContractsContext();
+  const {
+    tokenKidFactoryContract,
+    loading,
+    setLoading,
+    ERC20,
+    contractAddress,
+  } = useContractsContext();
 
   const {
     performActions,
@@ -59,19 +65,27 @@ const Assets: React.FC = () => {
     }
   }, [ERC20]);
 
+  const fetchApproved = useCallback(async () => {
+    await performActions(async () => {
+      if (
+        router.isReady &&
+        tokenKidFactoryContract instanceof TokenKidFactoryContract
+      ) {
+        const _approved = await tokenKidFactoryContract.getApproved(+tokenId);
+        setApproved(_approved);
+      }
+    });
+  }, [tokenKidFactoryContract, router.isReady]);
+
   useEffect(() => {
     void fetchMintedToken();
     void fetchAllowance();
-  }, [fetchMintedToken, fetchAllowance]);
+    void fetchApproved();
+  }, [fetchMintedToken, fetchAllowance, fetchApproved]);
 
   const setAllowance = async () => {
-    const priceInWei = Web3.utils.toWei(new BN("10"));
-    await ERC20.setAllowance(
-      priceInWei,
-      onReceipt,
-      onError,
-      onTransactionHash
-    );
+    const priceInWei = Web3.utils.toWei(new BN(tokeninfo.price));
+    await ERC20.setAllowance(priceInWei, onReceipt, onError, onTransactionHash);
     fetchAllowance();
   };
 
@@ -89,6 +103,26 @@ const Assets: React.FC = () => {
         onError,
         onTransactionHash
       );
+    });
+  };
+
+  const approveToken = async () => {
+    await performActions(async (kit) => {
+      const _tokenId = +tokeninfo.tokenId;
+      await tokenKidFactoryContract.approve(
+        _tokenId,
+        kit.defaultAccount,
+        onReceipt,
+        onError,
+        onTransactionHash
+      );
+      // await tokenKidFactoryContract.setApprovalForAll(
+      //   true,
+      //   kit.defaultAccount,
+      //   onReceipt,
+      //   onError,
+      //   onTransactionHash
+      // );
     });
   };
 
@@ -111,10 +145,6 @@ const Assets: React.FC = () => {
         </div>
       </div>
       <div className="w-1/2 flex flex-col space-y-5">
-        <button onClick={async () => {
-          const _currentAllowance = await ERC20.getAllowance();
-          console.log({_currentAllowance});
-        }}>_currentAllowance</button>
         <div className="font-bold text-2xl">Description</div>
         <div className="text-gray-400">
           All the Lorem Ipsum generators on the Internet tend to repeat
@@ -169,6 +199,17 @@ const Assets: React.FC = () => {
             </button>
           </>
         )}
+        {tokeninfo.owner &&
+          tokeninfo.owner === address && (
+            <button
+              className={classNames(
+                "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
+              )}
+              onClick={approveToken}
+            >
+              Approve Marketplace to transfer Token ownership
+            </button>
+          )}
 
         <div className="bg-white-back py-9 px-5">
           <div className="text-black text-2xl font-bold pb-8">History</div>
@@ -255,3 +296,5 @@ const Assets: React.FC = () => {
 };
 
 export default Assets;
+
+// 2000000000000000000
