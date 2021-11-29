@@ -4,6 +4,7 @@ import { Contract } from "web3-eth-contract";
 import { tokenAddresses } from "@/utils/tokenMapping";
 import { ITokenKid } from "@/state/wallet/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
+import { gas } from "@/utils/constants";
 
 class TokenKidFactoryContract {
   private token: string;
@@ -12,7 +13,7 @@ class TokenKidFactoryContract {
 
   constructor(name: string, getConnectedKit: () => any) {
     this.token = tokenAddresses[name].tokenFactory;
-    this.getConnectedKit = getConnectedKit
+    this.getConnectedKit = getConnectedKit;
     this.initialize();
   }
 
@@ -52,6 +53,7 @@ class TokenKidFactoryContract {
         })
         .on("error", (error) => {
           onError(error);
+          resolve(error); // This Hack dismisses useContractKit modal
         });
     });
   };
@@ -68,7 +70,7 @@ class TokenKidFactoryContract {
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .buyToken(tokenId, price, token)
-        .send({ gas: "80000", from: defaultAccount })
+        .send({ gas, from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash(transactionHash);
         })
@@ -78,13 +80,16 @@ class TokenKidFactoryContract {
         })
         .on("error", (error) => {
           onError(error);
+          resolve(error);
         });
     });
   };
 
   getMintedToken = async (tokenId: number): Promise<ITokenKid> => {
     try {
-      const _token = await this.tokenKidFactory.methods.getMintedToken(tokenId).call();
+      const _token = await this.tokenKidFactory.methods
+        .getMintedToken(tokenId)
+        .call();
 
       return {
         tokenId: _token[0],
@@ -96,7 +101,7 @@ class TokenKidFactoryContract {
         isOnSale: _token[6],
       };
     } catch (error) {
-      console.log({error}); // TODO: handle this
+      console.log({ error }); // TODO: handle this
       return null;
     }
   };
@@ -122,6 +127,7 @@ class TokenKidFactoryContract {
         })
         .on("error", (error) => {
           onError(error);
+          resolve(error);
         });
     });
   };
@@ -146,6 +152,7 @@ class TokenKidFactoryContract {
         })
         .on("error", (error) => {
           onError(error);
+          resolve(error);
         });
     });
   };

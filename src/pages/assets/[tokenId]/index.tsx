@@ -1,3 +1,5 @@
+import BN from "bn.js";
+import Web3 from "web3";
 import GradientAvatar from "@/components/avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
@@ -6,6 +8,9 @@ import { shortAddress } from "@/utils/shortAddress";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { tokenAddresses } from "@/utils/tokenMapping";
+import { classNames } from "@/utils/classNames";
+import ERC20Contract from "@/contracts/ERC20";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,
@@ -22,11 +27,16 @@ const Assets: React.FC = () => {
   const { tokenId } = router.query;
 
   const [tokeninfo, setTokeninfo] = useState<ITokenKid>(defaultTokenInfo);
+  const [currentAllowance, setCurrentAllowance] = useState(null);
 
-  const { tokenKidFactoryContract, loading, setLoading } =
+  const { tokenKidFactoryContract, loading, setLoading, ERC20 } =
     useContractsContext();
 
-  const { performActions, address } = useContractKit();
+  const {
+    performActions,
+    address,
+    network: { name },
+  } = useContractKit();
 
   const fetchMintedToken = useCallback(async () => {
     setLoading(true);
@@ -42,9 +52,56 @@ const Assets: React.FC = () => {
     });
   }, [tokenKidFactoryContract, router.isReady]);
 
+  const fetchAllowance = useCallback(async () => {
+    if (ERC20 instanceof ERC20Contract) {
+      const _currentAllowance = await ERC20.getAllowance();
+      setCurrentAllowance(_currentAllowance / 10 ** 18);
+    }
+  }, [ERC20]);
+
   useEffect(() => {
     void fetchMintedToken();
-  }, [fetchMintedToken]);
+    void fetchAllowance();
+  }, [fetchMintedToken, fetchAllowance]);
+
+  const setAllowance = async () => {
+    const priceInWei = Web3.utils.toWei(new BN("10"));
+    await ERC20.setAllowance(
+      priceInWei,
+      onReceipt,
+      onError,
+      onTransactionHash
+    );
+    fetchAllowance();
+  };
+
+  const buyToken = async () => {
+    await performActions(async (kit) => {
+      const _tokenId = +tokeninfo.tokenId;
+      const priceInWei = Web3.utils.toWei(new BN(tokeninfo.price.toString()));
+      const cUSDToken = tokenAddresses[name].ERC20Tokens.cUSD;
+      await tokenKidFactoryContract.buyToken(
+        _tokenId,
+        priceInWei,
+        cUSDToken,
+        kit.defaultAccount,
+        onReceipt,
+        onError,
+        onTransactionHash
+      );
+    });
+  };
+
+  const onReceipt = (_receipt) => {
+    console.log({ _receipt });
+  };
+
+  const onError = (err) => {
+    console.log({ err });
+  };
+  const onTransactionHash = (hash) => {
+    console.log({ hash });
+  };
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
@@ -54,6 +111,10 @@ const Assets: React.FC = () => {
         </div>
       </div>
       <div className="w-1/2 flex flex-col space-y-5">
+        <button onClick={async () => {
+          const _currentAllowance = await ERC20.getAllowance();
+          console.log({_currentAllowance});
+        }}>_currentAllowance</button>
         <div className="font-bold text-2xl">Description</div>
         <div className="text-gray-400">
           All the Lorem Ipsum generators on the Internet tend to repeat
@@ -87,9 +148,26 @@ const Assets: React.FC = () => {
         </div>
 
         {tokeninfo.owner && tokeninfo.owner !== address && (
-          <button className="bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold">
-            Buy Token
-          </button>
+          <>
+            <button
+              className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
+              onClick={setAllowance}
+            >
+              Set Allowance {currentAllowance}
+            </button>
+            <button
+              className={classNames(
+                "rounded-full px-6 py-3 text-white text-center font-semibold",
+                +currentAllowance < +tokeninfo.price
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-pink-primary"
+              )}
+              disabled={+currentAllowance < +tokeninfo.price}
+              onClick={buyToken}
+            >
+              Buy Token
+            </button>
+          </>
         )}
 
         <div className="bg-white-back py-9 px-5">

@@ -14,12 +14,13 @@ import { useDispatch } from "react-redux";
 import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
 import { ITokenKid } from "@/state/wallet/types";
-import { useRouter } from "next/router";
+import ERC20Contract from "@/contracts/ERC20";
 
 interface ContractsProviderProps {
   handleConnection: () => void;
   handleDestroy: () => void;
   tokenKidFactoryContract: TokenKidFactoryContract;
+  ERC20: ERC20Contract;
   fetchMintedToken: (tokenId: number) => Promise<ITokenKid>;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -40,10 +41,9 @@ const ContractsProvider: React.FC = ({ children }) => {
     performActions,
   } = useContractKit();
 
-  const router = useRouter();
-
   const [loading, setLoading] = useState(false);
   const [tokenKidFactoryContract, setTokenKidFactoryContract] = useState(null);
+  const [ERC20, setERC20] = useState(null);
 
   useEffect(() => {
     if (walletType !== "Unauthenticated") {
@@ -51,8 +51,10 @@ const ContractsProvider: React.FC = ({ children }) => {
       setTokenKidFactoryContract(
         new TokenKidFactoryContract(name, getConnectedKit)
       );
+      setERC20(new ERC20Contract(name, getConnectedKit));
     } else {
       setTokenKidFactoryContract(null);
+      setERC20(null);
     }
   }, [walletType]);
 
@@ -102,6 +104,7 @@ const ContractsProvider: React.FC = ({ children }) => {
         handleConnection,
         handleDestroy,
         tokenKidFactoryContract,
+        ERC20,
         loading,
         setLoading,
       }}
