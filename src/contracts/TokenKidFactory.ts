@@ -84,9 +84,19 @@ class TokenKidFactoryContract {
 
   getMintedToken = async (tokenId: number): Promise<ITokenKid> => {
     try {
-      return await this.tokenKidFactory.methods.getMintedToken(tokenId).call();
+      const _token = await this.tokenKidFactory.methods.getMintedToken(tokenId).call();
+
+      return {
+        tokenId: _token[0],
+        tokenName: _token[1],
+        owner: _token[2],
+        previousOwner: _token[3],
+        price: +_token[4] / 10 ** 18, // Convert Price from wei
+        tokenURI: _token[5],
+        isOnSale: _token[6],
+      };
     } catch (error) {
-      console.debug(error); // TODO: handle this
+      console.log({error}); // TODO: handle this
       return null;
     }
   };

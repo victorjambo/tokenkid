@@ -1,7 +1,18 @@
 import GradientAvatar from "@/components/avatar";
-import React from "react";
+import { useContractsContext } from "@/context/contractsContext";
+import { useRouter } from "next/router";
 
 const Assets: React.FC = () => {
+  const router = useRouter();
+  const { tokenId } = router.query;
+
+  const { tokenKidFactoryContract } = useContractsContext();
+
+  const fetchToken = async () => {
+    const token = await tokenKidFactoryContract.getMintedToken(+tokenId);
+    console.log({token})
+  }
+
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
       <div className="w-1/2 flex flex-col">
@@ -14,6 +25,7 @@ const Assets: React.FC = () => {
         
       </div>
       <div className="w-1/2 flex flex-col space-y-5">
+        <button onClick={fetchToken}>CLICKME</button>
         <div className="font-bold text-2xl">Description</div>
         <div className="text-gray-400">All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks.</div>
         <div className="flex flex-row items-center space-x-2">
