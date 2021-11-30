@@ -4,7 +4,6 @@ import { Contract } from "web3-eth-contract";
 import { tokenAddresses } from "@/utils/tokenMapping";
 import { ITokenKid } from "@/state/wallet/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
-import { gas } from "@/utils/constants";
 
 class TokenKidFactoryContract {
   private token: string;
@@ -69,7 +68,7 @@ class TokenKidFactoryContract {
   ) => {
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
-        .buyToken(tokenId, price, token)
+        .buyToken(tokenId, token)
         .send({ from: defaultAccount, value: price })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash(transactionHash);

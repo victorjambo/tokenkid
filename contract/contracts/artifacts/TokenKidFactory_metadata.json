@@ -130,11 +130,6 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "_price",
-						"type": "uint256"
-					},
-					{
 						"internalType": "address",
 						"name": "token",
 						"type": "address"
@@ -526,10 +521,9 @@
 				"balanceOf(address)": {
 					"details": "See {IERC721-balanceOf}."
 				},
-				"buyToken(uint256,uint256,address)": {
+				"buyToken(uint256,address)": {
 					"details": "We Transfer ERC20 Tokens to owner of the NFT Hence The ERC20 Token address.",
 					"params": {
-						"_price": "Price in wei.",
 						"_tokenId": "NFT Token Id.",
 						"token": "ERC20 Token contract address."
 					}
@@ -599,7 +593,7 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"buyToken(uint256,uint256,address)": {
+				"buyToken(uint256,address)": {
 					"notice": "Transfer ownership of ERC721 token and Transfer ERC20 tokens to owner."
 				},
 				"changeTokenPrice(uint256,uint256)": {
@@ -735,11 +729,11 @@
 			]
 		},
 		"TokenKidFactory.sol": {
-			"keccak256": "0x6ee09186bcdaa8cb3f823d7ef2a6f5d1f2404fb7424f1e51f91bc86f750d7f07",
+			"keccak256": "0x121a4c3f6c812e314b8f572564a2d70c46273a3149c86e46596961fee053d257",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b19bcab5246c6a1b1023f30e308c9e99aa12a0e6c5d14a4e433e144f40e420f3",
-				"dweb:/ipfs/QmQWzxqGZYNTCzycgwEVQgcn3ywJKtmmAGam5ZpDhJ2L4o"
+				"bzz-raw://f9d274f73ec4d1b9957cb0ef66525e1d1e4fcd1ec5767da1ab261a148bb2d344",
+				"dweb:/ipfs/QmUU5k6A4Voeq4hTwWQvVxgPgkzo22ra2P3fu24iU7Jare"
 			]
 		}
 	},

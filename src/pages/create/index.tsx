@@ -93,7 +93,10 @@ const Create: React.FC = () => {
     } catch (error) {
       setTxError({ message: "Error uploading image. Check console" });
       setShowAlert(true);
-      return;
+      updateState("upload", "loading", false);
+      updateState("upload", "error", true);
+      setShowWall(false);
+      throw error.message;
     }
   };
 

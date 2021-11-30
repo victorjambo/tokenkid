@@ -21,8 +21,9 @@ Modifier to check if Token is owned by msg.sender
 Used to create/mint a token.
 
 
-### `buyToken(uint256 _tokenId, uint256 _price, address token)` (public)
+### `buyToken(uint256 _tokenId, address token)` (public)
 Transfer ownership of ERC721 token and Transfer ERC20 tokens to owner.
+This a payable function, remember to send price in msg.value.
 
 
 ### `getMintedToken(uint256 _tokenId)` (public)
