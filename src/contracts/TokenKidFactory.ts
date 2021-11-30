@@ -70,7 +70,7 @@ class TokenKidFactoryContract {
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .buyToken(tokenId, price, token)
-        .send({ gas, from: defaultAccount })
+        .send({ from: defaultAccount, value: price })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash(transactionHash);
         })
