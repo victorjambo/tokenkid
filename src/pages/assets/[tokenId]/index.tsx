@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { tokenAddresses } from "@/utils/tokenMapping";
 import { classNames } from "@/utils/classNames";
 import ERC20Contract from "@/contracts/ERC20";
+import ReactTooltip from "react-tooltip";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,
@@ -179,9 +180,14 @@ const Assets: React.FC = () => {
 
         {tokeninfo.owner && tokeninfo.owner !== address && (
           <>
+            
             <button
               className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
               onClick={setAllowance}
+              data-tip=""
+              data-for="set-allowance"
+              data-offset="{'top': 24}"
+              disabled={+currentAllowance < +tokeninfo.price}
             >
               Set Allowance {currentAllowance}
             </button>
@@ -197,18 +203,25 @@ const Assets: React.FC = () => {
             >
               Buy Token
             </button>
+            <ReactTooltip effect="solid" id="set-allowance">ERC-20 allowance to transfer cUSD</ReactTooltip>
           </>
         )}
         {tokeninfo.owner &&
           tokeninfo.owner === address && (
-            <button
-              className={classNames(
-                "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
-              )}
-              onClick={approveToken}
-            >
-              Approve Marketplace to transfer Token ownership
-            </button>
+            <>
+              <button
+                className={classNames(
+                  "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
+                )}
+                onClick={approveToken}
+                data-tip=""
+                data-for="approve-token"
+                data-offset="{'top': 24}"
+              >
+                Approve Token
+              </button>
+              <ReactTooltip effect="solid" id="approve-token">Approve Marketplace to transfer Token ownership on your behalf</ReactTooltip>
+            </>
           )}
 
         <div className="bg-white-back py-9 px-5">
