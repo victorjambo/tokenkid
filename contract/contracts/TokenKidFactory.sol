@@ -57,12 +57,10 @@ contract TokenKidFactory is ERC721URIStorage {
 
     /// @notice Transfer ownership of ERC721 token and Transfer ERC20 tokens to owner.
     /// @param _tokenId NFT Token Id.
-    /// @param _price Price in wei.
     /// @param token ERC20 Token contract address.
     /// @dev We Transfer ERC20 Tokens to owner of the NFT Hence The ERC20 Token address.
     function buyToken(
         uint256 _tokenId,
-        uint256 _price,
         address token
     ) public payable onlyExisting(_tokenId) {
         // Get owner of the token
@@ -75,6 +73,7 @@ contract TokenKidFactory is ERC721URIStorage {
         TokenKid memory tokenkid = tokenKids[_tokenId];
 
         // Check: price should be greater than or equal to token price
+        uint _price = msg.value;
         require(_price >= tokenkid.price, "TOKEN PRICE IS NOT ENOUGH");
 
         // Check: Token should be available for sale
