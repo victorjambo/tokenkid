@@ -28,4 +28,5 @@ export interface ITokenKid {
   price: number;
   tokenURI: string;
   isOnSale: boolean;
+  tokenDesc: string;
 }

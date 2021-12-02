@@ -34,6 +34,7 @@ class TokenKidFactoryContract {
     tokenName: string,
     price: number | BN,
     tokenURI: string,
+    tokenDesc: string,
     onReceipt: (arg0: any) => void,
     onError: (arg0: any) => void,
     onTransactionHash?: (arg0: string) => void
@@ -41,7 +42,7 @@ class TokenKidFactoryContract {
     const kit = await this.getConnectedKit();
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
-        .safeMint(tokenName, price, tokenURI)
+        .safeMint(tokenName, price, tokenURI, tokenDesc)
         .send({ from: kit.defaultAccount })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash(transactionHash);
@@ -98,6 +99,7 @@ class TokenKidFactoryContract {
         price: +_token[4] / 10 ** 18, // Convert Price from wei
         tokenURI: _token[5],
         isOnSale: _token[6],
+        tokenDesc: _token[7],
       };
     } catch (error) {
       console.log({ error }); // TODO: handle this

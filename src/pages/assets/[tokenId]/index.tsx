@@ -21,6 +21,7 @@ const defaultTokenInfo: ITokenKid = {
   price: 0,
   tokenURI: "",
   isOnSale: false,
+  tokenDesc: "",
 };
 
 const Assets: React.FC = () => {
@@ -148,9 +149,7 @@ const Assets: React.FC = () => {
       <div className="w-1/2 flex flex-col space-y-5">
         <div className="font-bold text-2xl">Description</div>
         <div className="text-gray-400">
-          All the Lorem Ipsum generators on the Internet tend to repeat
-          predefined chunks as necessary, All the Lorem Ipsum generators on the
-          Internet tend to repeat predefined chunks.
+          {tokeninfo.tokenDesc}
         </div>
         <div className="flex flex-row items-center space-x-2">
           <div className=" border-2 border-pink-primary rounded-full">

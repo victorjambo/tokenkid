@@ -21,6 +21,7 @@ contract TokenKidFactory is ERC721URIStorage {
         uint256 price;
         string tokenURI;
         bool isOnSale;
+        string tokenDesc;
     }
 
     mapping(uint256 => TokenKid) public tokenKids;
@@ -32,10 +33,12 @@ contract TokenKidFactory is ERC721URIStorage {
     /// @param _tokenName Token Name
     /// @param _price Token Price in wei. Value of NFT.
     /// @param _tokenURI BaseURI
+    /// @param _tokenDesc Token Description
     function safeMint(
         string memory _tokenName,
         uint256 _price,
-        string memory _tokenURI
+        string memory _tokenURI,
+        string memory _tokenDesc
     ) public {
         // Mint
         uint256 tokenId = _tokenIdCounter.current();
@@ -51,7 +54,8 @@ contract TokenKidFactory is ERC721URIStorage {
             payable(msg.sender), // previousOwner
             _price,
             _tokenURI,
-            true
+            true,
+            _tokenDesc
         );
     }
 
@@ -108,7 +112,8 @@ contract TokenKidFactory is ERC721URIStorage {
             address payable,
             uint256,
             string memory,
-            bool
+            bool,
+            string memory
         )
     {
         // Check: if tokenId exists
@@ -123,7 +128,8 @@ contract TokenKidFactory is ERC721URIStorage {
             tokenkid.previousOwner,
             tokenkid.price,
             tokenkid.tokenURI,
-            tokenkid.isOnSale
+            tokenkid.isOnSale,
+            tokenkid.tokenDesc
         );
     }
 
