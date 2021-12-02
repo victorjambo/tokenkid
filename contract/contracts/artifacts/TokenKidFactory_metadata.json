@@ -221,6 +221,52 @@
 						"internalType": "bool",
 						"name": "",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "getTokenPriceHistory",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "transferTime",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "from",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "to",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TokenKidFactory.TokenPriceHistory[]",
+						"name": "",
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -297,6 +343,11 @@
 					{
 						"internalType": "string",
 						"name": "_tokenURI",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_tokenDesc",
 						"type": "string"
 					}
 				],
@@ -463,6 +514,50 @@
 						"internalType": "bool",
 						"name": "isOnSale",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "tokenDesc",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "tokenPriceHistory",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "transferTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "from",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "to",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -545,6 +640,14 @@
 						"_0": "The `TokenKid`"
 					}
 				},
+				"getTokenPriceHistory(uint256)": {
+					"params": {
+						"_tokenId": "NFT Token Id."
+					},
+					"returns": {
+						"_0": "The `TokenPriceHistory[]`"
+					}
+				},
 				"isApprovedForAll(address,address)": {
 					"details": "See {IERC721-isApprovedForAll}."
 				},
@@ -554,9 +657,10 @@
 				"ownerOf(uint256)": {
 					"details": "See {IERC721-ownerOf}."
 				},
-				"safeMint(string,uint256,string)": {
+				"safeMint(string,uint256,string,string)": {
 					"params": {
 						"_price": "Token Price in wei. Value of NFT.",
+						"_tokenDesc": "Token Description",
 						"_tokenName": "Token Name",
 						"_tokenURI": "BaseURI"
 					}
@@ -605,7 +709,10 @@
 				"getMintedToken(uint256)": {
 					"notice": "Get a Minted Token given the _tokenId"
 				},
-				"safeMint(string,uint256,string)": {
+				"getTokenPriceHistory(uint256)": {
+					"notice": "Get a Minted Token History"
+				},
+				"safeMint(string,uint256,string,string)": {
 					"notice": "Mint a new ERC721 token"
 				},
 				"toggleOnSale(uint256)": {
@@ -729,11 +836,11 @@
 			]
 		},
 		"TokenKidFactory.sol": {
-			"keccak256": "0x121a4c3f6c812e314b8f572564a2d70c46273a3149c86e46596961fee053d257",
+			"keccak256": "0xb083093233d9fd5e3e5fab6c163bfb5c6e35145c06a6ed607667a9d8c04b1f6e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f9d274f73ec4d1b9957cb0ef66525e1d1e4fcd1ec5767da1ab261a148bb2d344",
-				"dweb:/ipfs/QmUU5k6A4Voeq4hTwWQvVxgPgkzo22ra2P3fu24iU7Jare"
+				"bzz-raw://fac35577c3ab0ba93a3a2c185759fbe9d109437e0a355d572d85083f5c9b49ec",
+				"dweb:/ipfs/QmRKL3eavuydVLtT6hEhtPrZFeoSAmKE5iPEawJomN7stA"
 			]
 		}
 	},

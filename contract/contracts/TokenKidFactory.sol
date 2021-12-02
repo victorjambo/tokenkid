@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /// @author @victorjambo
 /// @notice Factory to create/mint ERC721 Tokens
 contract TokenKidFactory is ERC721URIStorage {
-
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -25,6 +24,15 @@ contract TokenKidFactory is ERC721URIStorage {
     }
 
     mapping(uint256 => TokenKid) public tokenKids;
+
+    struct TokenPriceHistory {
+        uint256 tokenId;
+        uint256 transferTime;
+        uint256 from;
+        uint256 to;
+    }
+
+    mapping(uint256 => TokenPriceHistory[]) public tokenPriceHistory;
 
     /// @notice Used to initialize the TokenKid contract
     constructor() ERC721("TokenKid", "KID") {}
@@ -63,10 +71,11 @@ contract TokenKidFactory is ERC721URIStorage {
     /// @param _tokenId NFT Token Id.
     /// @param token ERC20 Token contract address.
     /// @dev We Transfer ERC20 Tokens to owner of the NFT Hence The ERC20 Token address.
-    function buyToken(
-        uint256 _tokenId,
-        address token
-    ) public payable onlyExisting(_tokenId) {
+    function buyToken(uint256 _tokenId, address token)
+        public
+        payable
+        onlyExisting(_tokenId)
+    {
         // Get owner of the token
         address tokenOwner = ownerOf(_tokenId);
 
@@ -77,7 +86,7 @@ contract TokenKidFactory is ERC721URIStorage {
         TokenKid memory tokenkid = tokenKids[_tokenId];
 
         // Check: price should be greater than or equal to token price
-        uint _price = msg.value;
+        uint256 _price = msg.value;
         require(_price >= tokenkid.price, "TOKEN PRICE IS NOT ENOUGH");
 
         // Check: Token should be available for sale
@@ -116,9 +125,6 @@ contract TokenKidFactory is ERC721URIStorage {
             string memory
         )
     {
-        // Check: if tokenId exists
-        require(_exists(_tokenId));
-
         TokenKid memory tokenkid = tokenKids[_tokenId];
 
         return (
@@ -133,14 +139,39 @@ contract TokenKidFactory is ERC721URIStorage {
         );
     }
 
+    /// @notice Get a Minted Token History
+    /// @param _tokenId NFT Token Id.
+    /// @return The `TokenPriceHistory[]`
+    function getTokenPriceHistory(uint256 _tokenId)
+        public
+        view
+        onlyExisting(_tokenId)
+        returns (TokenPriceHistory[] memory)
+    {
+        return tokenPriceHistory[_tokenId];
+    }
+
     /// @notice Update NFT Price
     /// @param _tokenId NFT Token Id.
     /// @param _price Price in wei.
     function changeTokenPrice(uint256 _tokenId, uint256 _price)
         public
+        onlyExisting(_tokenId)
         onlyOwner(_tokenId)
     {
+        uint256 _prevPrice = tokenKids[_tokenId].price;
+
         tokenKids[_tokenId].price = _price;
+
+        // update transfer history
+        tokenPriceHistory[_tokenId].push(
+            TokenPriceHistory(
+                _tokenId,
+                block.timestamp,
+                _prevPrice,
+                _price
+            )
+        );
     }
 
     /// @notice Update NFT On sale Availability
