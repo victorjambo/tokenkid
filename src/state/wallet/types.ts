@@ -30,3 +30,10 @@ export interface ITokenKid {
   isOnSale: boolean;
   tokenDesc: string;
 }
+
+export interface ITokenPriceHistory {
+  tokenId: number;
+  transferTime: number;
+  from: number;
+  to: number;
+}

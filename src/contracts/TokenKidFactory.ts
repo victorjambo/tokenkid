@@ -2,7 +2,7 @@ import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
 import { tokenAddresses } from "@/utils/tokenAddresses";
-import { ITokenKid } from "@/state/wallet/types";
+import { ITokenKid, ITokenPriceHistory } from "@/state/wallet/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 
 class TokenKidFactoryContract {
@@ -100,6 +100,24 @@ class TokenKidFactoryContract {
         tokenURI: _token[5],
         isOnSale: _token[6],
         tokenDesc: _token[7],
+      };
+    } catch (error) {
+      console.log({ error }); // TODO: handle this
+      return null;
+    }
+  };
+
+  getTokenPriceHistory = async (tokenId: number): Promise<ITokenPriceHistory> => {
+    try {
+      const _tokenPriceHistory = await this.tokenKidFactory.methods
+        .getTokenPriceHistory(tokenId)
+        .call();
+
+      return {
+        tokenId: _tokenPriceHistory[0],
+        transferTime: _tokenPriceHistory[1],
+        from: _tokenPriceHistory[2] / 10 ** 18,
+        to: _tokenPriceHistory[3] / 10 ** 18,
       };
     } catch (error) {
       console.log({ error }); // TODO: handle this

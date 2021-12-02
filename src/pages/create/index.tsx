@@ -11,6 +11,7 @@ import { ICreateStates, IReceipt } from "@/types";
 
 type Inputs = {
   tokenName: string;
+  tokenDesc: string;
   tokenPrice: number;
   tokenImage: any;
 };
@@ -52,7 +53,7 @@ const Create: React.FC = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { tokenImage, tokenName, tokenPrice } = data;
+    const { tokenImage, tokenName, tokenPrice, tokenDesc } = data;
     setShowWall(true);
     setShowActivity(true);
 
@@ -71,6 +72,7 @@ const Create: React.FC = () => {
       tokenName,
       priceInWei,
       tokenURI,
+      tokenDesc,
       onReceipt,
       onTransactionError,
       onTransactionHash
@@ -172,6 +174,23 @@ const Create: React.FC = () => {
                     />
                     <p className="text-red-400 text-sm">
                       {errors.tokenName && "Required Field"}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label htmlFor="tokenName">Token Description</label>
+                    <textarea
+                      id="tokenDesc"
+                      className={classNames(
+                        "px-4 py-2 border rounded-md",
+                        errors.tokenName ? "border-red-400" : ""
+                      )}
+                      placeholder="Token Description"
+                      {...register("tokenDesc", {
+                        required: true,
+                      })}
+                    />
+                    <p className="text-red-400 text-sm">
+                      {errors.tokenDesc && "Required Field"}
                     </p>
                   </div>
                   <div className="flex flex-col">
