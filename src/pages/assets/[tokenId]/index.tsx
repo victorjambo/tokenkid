@@ -12,6 +12,7 @@ import { tokenAddresses } from "@/utils/tokenAddresses";
 import { classNames } from "@/utils/classNames";
 import ERC20Contract from "@/contracts/ERC20";
 import ReactTooltip from "react-tooltip";
+import TokenPriceHistory from "@/components/tokenPriceHistory";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,
@@ -32,13 +33,8 @@ const Assets: React.FC = () => {
   const [currentAllowance, setCurrentAllowance] = useState(null);
   const [approved, setApproved] = useState(null);
 
-  const {
-    tokenKidFactoryContract,
-    loading,
-    setLoading,
-    ERC20,
-    contractAddress,
-  } = useContractsContext();
+  const { tokenKidFactoryContract, loading, setLoading, ERC20 } =
+    useContractsContext();
 
   const {
     performActions,
@@ -118,13 +114,6 @@ const Assets: React.FC = () => {
         onError,
         onTransactionHash
       );
-      // await tokenKidFactoryContract.setApprovalForAll(
-      //   true,
-      //   kit.defaultAccount,
-      //   onReceipt,
-      //   onError,
-      //   onTransactionHash
-      // );
     });
   };
 
@@ -143,13 +132,21 @@ const Assets: React.FC = () => {
     <div className="container m-auto py-24 flex flex-row space-x-6">
       <div className="w-1/2 flex flex-col sticky top-20 h-full">
         <div className="mb-8">
-          <img className="w-full rounded-xl" src={tokeninfo.tokenURI} />
+          {loading ? (
+            <div className="animate-pulse h-96 rounded-xl bg-gray-200" />
+          ) : (
+            <img className="w-full rounded-xl" src={tokeninfo.tokenURI} />
+          )}
         </div>
       </div>
       <div className="w-1/2 flex flex-col space-y-5">
         <div className="font-bold text-2xl">Description</div>
         <div className="text-gray-400">
-          {tokeninfo.tokenDesc}
+          {loading ? (
+            <div className="animate-pulse h-20 rounded-xl bg-gray-200" />
+          ) : (
+            tokeninfo.tokenDesc
+          )}
         </div>
         <div className="flex flex-row items-center space-x-2">
           <div className=" border-2 border-pink-primary rounded-full">
@@ -157,7 +154,11 @@ const Assets: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <div className="text-lg">
-              {shortAddress(tokeninfo.owner)}{" "}
+              {loading ? (
+                <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
+              ) : (
+                shortAddress(tokeninfo.owner)
+              )}{" "}
               {tokeninfo.owner && tokeninfo.owner === address && (
                 <span className="italic text-gray-400 text-sm">(You)</span>
               )}
@@ -169,17 +170,29 @@ const Assets: React.FC = () => {
         <div className="flex flex-row justify-between bg-gray-state rounded-xl p-8">
           <div className="flex flex-col">
             <div className="text-sm text-gray-400">Token Name</div>
-            <div className="text-lg font-semibold">{tokeninfo.tokenName}</div>
+            <div className="text-lg font-semibold">
+              {loading ? (
+                <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
+              ) : (
+                tokeninfo.tokenName
+              )}
+            </div>
           </div>
           <div className="flex flex-col">
             <div className="text-sm text-gray-400">Token Price</div>
-            <div className="text-lg font-semibold">{tokeninfo.price} cUSD</div>
+            <div className="text-lg font-semibold">
+              {loading ? (
+                <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
+              ) : (
+                tokeninfo.price
+              )}{" "}
+              cUSD
+            </div>
           </div>
         </div>
 
         {tokeninfo.owner && tokeninfo.owner !== address && (
           <>
-            
             <button
               className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
               onClick={setAllowance}
@@ -202,106 +215,31 @@ const Assets: React.FC = () => {
             >
               Buy Token
             </button>
-            <ReactTooltip effect="solid" id="set-allowance">ERC-20 allowance to transfer cUSD</ReactTooltip>
+            <ReactTooltip effect="solid" id="set-allowance">
+              ERC-20 allowance to transfer cUSD
+            </ReactTooltip>
           </>
         )}
-        {tokeninfo.owner &&
-          tokeninfo.owner === address && (
-            <>
-              <button
-                className={classNames(
-                  "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
-                )}
-                onClick={approveToken}
-                data-tip=""
-                data-for="approve-token"
-                data-offset="{'top': 24}"
-              >
-                Approve Token
-              </button>
-              <ReactTooltip effect="solid" id="approve-token">Approve Marketplace to transfer Token ownership on your behalf</ReactTooltip>
-            </>
-          )}
+        {tokeninfo.owner && tokeninfo.owner === address && (
+          <>
+            <button
+              className={classNames(
+                "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
+              )}
+              onClick={approveToken}
+              data-tip=""
+              data-for="approve-token"
+              data-offset="{'top': 24}"
+            >
+              Approve Token
+            </button>
+            <ReactTooltip effect="solid" id="approve-token">
+              Approve Marketplace to transfer Token ownership on your behalf
+            </ReactTooltip>
+          </>
+        )}
 
-        <div className="bg-white-back py-9 px-5">
-          <div className="text-black text-2xl font-bold pb-8">History</div>
-          <div className="flex flex-col space-y-4">
-            <div className="p-5 bg-white flex flex-row justify-between items-center">
-              <div className="flex flex-row items-center space-x-3">
-                <div className=" border-2 border-pink-primary rounded-full">
-                  <GradientAvatar />
-                </div>
-                <div className="flex flex-col">
-                  <div className="text-gray-600">
-                    Bid Placed For <span className="text-black">235 CELO</span>
-                  </div>
-                  <div className="text-pink-primary">@Jack</div>
-                </div>
-              </div>
-              <div className="text-gray-400">4 Hours Ago</div>
-            </div>
-
-            <div className="p-5 bg-white flex flex-row justify-between items-center">
-              <div className="flex flex-row items-center space-x-3">
-                <div className=" border-2 border-pink-primary rounded-full">
-                  <GradientAvatar />
-                </div>
-                <div className="flex flex-col">
-                  <div className="text-gray-600">
-                    Bid Placed For <span className="text-black">235 CELO</span>
-                  </div>
-                  <div className="text-pink-primary">@Jack</div>
-                </div>
-              </div>
-              <div className="text-gray-400">4 Hours Ago</div>
-            </div>
-
-            <div className="p-5 bg-white flex flex-row justify-between items-center">
-              <div className="flex flex-row items-center space-x-3">
-                <div className=" border-2 border-pink-primary rounded-full">
-                  <GradientAvatar />
-                </div>
-                <div className="flex flex-col">
-                  <div className="text-gray-600">
-                    Bid Placed For <span className="text-black">235 CELO</span>
-                  </div>
-                  <div className="text-pink-primary">@Jack</div>
-                </div>
-              </div>
-              <div className="text-gray-400">4 Hours Ago</div>
-            </div>
-
-            <div className="p-5 bg-white flex flex-row justify-between items-center">
-              <div className="flex flex-row items-center space-x-3">
-                <div className=" border-2 border-pink-primary rounded-full">
-                  <GradientAvatar />
-                </div>
-                <div className="flex flex-col">
-                  <div className="text-gray-600">
-                    Bid Placed For <span className="text-black">235 CELO</span>
-                  </div>
-                  <div className="text-pink-primary">@Jack</div>
-                </div>
-              </div>
-              <div className="text-gray-400">4 Hours Ago</div>
-            </div>
-
-            <div className="p-5 bg-white flex flex-row justify-between items-center">
-              <div className="flex flex-row items-center space-x-3">
-                <div className=" border-2 border-pink-primary rounded-full">
-                  <GradientAvatar />
-                </div>
-                <div className="flex flex-col">
-                  <div className="text-gray-600">
-                    Bid Placed For <span className="text-black">235 CELO</span>
-                  </div>
-                  <div className="text-pink-primary">@Jack</div>
-                </div>
-              </div>
-              <div className="text-gray-400">4 Hours Ago</div>
-            </div>
-          </div>
-        </div>
+        <TokenPriceHistory />
       </div>
     </div>
   );
