@@ -710,7 +710,7 @@
 					"notice": "Get a Minted Token given the _tokenId"
 				},
 				"getTokenPriceHistory(uint256)": {
-					"notice": "Get a Minted Token History"
+					"notice": "Get a Minted Token Change Price History"
 				},
 				"safeMint(string,uint256,string,string)": {
 					"notice": "Mint a new ERC721 token"
@@ -836,11 +836,11 @@
 			]
 		},
 		"TokenKidFactory.sol": {
-			"keccak256": "0xb083093233d9fd5e3e5fab6c163bfb5c6e35145c06a6ed607667a9d8c04b1f6e",
+			"keccak256": "0x03e0fb06d6e2bdf479f2c3050a7a790b3abbbcd20bf7e98d4ed4aec1b97fe2a6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fac35577c3ab0ba93a3a2c185759fbe9d109437e0a355d572d85083f5c9b49ec",
-				"dweb:/ipfs/QmRKL3eavuydVLtT6hEhtPrZFeoSAmKE5iPEawJomN7stA"
+				"bzz-raw://38cbc2f7f35595af679fd70dfddfc615230158edaae44c401de1fefbc166f50a",
+				"dweb:/ipfs/QmNQuXmrNiBAZtrCZwtkjYsTYuvWBJjfYFcMeUzpL3B2Cx"
 			]
 		}
 	},

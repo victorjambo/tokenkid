@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
-import { tokenAddresses } from "@/utils/tokenMapping";
+import { tokenAddresses } from "@/utils/tokenAddresses";
 import { ERC20_ABI } from "../abi/ERC20";
 
 class ERC20Contract {

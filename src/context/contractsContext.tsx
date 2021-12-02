@@ -15,7 +15,7 @@ import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
 import { ITokenKid } from "@/state/wallet/types";
 import ERC20Contract from "@/contracts/ERC20";
-import { tokenAddresses } from "@/utils/tokenMapping";
+import { tokenAddresses } from "@/utils/tokenAddresses";
 
 interface ContractsProviderProps {
   handleConnection: () => void;

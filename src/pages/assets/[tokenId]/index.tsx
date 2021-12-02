@@ -8,7 +8,7 @@ import { shortAddress } from "@/utils/shortAddress";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { tokenAddresses } from "@/utils/tokenMapping";
+import { tokenAddresses } from "@/utils/tokenAddresses";
 import { classNames } from "@/utils/classNames";
 import ERC20Contract from "@/contracts/ERC20";
 import ReactTooltip from "react-tooltip";

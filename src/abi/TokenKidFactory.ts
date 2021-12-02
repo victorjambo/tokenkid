@@ -126,11 +126,6 @@ export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "_price",
-        type: "uint256",
-      },
-      {
         internalType: "address",
         name: "token",
         type: "address",
@@ -223,6 +218,52 @@ export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
         name: "",
         type: "bool",
       },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getTokenPriceHistory",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "transferTime",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "from",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "to",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct TokenKidFactory.TokenPriceHistory[]",
+        name: "",
+        type: "tuple[]",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -298,6 +339,11 @@ export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
       {
         internalType: "string",
         name: "_tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_tokenDesc",
         type: "string",
       },
     ],
@@ -464,6 +510,50 @@ export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
         internalType: "bool",
         name: "isOnSale",
         type: "bool",
+      },
+      {
+        internalType: "string",
+        name: "tokenDesc",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "tokenPriceHistory",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "transferTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "to",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

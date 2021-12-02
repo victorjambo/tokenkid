@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
-import { tokenAddresses } from "@/utils/tokenMapping";
+import { tokenAddresses } from "@/utils/tokenAddresses";
 import { ITokenKid } from "@/state/wallet/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 
