@@ -13,6 +13,7 @@ import { classNames } from "@/utils/classNames";
 import ERC20Contract from "@/contracts/ERC20";
 import ReactTooltip from "react-tooltip";
 import TokenPriceHistory from "@/components/tokenPriceHistory";
+import { ZERO_ADDRESS } from "@/utils/constants";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,
@@ -104,6 +105,8 @@ const Assets: React.FC = () => {
     });
   };
 
+  // TODO: Grp this in a hook
+  // Refetch Approved after approving token
   const approveToken = async () => {
     await performActions(async (kit) => {
       const _tokenId = +tokeninfo.tokenId;
@@ -191,7 +194,7 @@ const Assets: React.FC = () => {
           </div>
         </div>
 
-        {tokeninfo.owner && tokeninfo.owner !== address && (
+        {tokeninfo.owner && tokeninfo.owner !== address && approved !== ZERO_ADDRESS && (
           <>
             <button
               className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
@@ -220,7 +223,10 @@ const Assets: React.FC = () => {
             </ReactTooltip>
           </>
         )}
-        {tokeninfo.owner && tokeninfo.owner === address && (
+        {tokeninfo.owner && tokeninfo.owner !== address && approved === ZERO_ADDRESS && (
+          <div>Token has not been approved by owner</div>
+        )}
+        {tokeninfo.owner && tokeninfo.owner === address && approved === ZERO_ADDRESS && (
           <>
             <button
               className={classNames(
@@ -246,5 +252,3 @@ const Assets: React.FC = () => {
 };
 
 export default Assets;
-
-// 2000000000000000000
