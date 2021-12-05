@@ -34,6 +34,22 @@ contract TokenKidFactory is ERC721URIStorage {
 
     mapping(uint256 => TokenPriceHistory[]) public tokenPriceHistory;
 
+    /// @notice Event emitted after minting an ERC721 token.
+    /// @dev These events can be used to fetch all minted tokens
+    /// in the contract
+    event Minted(
+        uint256 indexed tokenId,
+        address indexed owner,
+        string _tokenName,
+        uint256 _price,
+        string _tokenURI
+    );
+
+    /// @notice Event emitted after buying a token.
+    /// @dev These events can be used to notify the owner that their
+    /// token has been purchased
+    event TokenTransfered(uint256 indexed tokenId, address indexed newOwner);
+
     /// @notice Used to initialize the TokenKid contract
     constructor() ERC721("TokenKid", "KID") {}
 
@@ -48,11 +64,14 @@ contract TokenKidFactory is ERC721URIStorage {
         string memory _tokenURI,
         string memory _tokenDesc
     ) public {
-        // Mint
+        // Safe Mint ERC721 token
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, _tokenURI);
+
+        // emit event after minting token
+        emit Minted(tokenId, msg.sender, _tokenName, _price, _tokenURI);
 
         // update tokenKids mapping with newly minted token
         tokenKids[tokenId] = TokenKid(
@@ -67,10 +86,12 @@ contract TokenKidFactory is ERC721URIStorage {
         );
     }
 
-    /// @notice Transfer ownership of ERC721 token and Transfer ERC20 tokens to owner.
+    /// @notice Transfer ownership of ERC721 token and Transfer
+    /// ERC20 tokens to owner.
     /// @param _tokenId NFT Token Id.
     /// @param token ERC20 Token contract address.
-    /// @dev We Transfer ERC20 Tokens to owner of the NFT Hence The ERC20 Token address.
+    /// @dev We Transfer ERC20 Tokens to owner of the NFT
+    /// Hence The ERC20 Token address.
     function buyToken(uint256 _tokenId, address token)
         public
         payable
@@ -100,6 +121,9 @@ contract TokenKidFactory is ERC721URIStorage {
             IERC20(token).transferFrom(msg.sender, tokenkid.owner, _price),
             "COIN TRANFER FAILED"
         );
+
+        // emitted after Transfering Token and Coins
+        emit TokenTransfered(_tokenId, msg.sender);
 
         // update tokenKids mapping
         tokenkid.previousOwner = tokenkid.owner;
@@ -165,12 +189,7 @@ contract TokenKidFactory is ERC721URIStorage {
 
         // update transfer history
         tokenPriceHistory[_tokenId].push(
-            TokenPriceHistory(
-                _tokenId,
-                block.timestamp,
-                _prevPrice,
-                _price
-            )
+            TokenPriceHistory(_tokenId, block.timestamp, _prevPrice, _price)
         );
     }
 

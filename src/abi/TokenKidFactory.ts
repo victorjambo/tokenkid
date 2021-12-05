@@ -61,6 +61,62 @@ export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
     inputs: [
       {
         indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "_tokenName",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "_price",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "_tokenURI",
+        type: "string",
+      },
+    ],
+    name: "Minted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "TokenTransfered",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "from",
         type: "address",
