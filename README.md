@@ -21,6 +21,7 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
     * https://thegraph.com/docs/developer/create-subgraph-hosted
     * https://www.youtube.com/watch?v=dO-FkIySMys
     * https://www.youtube.com/watch?v=HfDgC2oNnwo
+    * https://github.com/zkwarlock/the-graph-celo
 2. [Tailwind](https://tailwindcss.com/)
     * https://torf.co/side-menu-crud-data-list.html
 3. Connecting to wallet with ContractKit
