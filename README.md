@@ -2,7 +2,7 @@
 
 TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
 
-_This project hasn't been reviewed by other engineers. I might have missed some errors 😀._
+> _This project hasn't been reviewed by other engineers. I might have missed some errors._ 😀
 
 ## Deployments
 1. Web3 App
@@ -10,6 +10,9 @@ _This project hasn't been reviewed by other engineers. I might have missed some 
 3. Subgraph
     * [Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
     * [Repo](https://github.com/victorjambo/tokenkid-subgraph)
+
+## Docs
+1. [Contracts](contract/README.md)
 
 ## Resources used to build this project
 
