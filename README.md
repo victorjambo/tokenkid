@@ -49,4 +49,4 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
 7. GraphQl
     * https://www.apollographql.com/docs/tutorial/schema/
     * https://www.apollographql.com/docs/tutorial/queries/
-  
+    * https://www.apollographql.com/blog/apollo-client/next-js/next-js-getting-started/

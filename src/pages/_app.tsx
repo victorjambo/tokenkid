@@ -10,6 +10,8 @@ import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
 import ContractsProvider from "@/context/contractsContext";
 import AppWrapper from "@/containers/AppWrapper";
+import { ApolloProvider } from "@apollo/client";
+import client from "@/graphql/client";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -30,17 +32,19 @@ const App = ({ Component, pageProps }) => {
     >
       <Provider store={store}>
         <ContractsProvider>
-          <PageHeader />
-          <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
-            <Navbar />
-          </div>
-          <AppWrapper>
-            <div className="flex w-full flex-col sm:flex-row">
-              <Component {...pageProps} />
+          <ApolloProvider client={client}>
+            <PageHeader />
+            <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
+              <Navbar />
             </div>
-            <Footer />
-            <Modal />
-          </AppWrapper>
+            <AppWrapper>
+              <div className="flex w-full flex-col sm:flex-row">
+                <Component {...pageProps} />
+              </div>
+              <Footer />
+              <Modal />
+            </AppWrapper>
+          </ApolloProvider>
         </ContractsProvider>
       </Provider>
     </ContractKitProvider>
