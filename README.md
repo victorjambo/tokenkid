@@ -1,29 +1,48 @@
-# Next.js + Tailwind CSS Example
+# TokenKid
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v2.2)](https://blog.tailwindcss.com/tailwindcss-2-2) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
 
-It uses the new [`Just-in-Time Mode`](https://tailwindcss.com/docs/just-in-time-mode) for Tailwind CSS.
+_This project hasn't been reviewed by other engineers. I might have missed some errors 😀._
 
-## Preview
+## Deployments
+1. Web3 App
+2. [Smart Contract](https://alfajores-blockscout.celo-testnet.org/address/0x3BF90f17A0dCA60aDf464d1ac4A8e921f18D8a23/contracts)
+3. Subgraph
+    [Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
+    [Repo](https://github.com/victorjambo/tokenkid-subgraph)
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+## Resources used to build this project
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
-
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+1. Subgraph
+    * https://docs.celo.org/blog/using-the-graph
+    * https://thegraph.com/docs/developer/create-subgraph-hosted
+    * https://www.youtube.com/watch?v=dO-FkIySMys
+    * https://www.youtube.com/watch?v=HfDgC2oNnwo
+2. [Tailwind](https://tailwindcss.com/)
+    * https://torf.co/side-menu-crud-data-list.html
+3. Connecting to wallet with ContractKit
+    * https://use-contractkit-c-labs.vercel.app/
+    * https://github.com/celo-org/use-contractkit
+    * https://docs.celo.org/developer-guide/contractkit
+    * https://docs.celo.org/getting-started/wallets/using-metamask-with-celo/manual-setup
+4. Celo
+    * https://docs.celo.org/developer-guide/overview
+    * https://dacade.org/communities/celo-development-101
+    * https://celo.org/developers/faucet
+    * https://learn.figment.io/tutorials/celo-subgraphs
+    * https://alfajores-blockscout.celo-testnet.org/api-docs
+5. Solidity & ERC721
+    * https://www.tutorialspoint.com/solidity/index.htm
+    * https://youtu.be/p36tXHX1JD8
+    * https://erc721.org/
+    * https://docs.openzeppelin.com/contracts/2.x/api/token/erc721
+    * https://github.com/devpavan04/cryptoboys-nft-marketplace
+6. UI/UX inspirations
+    * https://netstorm-react.theme-land.com/
+    * https://templates.hibootstrap.com/tezor/default/index-2.html
+    * https://dmitryvolkov.me/demo/unitok/index.html
+    * https://opensea.io/
+7. GraphQl
+    * https://www.apollographql.com/docs/tutorial/schema/
+    * https://www.apollographql.com/docs/tutorial/queries/
+  
