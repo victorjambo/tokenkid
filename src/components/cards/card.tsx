@@ -1,4 +1,3 @@
-// https://blog.infura.io/ipfs-0-5-is-here-with-a-new-improved-gateway/
 import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { shortAddress } from "@/utils/shortAddress";
@@ -17,7 +16,7 @@ const Card: React.FC<ICards> = ({ token }) => {
   return (
     <div className="text-white popup-hover">
       <div className="relative">
-        <Link href="/assets">
+        <Link href={`/assets/${token.tokenId}`}>
           <img
             className="w-full rounded-t-md cursor-pointer"
             src={token._tokenURI}
@@ -37,19 +36,14 @@ const Card: React.FC<ICards> = ({ token }) => {
             </Link>
           </div>
         </div>
-        <div className="absolute bottom-5 left-5 right-5 p-3 border-1 border-white border-opacity-50 rounded-lg">
-          <div className="absolute inset-0 backdrop-filter backdrop-blur-md rounded-lg" />
-          <div className="flex flex-row font-medium">
-            <div className="w-full z-10 text-center">00:00:00:00</div>
-          </div>
-        </div>
+        
       </div>
       <div className="flex flex-col justify-between bg-white text-black p-4 rounded-b-md space-y-3">
+        
+        <div className="flex flex-row border-1 rounded-md py-2 px-4 justify-between">
         <div className="hover:text-pink-primary font-bold">
           <Link href={`/assets/${token.tokenId}`}>{token._tokenName}</Link>
         </div>
-        <div className="flex flex-row border-1 rounded-md py-2 px-4 justify-between">
-          <div />
           <div>{fromWei(token._price)} cUSD</div>
         </div>
         <div className="flex flex-wrap flex-row items-center space-x-2">

@@ -50,3 +50,4 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
     * https://www.apollographql.com/docs/tutorial/schema/
     * https://www.apollographql.com/docs/tutorial/queries/
     * https://www.apollographql.com/blog/apollo-client/next-js/next-js-getting-started/
+8. [Infura ipfs](https://blog.infura.io/ipfs-0-5-is-here-with-a-new-improved-gateway/)

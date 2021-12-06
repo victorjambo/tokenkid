@@ -4,6 +4,7 @@ import { Contract } from "web3-eth-contract";
 import { tokenAddresses } from "@/utils/tokenAddresses";
 import { ITokenKid, ITokenPriceHistory } from "@/state/wallet/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
+import { fromWei } from "@/utils/weiConversions";
 
 class TokenKidFactoryContract {
   private token: string;
@@ -96,7 +97,7 @@ class TokenKidFactoryContract {
         tokenName: _token[1],
         owner: _token[2],
         previousOwner: _token[3],
-        price: +_token[4] / 10 ** 18, // Convert Price from wei
+        price: fromWei(_token[4]),
         tokenURI: _token[5],
         isOnSale: _token[6],
         tokenDesc: _token[7],
@@ -107,7 +108,9 @@ class TokenKidFactoryContract {
     }
   };
 
-  getTokenPriceHistory = async (tokenId: number): Promise<ITokenPriceHistory> => {
+  getTokenPriceHistory = async (
+    tokenId: number
+  ): Promise<ITokenPriceHistory> => {
     try {
       const _tokenPriceHistory = await this.tokenKidFactory.methods
         .getTokenPriceHistory(tokenId)
@@ -178,9 +181,7 @@ class TokenKidFactoryContract {
 
   getApproved = async (tokenId: number): Promise<any> => {
     try {
-      return await this.tokenKidFactory.methods
-        .getApproved(tokenId)
-        .call();
+      return await this.tokenKidFactory.methods.getApproved(tokenId).call();
     } catch (error) {
       console.log({ error }); // TODO: handle this
       return null;

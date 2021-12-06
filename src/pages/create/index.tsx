@@ -1,5 +1,3 @@
-import Web3 from "web3";
-import BN from "bn.js";
 import PageHeader from "@/containers/pageHeader";
 import { useState } from "react";
 import { ipfs, IPFS_BASE_URL } from "@/utils/ipfs";
@@ -8,6 +6,7 @@ import { classNames } from "@/utils/classNames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Activity from "@/components/activity";
 import { ICreateStates, IReceipt } from "@/types";
+import { toWei } from "@/utils/weiConversions";
 
 type Inputs = {
   tokenName: string;
@@ -65,8 +64,7 @@ const Create: React.FC = () => {
     // Waiting for transaction Hash
     updateState("txHash", "loading", true);
 
-    // Convert price to wei
-    const priceInWei = Web3.utils.toWei(new BN(tokenPrice.toString()));
+    const priceInWei = toWei(tokenPrice);
 
     await tokenKidFactoryContract.safeMint(
       tokenName,
