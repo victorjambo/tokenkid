@@ -8,8 +8,8 @@ _This project hasn't been reviewed by other engineers. I might have missed some 
 1. Web3 App
 2. [Smart Contract](https://alfajores-blockscout.celo-testnet.org/address/0x3BF90f17A0dCA60aDf464d1ac4A8e921f18D8a23/contracts)
 3. Subgraph
-    [Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
-    [Repo](https://github.com/victorjambo/tokenkid-subgraph)
+    * [Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
+    * [Repo](https://github.com/victorjambo/tokenkid-subgraph)
 
 ## Resources used to build this project
 
