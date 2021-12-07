@@ -1,32 +1,35 @@
 import { useContractsContext } from "@/context/contractsContext";
+import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { toWei } from "@/utils/weiConversions";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { PencilAltIcon } from "@heroicons/react/solid";
 import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-interface ITokenInfo {
-  owner: string;
-  tokenName: string;
-  price: number;
-  tokenId: number;
-}
+type Inputs = {
+  tokenPrice: number;
+};
 
-const TokenInfo: React.FC<ITokenInfo> = ({
-  owner,
-  tokenName,
-  price,
-  tokenId,
-}) => {
+const TokenInfo: React.FC = () => {
   const [showPriceInput, setShowPriceInput] = useState(false);
-  const [newPrice, setNewPrice] = useState(price);
 
   const { loading, tokenKidFactoryContract } = useContractsContext();
 
   const { performActions, address } = useContractKit();
 
-  const changeTokenPrice = async () => {
+  const { tokeninfo, fetchMintedToken } = fetchFromContract();
+
+  const { owner, tokenName, price, tokenId } = tokeninfo;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const changeTokenPrice = async (_price: number) => {
     await performActions(async (kit) => {
-      const priceInWei = toWei(newPrice);
+      const priceInWei = toWei(_price);
       await tokenKidFactoryContract.changeTokenPrice(
         +tokenId,
         priceInWei,
@@ -38,19 +41,20 @@ const TokenInfo: React.FC<ITokenInfo> = ({
     });
   };
 
-  const handleChangeTokenPrice = (e) => {
-    setNewPrice(e.target.value);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { tokenPrice } = data;
+    await changeTokenPrice(tokenPrice);
   };
 
-  const handleSaleChange = () => {};
-
-  const onReceipt = (_receipt) => {
-    console.log({ _receipt });
+  const onReceipt = async (_receipt) => {
+    setShowPriceInput(false);
+    await fetchMintedToken();
   };
 
   const onError = (err) => {
     console.log({ err });
   };
+
   const onTransactionHash = (hash) => {
     console.log({ hash });
   };
@@ -60,11 +64,6 @@ const TokenInfo: React.FC<ITokenInfo> = ({
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Name</span>
-          {owner && owner === address && (
-            <button onClick={handleSaleChange}>
-              <PencilAltIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />
-            </button>
-          )}
         </div>
         <div className="text-lg font-semibold">
           {loading ? (
@@ -78,7 +77,7 @@ const TokenInfo: React.FC<ITokenInfo> = ({
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Price</span>
           {owner && owner === address && (
-            <button onClick={() => setShowPriceInput(true)}>
+            <button onClick={() => setShowPriceInput(!showPriceInput)}>
               <PencilAltIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />
             </button>
           )}
@@ -87,20 +86,38 @@ const TokenInfo: React.FC<ITokenInfo> = ({
           {loading ? (
             <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
           ) : showPriceInput ? (
-            <div className="flex flex-row space-x-2">
-              <input
-                type="number"
-                value={newPrice}
-                className="px-2 py-1 rounded-md border border-gray-300"
-                onChange={handleChangeTokenPrice}
-              />
-              <button
-                onClick={changeTokenPrice}
-                className="px-2 py-1 rounded-md bg-green-500 text-white"
-              >
-                save
-              </button>
-            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col space-y-2">
+                <input
+                  type="number"
+                  className="px-2 py-1 rounded-md border border-gray-300"
+                  {...register("tokenPrice", {
+                    required: true,
+                    min: 1,
+                  })}
+                />
+                {errors.tokenPrice && (
+                  <p className="text-red-400 text-sm">
+                    {errors.tokenPrice?.type === "required" && "Required Field"}
+                    {errors.tokenPrice?.type === "min" && "Cannot be < 0"}
+                  </p>
+                )}
+                <div className="flex flex-row space-x-2">
+                  <button
+                    onClick={() => setShowPriceInput(false)}
+                    className="px-2 py-1 rounded-md bg-red-400 text-white w-full"
+                  >
+                    cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-2 py-1 rounded-md bg-green-500 text-white w-full"
+                  >
+                    save
+                  </button>
+                </div>
+              </div>
+            </form>
           ) : (
             <span>{price}&nbsp; cUSD</span>
           )}

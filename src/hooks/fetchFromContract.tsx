@@ -68,5 +68,12 @@ export const fetchFromContract = () => {
     void fetchApproved();
   }, [fetchMintedToken, fetchAllowance, fetchApproved]);
 
-  return { tokeninfo, currentAllowance, approved, fetchAllowance };
+  return {
+    tokeninfo,
+    currentAllowance,
+    approved,
+    fetchMintedToken,
+    fetchAllowance,
+    fetchApproved,
+  };
 };

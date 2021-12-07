@@ -9,14 +9,9 @@ import TokenPriceHistory from "@/components/tokenPriceHistory";
 import { ZERO_ADDRESS } from "@/utils/constants";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { toWei } from "@/utils/weiConversions";
-import { PencilAltIcon } from "@heroicons/react/solid";
-import { useState } from "react";
 import TokenInfo from "@/components/tokenInfo";
 
 const Assets: React.FC = () => {
-  const [showPriceInput, setShowPriceInput] = useState(false);
-  const [newPrice, setNewPrice] = useState("1");
-
   const { tokenKidFactoryContract, loading, ERC20 } = useContractsContext();
 
   const {
@@ -65,21 +60,6 @@ const Assets: React.FC = () => {
     });
   };
 
-  const changeTokenPrice = async () => {
-    await performActions(async (kit) => {
-      const _tokenId = +tokeninfo.tokenId;
-      const priceInWei = toWei(newPrice);
-      await tokenKidFactoryContract.changeTokenPrice(
-        _tokenId,
-        priceInWei,
-        kit.defaultAccount,
-        onReceipt,
-        onError,
-        onTransactionHash
-      );
-    });
-  };
-
   const onReceipt = (_receipt) => {
     console.log({ _receipt });
   };
@@ -90,12 +70,6 @@ const Assets: React.FC = () => {
   const onTransactionHash = (hash) => {
     console.log({ hash });
   };
-
-  const handlePriceChange = () => {
-    setShowPriceInput(true);
-  };
-
-  const handleSaleChange = () => {};
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
@@ -136,12 +110,7 @@ const Assets: React.FC = () => {
           </div>
         </div>
 
-        <TokenInfo
-          owner={tokeninfo.owner}
-          tokenName={tokeninfo.tokenName}
-          price={tokeninfo.price}
-          tokenId={tokeninfo.tokenId}
-        />
+        <TokenInfo />
 
         {tokeninfo.owner &&
           tokeninfo.owner !== address &&
