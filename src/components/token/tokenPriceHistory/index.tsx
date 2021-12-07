@@ -1,5 +1,5 @@
 import React from "react";
-import GradientAvatar from "../avatar";
+import GradientAvatar from "../../avatar";
 
 const TokenPriceHistory: React.FC = () => {
   return (

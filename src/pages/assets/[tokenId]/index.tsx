@@ -2,74 +2,19 @@ import GradientAvatar from "@/components/avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import { shortAddress } from "@/utils/shortAddress";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { tokenAddresses } from "@/utils/tokenAddresses";
-import { classNames } from "@/utils/classNames";
-import ReactTooltip from "react-tooltip";
-import TokenPriceHistory from "@/components/tokenPriceHistory";
+import TokenPriceHistory from "@/components/token/tokenPriceHistory";
 import { ZERO_ADDRESS } from "@/utils/constants";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
-import { toWei } from "@/utils/weiConversions";
-import TokenInfo from "@/components/tokenInfo";
+import TokenInfo from "@/components/token/tokenInfo";
+import ApproveToken from "@/components/token/approveToken";
+import BuyToken from "@/components/token/buyToken";
 
 const Assets: React.FC = () => {
-  const { tokenKidFactoryContract, loading, ERC20 } = useContractsContext();
+  const { loading } = useContractsContext();
 
-  const {
-    performActions,
-    address,
-    network: { name },
-  } = useContractKit();
+  const { address } = useContractKit();
 
-  const { tokeninfo, currentAllowance, approved, fetchAllowance } =
-    fetchFromContract();
-
-  const setAllowance = async () => {
-    const priceInWei = toWei(tokeninfo.price);
-    await ERC20.setAllowance(priceInWei, onReceipt, onError, onTransactionHash);
-    await fetchAllowance();
-  };
-
-  const buyToken = async () => {
-    await performActions(async (kit) => {
-      const _tokenId = +tokeninfo.tokenId;
-      const priceInWei = toWei(tokeninfo.price);
-      const cUSDToken = tokenAddresses[name].ERC20Tokens.cUSD;
-      await tokenKidFactoryContract.buyToken(
-        _tokenId,
-        priceInWei,
-        cUSDToken,
-        kit.defaultAccount,
-        onReceipt,
-        onError,
-        onTransactionHash
-      );
-    });
-  };
-
-  // Refetch Approved after approving token
-  const approveToken = async () => {
-    await performActions(async (kit) => {
-      const _tokenId = +tokeninfo.tokenId;
-      await tokenKidFactoryContract.approve(
-        _tokenId,
-        kit.defaultAccount,
-        onReceipt,
-        onError,
-        onTransactionHash
-      );
-    });
-  };
-
-  const onReceipt = (_receipt) => {
-    console.log({ _receipt });
-  };
-
-  const onError = (err) => {
-    console.log({ err });
-  };
-  const onTransactionHash = (hash) => {
-    console.log({ hash });
-  };
+  const { tokeninfo, approved } = fetchFromContract();
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
@@ -114,35 +59,7 @@ const Assets: React.FC = () => {
 
         {tokeninfo.owner &&
           tokeninfo.owner !== address &&
-          approved !== ZERO_ADDRESS && (
-            <>
-              <button
-                className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
-                onClick={setAllowance}
-                data-tip=""
-                data-for="set-allowance"
-                data-offset="{'top': 24}"
-                disabled={+currentAllowance < +tokeninfo.price}
-              >
-                Set Allowance {currentAllowance}
-              </button>
-              <button
-                className={classNames(
-                  "rounded-full px-6 py-3 text-white text-center font-semibold",
-                  +currentAllowance < +tokeninfo.price
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-pink-primary"
-                )}
-                disabled={+currentAllowance < +tokeninfo.price}
-                onClick={buyToken}
-              >
-                Buy Token
-              </button>
-              <ReactTooltip effect="solid" id="set-allowance">
-                ERC-20 allowance to transfer cUSD
-              </ReactTooltip>
-            </>
-          )}
+          approved !== ZERO_ADDRESS && <BuyToken />}
         {tokeninfo.owner &&
           tokeninfo.owner !== address &&
           approved === ZERO_ADDRESS && (
@@ -150,24 +67,7 @@ const Assets: React.FC = () => {
           )}
         {tokeninfo.owner &&
           tokeninfo.owner === address &&
-          approved === ZERO_ADDRESS && (
-            <>
-              <button
-                className={classNames(
-                  "bg-pink-primary rounded-full px-6 py-3 text-white text-center font-semibold"
-                )}
-                onClick={approveToken}
-                data-tip=""
-                data-for="approve-token"
-                data-offset="{'top': 24}"
-              >
-                Approve Token
-              </button>
-              <ReactTooltip effect="solid" id="approve-token">
-                Approve Marketplace to transfer Token ownership on your behalf
-              </ReactTooltip>
-            </>
-          )}
+          approved === ZERO_ADDRESS && <ApproveToken />}
 
         <TokenPriceHistory />
       </div>
