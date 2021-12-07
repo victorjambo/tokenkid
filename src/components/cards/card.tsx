@@ -36,14 +36,12 @@ const Card: React.FC<ICards> = ({ token }) => {
             </Link>
           </div>
         </div>
-        
       </div>
       <div className="flex flex-col justify-between bg-white text-black p-4 rounded-b-md space-y-3">
-        
         <div className="flex flex-row border-1 rounded-md py-2 px-4 justify-between">
-        <div className="hover:text-pink-primary font-bold">
-          <Link href={`/assets/${token.tokenId}`}>{token._tokenName}</Link>
-        </div>
+          <div className="hover:text-pink-primary font-bold">
+            <Link href={`/assets/${token.tokenId}`}>{token._tokenName}</Link>
+          </div>
           <div>{fromWei(token._price)} cUSD</div>
         </div>
         <div className="flex flex-wrap flex-row items-center space-x-2">

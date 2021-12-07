@@ -10,8 +10,13 @@ import { ZERO_ADDRESS } from "@/utils/constants";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { toWei } from "@/utils/weiConversions";
 import { PencilAltIcon } from "@heroicons/react/solid";
+import { useState } from "react";
+import TokenInfo from "@/components/tokenInfo";
 
 const Assets: React.FC = () => {
+  const [showPriceInput, setShowPriceInput] = useState(false);
+  const [newPrice, setNewPrice] = useState("1");
+
   const { tokenKidFactoryContract, loading, ERC20 } = useContractsContext();
 
   const {
@@ -60,6 +65,21 @@ const Assets: React.FC = () => {
     });
   };
 
+  const changeTokenPrice = async () => {
+    await performActions(async (kit) => {
+      const _tokenId = +tokeninfo.tokenId;
+      const priceInWei = toWei(newPrice);
+      await tokenKidFactoryContract.changeTokenPrice(
+        _tokenId,
+        priceInWei,
+        kit.defaultAccount,
+        onReceipt,
+        onError,
+        onTransactionHash
+      );
+    });
+  };
+
   const onReceipt = (_receipt) => {
     console.log({ _receipt });
   };
@@ -70,6 +90,12 @@ const Assets: React.FC = () => {
   const onTransactionHash = (hash) => {
     console.log({ hash });
   };
+
+  const handlePriceChange = () => {
+    setShowPriceInput(true);
+  };
+
+  const handleSaleChange = () => {};
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
@@ -110,36 +136,12 @@ const Assets: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-between bg-gray-state rounded-xl p-8">
-          <div className="flex flex-col">
-            <div className="text-sm text-gray-400 flex flex-row">
-              <span className="pr-2">Token Name</span>
-              {tokeninfo.owner && tokeninfo.owner === address && (
-                <button className="cursor-pointer">
-                  <PencilAltIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />
-                </button>
-              )}
-            </div>
-            <div className="text-lg font-semibold">
-              {loading ? (
-                <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
-              ) : (
-                tokeninfo.tokenName
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="text-sm text-gray-400">Token Price</div>
-            <div className="text-lg font-semibold">
-              {loading ? (
-                <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
-              ) : (
-                tokeninfo.price
-              )}
-              &nbsp; cUSD
-            </div>
-          </div>
-        </div>
+        <TokenInfo
+          owner={tokeninfo.owner}
+          tokenName={tokeninfo.tokenName}
+          price={tokeninfo.price}
+          tokenId={tokeninfo.tokenId}
+        />
 
         {tokeninfo.owner &&
           tokeninfo.owner !== address &&
