@@ -2,7 +2,11 @@ import { useContractsContext } from "@/context/contractsContext";
 import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { Disclosure } from "@headlessui/react";
-import { ChevronDownIcon, CollectionIcon, SwitchVerticalIcon } from "@heroicons/react/solid";
+import {
+  ChevronDownIcon,
+  CollectionIcon,
+  SwitchVerticalIcon,
+} from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { humanizeTime } from "@/utils/humanizeTime";
@@ -58,24 +62,14 @@ const PriceHistoryTable = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
-                          >
-                            From
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
-                          >
-                            To
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
-                          >
-                            Date
-                          </th>
+                          {["From", "To", "Date"].map((header) => (
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
+                            >
+                              {header}
+                            </th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
