@@ -1,7 +1,35 @@
-import React from "react";
+import { useContractsContext } from "@/context/contractsContext";
+import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import { useContractKit } from "@celo-tools/use-contractkit";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect } from "react";
 import GradientAvatar from "../../avatar";
 
 const TokenPriceHistory: React.FC = () => {
+  const router = useRouter();
+  const { tokenId } = router.query;
+
+  const { tokenKidFactoryContract } = useContractsContext();
+
+  const { performActions } = useContractKit();
+
+  const fetchTokenPriceHistory = useCallback(async () => {
+    await performActions(async () => {
+      if (
+        router.isReady &&
+        tokenKidFactoryContract instanceof TokenKidFactoryContract
+      ) {
+        const tokenPriceHistory =
+          await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
+        console.log({ tokenPriceHistory });
+      }
+    });
+  }, [tokenKidFactoryContract, router.isReady]);
+
+  useEffect(() => {
+    void fetchTokenPriceHistory();
+  }, [fetchTokenPriceHistory]);
+
   return (
     <div className="bg-white-back py-9 px-5">
       <div className="text-black text-2xl font-bold pb-8">History</div>

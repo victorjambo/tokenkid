@@ -2,12 +2,12 @@ import GradientAvatar from "@/components/avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import { shortAddress } from "@/utils/shortAddress";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import TokenPriceHistory from "@/components/token/tokenPriceHistory";
 import { ZERO_ADDRESS } from "@/utils/constants";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import TokenInfo from "@/components/token/tokenInfo";
 import ApproveToken from "@/components/token/approveToken";
 import BuyToken from "@/components/token/buyToken";
+import TokenActivity from "@/components/token/tokenActivity";
 
 const Assets: React.FC = () => {
   const { loading } = useContractsContext();
@@ -69,7 +69,7 @@ const Assets: React.FC = () => {
           tokeninfo.owner === address &&
           approved === ZERO_ADDRESS && <ApproveToken />}
 
-        <TokenPriceHistory />
+        <TokenActivity />
       </div>
     </div>
   );
