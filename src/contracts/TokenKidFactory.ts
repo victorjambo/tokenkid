@@ -116,12 +116,7 @@ class TokenKidFactoryContract {
         .getTokenPriceHistory(tokenId)
         .call();
 
-      return {
-        tokenId: _tokenPriceHistory[0],
-        transferTime: _tokenPriceHistory[1],
-        from: _tokenPriceHistory[2] / 10 ** 18,
-        to: _tokenPriceHistory[3] / 10 ** 18,
-      };
+      return _tokenPriceHistory;
     } catch (error) {
       console.log({ error }); // TODO: handle this
       return null;

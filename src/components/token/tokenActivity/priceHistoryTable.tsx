@@ -1,12 +1,42 @@
+import { useContractsContext } from "@/context/contractsContext";
+import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { Disclosure } from "@headlessui/react";
-import { ChevronDownIcon, SwitchVerticalIcon } from "@heroicons/react/solid";
-
-const priceHistory = [
-  { from: "10", to: "15", date: "4 hours ago" },
-  { from: "5", to: "10", date: "4 hours ago" },
-];
+import { ChevronDownIcon, CollectionIcon, SwitchVerticalIcon } from "@heroicons/react/solid";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { humanizeTime } from "@/utils/humanizeTime";
+import { fromWei } from "@/utils/weiConversions";
 
 const PriceHistoryTable = () => {
+  const router = useRouter();
+  const { tokenId } = router.query;
+
+  const { tokenKidFactoryContract } = useContractsContext();
+
+  const { performActions } = useContractKit();
+
+  const [priceHistory, setPriceHistory] = useState(null);
+
+  const fetchTokenPriceHistory = useCallback(async () => {
+    await performActions(async () => {
+      if (
+        router.isReady &&
+        tokenKidFactoryContract instanceof TokenKidFactoryContract
+      ) {
+        const tokenPriceHistory =
+          await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
+        if (tokenPriceHistory !== null) {
+          setPriceHistory(tokenPriceHistory);
+        }
+      }
+    });
+  }, [tokenKidFactoryContract, router.isReady]);
+
+  useEffect(() => {
+    void fetchTokenPriceHistory();
+  }, [fetchTokenPriceHistory]);
+
   return (
     <Disclosure defaultOpen={true}>
       {({ open }) => (
@@ -24,25 +54,25 @@ const PriceHistoryTable = () => {
             <div className="flex flex-col">
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div>
+                  {priceHistory !== null ? (
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
                           >
                             From
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
                           >
                             To
                           </th>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider"
                           >
                             Date
                           </th>
@@ -56,20 +86,25 @@ const PriceHistoryTable = () => {
                               idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                             }
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {price.from}
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {fromWei(price.from)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {price.to}
+                              {fromWei(price.to)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {price.date}
+                              {humanizeTime(price.transferTime)}
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-6 bg-blue-lightblue bg-opacity-10">
+                      <CollectionIcon className="w-14 h-14 text-pink-primary opacity-75" />
+                      <div>No history yet</div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
