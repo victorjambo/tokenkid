@@ -1,12 +1,16 @@
 import React from "react";
 
-const GradientAvatar: React.FC<{ address?: string, size?: string, t?: boolean }> = ({
+const GradientAvatar: React.FC<{
+  address?: string;
+  size?: string;
+  t?: boolean;
+}> = ({
   address = "0x505D61759efFF407939606b47Ca721E2A18f3ea2",
   size = "h-10 w-10",
 }) => {
   function djb2Hash(str) {
     const len = str.length;
-    let hash = 5381;
+    let hash = Math.floor(1000 + Math.random() * 9000);
     for (let idx = 0; idx < len; ++idx) {
       hash = 33 * hash + str.charCodeAt(idx);
     }
