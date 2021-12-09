@@ -21,7 +21,9 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
     <div className="text-white popup-hover">
       <div className="relative">
         <Link href={`/assets/${token.id}`}>
-          <ImageRender src={token._tokenURI} />
+          <span>
+            <ImageRender src={token._tokenURI} />
+          </span>
         </Link>
         {showCreator && (
           <div className="absolute top-6 left-5 rounded-lg text-black">

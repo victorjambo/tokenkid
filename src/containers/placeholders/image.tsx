@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageRender: React.FC<{ src: string; height: string }> = ({
+const ImageRender: React.FC<{ src: string; height?: string }> = ({
   src,
   height = 96,
 }) => {
@@ -18,7 +18,7 @@ const ImageRender: React.FC<{ src: string; height: string }> = ({
         }`}
       />
       <img
-        className={`w-full rounded-t-md cursor-pointer max-h-${height} ${
+        className={`w-full rounded-t-md cursor-pointer overflow-hidden max-h-${height} ${
           imgLoaded ? "" : "hidden"
         }`}
         src={src}

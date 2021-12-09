@@ -1,9 +1,12 @@
 import { useQueryTokens } from "@/graphql/hooks";
+import { setHeroTokens } from "@/state/tokens/slice";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Spinner from "../spinner";
 import Card from "./card";
 
 const Cards: React.FC = () => {
+  const dispatch = useDispatch();
   const { data, loading } = useQueryTokens();
 
   const [tokens, setTokens] = useState(null);
@@ -11,6 +14,7 @@ const Cards: React.FC = () => {
   useEffect(() => {
     if (loading) return;
     setTokens(data.tokens);
+    dispatch(setHeroTokens(data.tokens));
   }, [loading]);
 
   return (
