@@ -2,6 +2,7 @@ import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { shortAddress } from "@/utils/shortAddress";
 import { fromWei } from "@/utils/weiConversions";
+import ImageRender from "@/containers/placeholders/image";
 
 interface ICards {
   token: {
@@ -20,10 +21,7 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
     <div className="text-white popup-hover">
       <div className="relative">
         <Link href={`/assets/${token.id}`}>
-          <img
-            className="w-full rounded-t-md cursor-pointer"
-            src={token._tokenURI}
-          />
+          <ImageRender src={token._tokenURI} />
         </Link>
         {showCreator && (
           <div className="absolute top-6 left-5 rounded-lg text-black">
