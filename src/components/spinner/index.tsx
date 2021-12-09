@@ -2,7 +2,7 @@ import * as React from "react";
 
 interface ISpinnerProps {
   className?: string;
-};
+}
 
 const Spinner: React.FC<ISpinnerProps> = ({ className }) => {
   return (

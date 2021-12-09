@@ -12,7 +12,7 @@ const HeroTokens: React.FC = () => {
   return (
     <div className="w-1/2 flex flex-row space-x-4">
       {tokens.map((token, idx) => (
-        <div className={idx === 1 ? "mt-10" : ""}>
+        <div className={idx === 1 ? "mt-10" : ""} key={idx}>
           <div className="relative">
             <ImageRender src={token._tokenURI} />
           </div>

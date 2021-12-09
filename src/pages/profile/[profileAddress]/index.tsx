@@ -60,8 +60,8 @@ const Profile: React.FC = () => {
             <div className="ml-5 px-5 pt-5 pb-20 rounded-2xl bg-blue-lightblue bg-opacity-10">
               {tokens && tokens?.length ? (
                 <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                  {tokens.map((token) => (
-                    <div className="group">
+                  {tokens.map((token, idx) => (
+                    <div className="group" key={idx}>
                       <Card token={token} showCreator={false} />
                     </div>
                   ))}

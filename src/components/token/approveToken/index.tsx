@@ -25,9 +25,17 @@ const ApproveToken: React.FC = () => {
     });
   };
 
-  const onReceipt = () => {};
-  const onError = () => {};
-  const onTransactionHash = () => {};
+  const onReceipt = (_receipt) => {
+    console.log({_receipt});
+  };
+
+  const onError = (_error) => {
+    console.log({_error});
+  };
+
+  const onTransactionHash = (_hash) => {
+    console.log({_hash});
+  };
 
   return (
     <>

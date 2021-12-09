@@ -26,8 +26,8 @@ const Cards: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-10">
           {tokens &&
-            tokens.map((token) => (
-              <div className="group">
+            tokens.map((token, idx) => (
+              <div className="group" key={idx}>
                 <Card token={token} />
               </div>
             ))}
