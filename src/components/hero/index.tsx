@@ -1,8 +1,19 @@
 import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { ArrowCircleRightIcon } from "@heroicons/react/solid";
+import { MutableRefObject } from "react";
 
-const Hero: React.FC = () => {
+const Hero: React.FC<{ assetRef: MutableRefObject<HTMLDivElement> }> = ({
+  assetRef,
+}) => {
+  const handleExplore = () => {
+    if (assetRef.current) {
+      assetRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className="w-full bg-gradient-to-b from-transparent to-blue-dark pt-16 text-white">
       <div className="container mx-auto flex flex-row py-12 sm:py-24 items-center">
@@ -20,7 +31,10 @@ const Hero: React.FC = () => {
             morbi quam eget luctus. In a vel morbi sed nisi.
           </p>
           <div className="flex flex-row space-x-5">
-            <button className="px-6 py-3 rounded-lg transition duration-500 ease-in-out bg-pink-primary hover:bg-blue-lightblue transform hover:-translate-y-1 hover:scale-110">
+            <button
+              className="px-6 py-3 rounded-lg transition duration-500 ease-in-out bg-pink-primary hover:bg-blue-lightblue transform hover:-translate-y-1 hover:scale-110"
+              onClick={handleExplore}
+            >
               Explore
             </button>
             <Link href="/create">
