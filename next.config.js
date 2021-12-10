@@ -13,4 +13,5 @@ module.exports = {
     return config;
   },
   extends: ["plugin:@next/next/recommended"],
+  // target: "experimental-serverless-trace",
 };
