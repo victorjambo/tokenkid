@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:export": "next build && next export",
+    "deploy:firebase": "firebase deploy — only hosting"
   },
   "dependencies": {
     "@apollo/client": "^3.5.5",
