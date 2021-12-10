@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import { Provider } from "react-redux";
 import { ContractKitProvider, NetworkNames } from "@celo-tools/use-contractkit";
 import { store } from "@/state";
-import Navbar from "src/components/navbar";
+// import Navbar from "src/components/navbar";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
@@ -35,7 +35,7 @@ const App = ({ Component, pageProps }) => {
           <ApolloProvider client={client}>
             <PageHeader />
             <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
-              <Navbar />
+              {/* <Navbar /> */}
             </div>
             <AppWrapper>
               <div className="flex w-full flex-col sm:flex-row">
