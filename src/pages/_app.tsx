@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import { Provider } from "react-redux";
 import { ContractKitProvider, NetworkNames } from "@celo-tools/use-contractkit";
 import { store } from "@/state";
-import Navbar from "@/components/navbar";
+import Navbar from "src/components/navbar";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
