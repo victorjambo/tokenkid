@@ -11,6 +11,7 @@ module.exports = {
     config.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^electron$/ })
     );
+    config.resolve.alias[package.name] = path.resolve(__dirname, "src");
     return config;
   },
 };
