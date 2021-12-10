@@ -1,13 +1,17 @@
+import Spinner from "@/components/spinner";
 import { useContractsContext } from "@/context/contractsContext";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { classNames } from "@/utils/classNames";
 import { tokenAddresses } from "@/utils/tokenAddresses";
 import { toWei } from "@/utils/weiConversions";
 import { useContractKit } from "@celo-tools/use-contractkit";
+import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 
 const BuyToken: React.FC = () => {
   const { tokenKidFactoryContract, ERC20 } = useContractsContext();
+  const [loadingAllowance, setLoadingAllowance] = useState(false);
+  const [loadingBuyToken, setLoadingBuyToken] = useState(false);
 
   const {
     performActions,
@@ -17,12 +21,14 @@ const BuyToken: React.FC = () => {
   const { tokeninfo, currentAllowance, fetchAllowance } = fetchFromContract();
 
   const setAllowance = async () => {
+    setLoadingAllowance(true);
     const priceInWei = toWei(tokeninfo.price);
-    await ERC20.setAllowance(priceInWei, onReceipt, onError, onTransactionHash);
+    await ERC20.setAllowance(priceInWei, onReceipt, onError);
     await fetchAllowance();
   };
 
   const buyToken = async () => {
+    setLoadingBuyToken(true);
     await performActions(async (kit) => {
       const _tokenId = +tokeninfo.tokenId;
       const priceInWei = toWei(tokeninfo.price);
@@ -34,32 +40,40 @@ const BuyToken: React.FC = () => {
         kit.defaultAccount,
         onReceipt,
         onError,
-        onTransactionHash
       );
     });
   };
 
-  const onReceipt = (_receipt) => {
-    console.log({ _receipt });
+  const onReceipt = () => {
+    setLoadingAllowance(false);
+    setLoadingBuyToken(false);
   };
 
   const onError = (err) => {
     console.log({ err });
+    setLoadingAllowance(false);
+    setLoadingBuyToken(false);
   };
-  const onTransactionHash = (hash) => {
-    console.log({ hash });
-  };
+
   return (
     <>
       <button
-        className="bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold"
+        className={classNames(
+          "bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold",
+          +currentAllowance >= +tokeninfo.price
+            ? "bg-gray-400 cursor-not-allowed"
+            : ""
+        )}
         onClick={setAllowance}
         data-tip=""
         data-for="set-allowance"
         data-offset="{'top': 24}"
-        disabled={+currentAllowance < +tokeninfo.price}
+        disabled={+currentAllowance >= +tokeninfo.price}
       >
-        Set Allowance {currentAllowance}
+        <span className="flex flex-row items-center space-x-2 justify-center">
+          <span>Set Allowance</span>
+          {loadingAllowance && <Spinner className="text-current animate-spin-slow w-5 h-5" />}
+        </span>
       </button>
       <button
         className={classNames(
@@ -71,7 +85,10 @@ const BuyToken: React.FC = () => {
         disabled={+currentAllowance < +tokeninfo.price}
         onClick={buyToken}
       >
-        Buy Token
+        <span className="flex flex-row items-center space-x-2 justify-center">
+          <span>Buy Token</span>
+          {loadingBuyToken && <Spinner className="text-current animate-spin-slow w-5 h-5" />}
+        </span>
       </button>
       <ReactTooltip effect="solid" id="set-allowance">
         ERC-20 allowance to transfer cUSD
