@@ -14,7 +14,7 @@ const Assets: React.FC = () => {
 
   const { address } = useContractKit();
 
-  const { tokeninfo, approved } = fetchFromContract();
+  const { tokeninfo, approved, fetchApproved } = fetchFromContract();
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
@@ -67,7 +67,7 @@ const Assets: React.FC = () => {
           )}
         {tokeninfo.owner &&
           tokeninfo.owner === address &&
-          approved === ZERO_ADDRESS && <ApproveToken />}
+          approved === ZERO_ADDRESS && <ApproveToken fetchApproved={fetchApproved} />}
 
         <TokenActivity />
       </div>

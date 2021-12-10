@@ -4,7 +4,7 @@ import { classNames } from "@/utils/classNames";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import ReactTooltip from "react-tooltip";
 
-const ApproveToken: React.FC = () => {
+const ApproveToken: React.FC<{ fetchApproved }> = ({ fetchApproved }) => {
   const { performActions } = useContractKit();
 
   const { tokenKidFactoryContract } = useContractsContext();
@@ -19,22 +19,17 @@ const ApproveToken: React.FC = () => {
         _tokenId,
         kit.defaultAccount,
         onReceipt,
-        onError,
-        onTransactionHash
+        onError
       );
     });
   };
 
-  const onReceipt = (_receipt) => {
-    console.log({_receipt});
+  const onReceipt = () => {
+    fetchApproved();
   };
 
   const onError = (_error) => {
-    console.log({_error});
-  };
-
-  const onTransactionHash = (_hash) => {
-    console.log({_hash});
+    console.log({ _error });
   };
 
   return (
