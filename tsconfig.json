@@ -20,9 +20,8 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@": ["src/"],
+      "@/*": ["src/*"],
     },
     "incremental": true
   },

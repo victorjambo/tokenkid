@@ -6,7 +6,6 @@ module.exports = {
       net: false,
       child_process: false,
       readline: false,
-      jsconfigPaths: true,
     };
     config.plugins.push(
       new webpack.IgnorePlugin({ resourceRegExp: /^electron$/ })
