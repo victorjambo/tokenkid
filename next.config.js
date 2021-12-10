@@ -6,10 +6,11 @@ module.exports = {
       net: false,
       child_process: false,
       readline: false,
+      electron: false,
     };
-    config.plugins.push(
-      new webpack.IgnorePlugin({ resourceRegExp: /^electron$/ })
-    );
+    // config.plugins.push(
+    //   new webpack.IgnorePlugin({ resourceRegExp: /^electron$/ })
+    // );
     return config;
   },
   extends: ["plugin:@next/next/recommended"],
