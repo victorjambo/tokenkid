@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ConnectWallet from "../connectWallet";
+import ConnectWallet from "@/components/connectWallet";
 
 const Navbar: React.FC = () => {
   return (
