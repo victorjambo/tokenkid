@@ -35,12 +35,12 @@ export const useContractsContext = (): Partial<ContractsProviderProps> =>
 
 const ContractsProvider: React.FC = ({ children }) => {
   const {
+    kit,
     connect,
     destroy,
     network: { name },
     walletType,
     getConnectedKit,
-    performActions,
   } = useContractKit();
 
   const [loading, setLoading] = useState(false);
@@ -65,30 +65,28 @@ const ContractsProvider: React.FC = ({ children }) => {
   const dispatch = useDispatch();
 
   const fetchAccountBalances = useCallback(async () => {
-    await performActions(async (kit) => {
-      const { defaultAccount } = kit;
-      if (!defaultAccount) return;
-      const [celoToken, cusdToken, ceurToken] = await Promise.all([
-        kit.contracts.getGoldToken(),
-        kit.contracts.getStableToken(StableToken.cUSD),
-        kit.contracts.getStableToken(StableToken.cEUR),
-      ]);
+    const { defaultAccount } = kit;
+    if (!defaultAccount) return;
+    const [celoToken, cusdToken, ceurToken] = await Promise.all([
+      kit.contracts.getGoldToken(),
+      kit.contracts.getStableToken(StableToken.cUSD),
+      kit.contracts.getStableToken(StableToken.cEUR),
+    ]);
 
-      const [celo, cUSD, cEUR] = await Promise.all([
-        celoToken.balanceOf(defaultAccount),
-        cusdToken.balanceOf(defaultAccount),
-        ceurToken.balanceOf(defaultAccount),
-      ]);
+    const [celo, cUSD, cEUR] = await Promise.all([
+      celoToken.balanceOf(defaultAccount),
+      cusdToken.balanceOf(defaultAccount),
+      ceurToken.balanceOf(defaultAccount),
+    ]);
 
-      dispatch(
-        setAccountBalances({
-          celo: Web3.utils.fromWei(celo.toFixed()),
-          cUSD: Web3.utils.fromWei(cUSD.toFixed()),
-          cEUR: Web3.utils.fromWei(cEUR.toFixed()),
-        })
-      );
-    });
-  }, []);
+    dispatch(
+      setAccountBalances({
+        celo: Web3.utils.fromWei(celo.toFixed()),
+        cUSD: Web3.utils.fromWei(cUSD.toFixed()),
+        cEUR: Web3.utils.fromWei(cEUR.toFixed()),
+      })
+    );
+  }, [walletType]);
 
   useEffect(() => {
     void fetchAccountBalances();
