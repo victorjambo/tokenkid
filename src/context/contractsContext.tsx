@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import {
   createContext,
@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
 import { ITokenKid } from "@/state/wallet/types";
-import ERC20Contract from "@/contracts/ERC20";
+import ERC20Contract from "@/contractClient/ERC20";
 import { tokenAddresses } from "@/utils/tokenAddresses";
 
 interface ContractsProviderProps {

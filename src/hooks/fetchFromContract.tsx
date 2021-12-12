@@ -1,10 +1,10 @@
 import { useContractsContext } from "@/context/contractsContext";
-import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 import { ITokenKid } from "@/state/wallet/types";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import ERC20Contract from "@/contracts/ERC20";
+import ERC20Contract from "@/contractClient/ERC20";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,

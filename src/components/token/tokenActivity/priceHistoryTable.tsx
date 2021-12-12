@@ -1,5 +1,5 @@
 import { useContractsContext } from "@/context/contractsContext";
-import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { Disclosure } from "@headlessui/react";
 import {

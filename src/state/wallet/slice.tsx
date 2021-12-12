@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 import { initialState, IAccountBalances } from "./types";
 
 const walletSlice = createSlice({

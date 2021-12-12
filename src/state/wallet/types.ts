@@ -1,4 +1,4 @@
-import TokenKidFactoryContract from "@/contracts/TokenKidFactory";
+import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 
 export interface IAccountBalances {
   celo: string;
