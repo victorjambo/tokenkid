@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 const ImageRender: React.FC<{ src: string; height?: string }> = ({
   src,
-  height = 72,
 }) => {
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -11,9 +10,9 @@ const ImageRender: React.FC<{ src: string; height?: string }> = ({
   };
 
   return (
-    <div className={`h-${height}`}>
+    <div className="h-72">
       <div
-        className={`animate-pulse bg-gray-400 rounded-t-md w-full ${
+        className={`animate-pulse bg-gray-400 rounded-t-md w-full h-full ${
           imgLoaded ? "hidden" : ""
         }`}
       />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { shortAddress } from "@/utils/shortAddress";
 import { useSelector } from "react-redux";
 import { AppState } from "@/state";
-import ImageRender from "@/containers/placeholders/image";
+import ImageRender from "@/containers/imageRender";
 
 const HeroTokens: React.FC = () => {
   const {tokens: {tokens}} = useSelector((state: AppState) => state);

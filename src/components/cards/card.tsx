@@ -2,7 +2,7 @@ import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { shortAddress } from "@/utils/shortAddress";
 import { fromWei } from "@/utils/weiConversions";
-import ImageRender from "@/containers/placeholders/image";
+import ImageRender from "@/containers/imageRender";
 
 interface ICards {
   token: {
