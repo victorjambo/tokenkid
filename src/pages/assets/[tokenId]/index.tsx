@@ -46,7 +46,9 @@ const Assets: React.FC = () => {
               {loading ? (
                 <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
               ) : (
-                <Link href={`/profile/${tokeninfo.owner}`}>{shortAddress(tokeninfo.owner)}</Link>
+                <Link href={`/profile/${tokeninfo.owner}`}>
+                  <span>{shortAddress(tokeninfo.owner)}</span>
+                </Link>
               )}
               {tokeninfo.owner && tokeninfo.owner === address && (
                 <span className="italic text-gray-400 text-sm">(You)</span>
@@ -68,7 +70,9 @@ const Assets: React.FC = () => {
           )}
         {tokeninfo.owner &&
           tokeninfo.owner === address &&
-          approved === ZERO_ADDRESS && <ApproveToken fetchApproved={fetchApproved} />}
+          approved === ZERO_ADDRESS && (
+            <ApproveToken fetchApproved={fetchApproved} />
+          )}
 
         <TokenActivity />
       </div>
