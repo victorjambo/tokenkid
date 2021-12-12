@@ -1,6 +1,6 @@
 import { useContractsContext } from "@/context/contractsContext";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
-import { ModalType, openModal, setModalType } from "@/state/modal/slice";
+import { ModalType, openModal } from "@/state/modal/slice";
 import { setCurrentToken } from "@/state/tokens/slice";
 import { toWei } from "@/utils/weiConversions";
 import { useContractKit } from "@celo-tools/use-contractkit";
@@ -60,8 +60,7 @@ const TokenInfo: React.FC = () => {
   };
 
   const handleDeleteToken = () => {
-    dispatch(setModalType(ModalType.DELETE_TOKEN));
-    dispatch(openModal());
+    dispatch(openModal(ModalType.DELETE_TOKEN));
     dispatch(setCurrentToken(tokeninfo));
   };
 

@@ -1,12 +1,15 @@
 import { useContractsContext } from "@/context/contractsContext";
 import { AppState } from "@/state";
-import { closeModal } from "@/state/modal/slice";
+import { closeModal, ModalType, openModal } from "@/state/modal/slice";
+import { setTxHash, setWalletError } from "@/state/wallet/slice";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { InformationCircleIcon } from "@heroicons/react/solid";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 
 const DeleteToken: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { performActions } = useContractKit();
 
@@ -21,25 +24,33 @@ const DeleteToken: React.FC = () => {
   };
 
   const handleDelete = async () => {
+    dispatch(openModal(ModalType.LOADING));
+
     await performActions(async (kit) => {
       const _tokenId = +tokeninfo.tokenId;
       await tokenKidFactoryContract.burnToken(
         _tokenId,
         kit.defaultAccount,
         onReceipt,
-        onError
+        onError,
+        onTransaction
       );
     });
   };
 
   const onReceipt = () => {
-    dispatch(closeModal());
+    dispatch(openModal(ModalType.SUCCESS));
+    router.push("/");
+  };
+
+  const onTransaction = (_txHash) => {
+    dispatch(setTxHash(_txHash));
   };
 
   const onError = (_error) => {
     console.log({ _error });
-    dispatch(closeModal());
-    // dispatch(setModalType(ModalType.WALLET_ERROR));
+    dispatch(setWalletError(_error.message));
+    dispatch(openModal(ModalType.WALLET_ERROR));
   };
 
   return (

@@ -1,14 +1,24 @@
 import { ModalType } from "@/state/modal/slice";
-import Placeholder from "../Placeholder";
 import DeleteToken from "./deleteToken";
+import ErrorModal from "./errorModal";
+import LoadingModal from "./loadingModal";
+import SuccessModal from "./successModel";
 
 export const modalContent = {
-  [ModalType.WALLET_CONNECT]: {
+  [ModalType.WALLET_ERROR]: {
     title: "",
-    body: <Placeholder />,
+    body: <ErrorModal />,
   },
   [ModalType.DELETE_TOKEN]: {
     title: "",
     body: <DeleteToken />,
+  },
+  [ModalType.LOADING]: {
+    title: "",
+    body: <LoadingModal />,
+  },
+  [ModalType.SUCCESS]: {
+    title: "",
+    body: <SuccessModal />,
   },
 };

@@ -9,6 +9,8 @@ export interface IAccountBalances {
 export interface IWalletState {
   accountBalances: IAccountBalances;
   contracts: TokenKidFactoryContract;
+  walletError: string;
+  txHash: string;
 }
 
 export const initialState: IWalletState = {
@@ -18,6 +20,8 @@ export const initialState: IWalletState = {
     cEUR: "0",
   },
   contracts: null,
+  walletError: "",
+  txHash: "",
 };
 
 export interface ITokenKid {

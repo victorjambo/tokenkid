@@ -33,7 +33,17 @@ export const fetchFromContract = () => {
         if (token !== null) {
           setTokeninfo(token);
         } else {
-          dispatch(setTokenNotFound(true));
+          // dispatch(setTokenNotFound(true));
+          setTokeninfo({
+            tokenId: 0,
+            tokenName: "Art NFT",
+            owner: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
+            previousOwner: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
+            price: 10,
+            tokenURI: "https://cdn.eathappyproject.com/wp-content/uploads/2021/02/The-Most-Beautiful-Flowers-in-the-World-With-Name-and-Picture.jpg",
+            isOnSale: true,
+            tokenDesc: "With the holiday season coming up soon, I wanted to share this cute chalkboard free printable “Eat More Pie” sign to share during the holidays.",
+          })
         }
         setLoading(false);
       }

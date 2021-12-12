@@ -47,7 +47,7 @@ const Assets: React.FC = () => {
                 <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
               ) : (
                 <Link href={`/profile/${tokeninfo.owner}`}>
-                  <span>{shortAddress(tokeninfo.owner)}</span>
+                  <span className="cursor-pointer">{shortAddress(tokeninfo.owner)}</span>
                 </Link>
               )}
               {tokeninfo.owner && tokeninfo.owner === address && (

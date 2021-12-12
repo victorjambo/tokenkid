@@ -46,7 +46,7 @@ class TokenKidFactoryContract {
         .safeMint(tokenName, price, tokenURI, tokenDesc)
         .send({ from: kit.defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -73,7 +73,7 @@ class TokenKidFactoryContract {
         .buyToken(tokenId, token)
         .send({ from: defaultAccount, value: price })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -136,7 +136,7 @@ class TokenKidFactoryContract {
         .changeTokenPrice(tokenId, price)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -161,7 +161,7 @@ class TokenKidFactoryContract {
         .toggleOnSale(tokenId)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -186,7 +186,7 @@ class TokenKidFactoryContract {
         .burnToken(tokenId)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -231,7 +231,7 @@ class TokenKidFactoryContract {
         .approve(this.token, tokenId)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
@@ -256,7 +256,7 @@ class TokenKidFactoryContract {
         .setApprovalForAll(this.token, _approved)
         .send({ from: defaultAccount })
         .on("transactionHash", (transactionHash) => {
-          onTransactionHash(transactionHash);
+          onTransactionHash && onTransactionHash(transactionHash);
         })
         .on("receipt", (receipt) => {
           onReceipt(receipt);
