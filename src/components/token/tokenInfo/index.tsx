@@ -1,16 +1,21 @@
 import { useContractsContext } from "@/context/contractsContext";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
+import { ModalType, openModal, setModalType } from "@/state/modal/slice";
+import { setCurrentToken } from "@/state/tokens/slice";
 import { toWei } from "@/utils/weiConversions";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { PencilAltIcon } from "@heroicons/react/solid";
+import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 type Inputs = {
   tokenPrice: number;
 };
 
 const TokenInfo: React.FC = () => {
+  const dispatch = useDispatch();
+
   const [showPriceInput, setShowPriceInput] = useState(false);
 
   const { loading, tokenKidFactoryContract } = useContractsContext();
@@ -35,8 +40,7 @@ const TokenInfo: React.FC = () => {
         priceInWei,
         kit.defaultAccount,
         onReceipt,
-        onError,
-        onTransactionHash
+        onError
       );
     });
   };
@@ -55,8 +59,10 @@ const TokenInfo: React.FC = () => {
     console.log({ err });
   };
 
-  const onTransactionHash = (hash) => {
-    console.log({ hash });
+  const handleDeleteToken = () => {
+    dispatch(setModalType(ModalType.DELETE_TOKEN));
+    dispatch(openModal());
+    dispatch(setCurrentToken(tokeninfo));
   };
 
   return (
@@ -64,6 +70,11 @@ const TokenInfo: React.FC = () => {
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Name</span>
+          {owner && owner === address && (
+            <button onClick={handleDeleteToken}>
+              <TrashIcon className="w-5 h-5 text-rose-400 hover:text-rose-700" />
+            </button>
+          )}
         </div>
         <div className="text-lg font-semibold">
           {loading ? (

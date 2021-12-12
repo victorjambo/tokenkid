@@ -5,19 +5,8 @@ import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import ERC20Contract from "@/contractClient/ERC20";
-import { setTokenNotFound } from "@/state/tokens/slice";
+import { defaultTokenInfo, setTokenNotFound } from "@/state/tokens/slice";
 import { useDispatch } from "react-redux";
-
-const defaultTokenInfo: ITokenKid = {
-  tokenId: null,
-  tokenName: "",
-  owner: "",
-  previousOwner: "",
-  price: 0,
-  tokenURI: "",
-  isOnSale: false,
-  tokenDesc: "",
-};
 
 export const fetchFromContract = () => {
   const dispatch = useDispatch();
