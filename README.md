@@ -41,6 +41,7 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
     * https://erc721.org/
     * https://docs.openzeppelin.com/contracts/2.x/api/token/erc721
     * https://github.com/devpavan04/cryptoboys-nft-marketplace
+    * https://jeancvllr.medium.com/solidity-tutorial-all-about-enums-684adcc0b38e
 6. UI/UX inspirations
     * https://netstorm-react.theme-land.com/
     * https://templates.hibootstrap.com/tezor/default/index-2.html
