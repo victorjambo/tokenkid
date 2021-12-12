@@ -1,3 +1,4 @@
+import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import { shortAddress } from "@/utils/shortAddress";
@@ -45,8 +46,8 @@ const Assets: React.FC = () => {
               {loading ? (
                 <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
               ) : (
-                shortAddress(tokeninfo.owner)
-              )}{" "}
+                <Link href={`/profile/${tokeninfo.owner}`}>{shortAddress(tokeninfo.owner)}</Link>
+              )}
               {tokeninfo.owner && tokeninfo.owner === address && (
                 <span className="italic text-gray-400 text-sm">(You)</span>
               )}
