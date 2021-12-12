@@ -174,6 +174,31 @@ class TokenKidFactoryContract {
     });
   };
 
+  burnToken = async (
+    tokenId: number,
+    defaultAccount: string,
+    onReceipt: (arg0: any) => void,
+    onError: (arg0: any) => void,
+    onTransactionHash?: (arg0: string) => void
+  ) => {
+    await new Promise((resolve) => {
+      this.tokenKidFactory.methods
+        .burnToken(tokenId)
+        .send({ from: defaultAccount })
+        .on("transactionHash", (transactionHash) => {
+          onTransactionHash(transactionHash);
+        })
+        .on("receipt", (receipt) => {
+          onReceipt(receipt);
+          resolve(receipt);
+        })
+        .on("error", (error) => {
+          onError(error);
+          resolve(error);
+        });
+    });
+  };
+
   getApproved = async (tokenId: number): Promise<any> => {
     try {
       return await this.tokenKidFactory.methods.getApproved(tokenId).call();
