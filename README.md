@@ -12,7 +12,7 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
     * [Repo](https://github.com/victorjambo/tokenkid-subgraph)
 
 ## Docs
-1. [Contracts](contract/README.md)
+1. [Contracts](https://github.com/victorjambo/tokenkid-contract)
 
 ## Resources used to build this project
 

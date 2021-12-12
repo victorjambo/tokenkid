@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /// @author @victorjambo
 /// @notice Factory to create/mint ERC721 Tokens
 contract TokenKidFactory is ERC721URIStorage {
+    address private _contractOwner;
+
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -51,7 +53,9 @@ contract TokenKidFactory is ERC721URIStorage {
     event TokenTransfered(uint256 indexed tokenId, address indexed newOwner);
 
     /// @notice Used to initialize the TokenKid contract
-    constructor() ERC721("TokenKid", "KID") {}
+    constructor() ERC721("TokenKid", "KID") {
+        _contractOwner = msg.sender;
+    }
 
     /// @notice Mint a new ERC721 token
     /// @param _tokenName Token Name
@@ -209,6 +213,14 @@ contract TokenKidFactory is ERC721URIStorage {
         tokenKids[_tokenId] = tokenkid;
     }
 
+    function burnToken(uint256 _tokenId)
+        public
+        onlyExisting(_tokenId)
+        onlyTokenOrContractOwner(_tokenId)
+    {
+        _burn(_tokenId);
+    }
+
     /// @notice Modifier to check if token exists
     /// @param _tokenId NFT Token Id.
     modifier onlyExisting(uint256 _tokenId) {
@@ -221,6 +233,14 @@ contract TokenKidFactory is ERC721URIStorage {
     modifier onlyOwner(uint256 _tokenId) {
         address tokenOwner = ownerOf(_tokenId);
         require(tokenOwner == msg.sender, "NOT OWNER");
+        _;
+    }
+
+    /// @notice Modifier to check if msg.sender is owner of token
+    /// @param _tokenId NFT Token Id.
+    modifier onlyTokenOrContractOwner(uint256 _tokenId) {
+        address tokenOwner = ownerOf(_tokenId);
+        require(tokenOwner == msg.sender && _contractOwner == msg.sender, "NOT OWNER");
         _;
     }
 }
