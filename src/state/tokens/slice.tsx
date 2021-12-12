@@ -11,10 +11,12 @@ export interface IToken {
 
 interface IState {
   tokens: IToken[];
+  tokenNotFound: boolean;
 }
 
 const initialState: IState = {
   tokens: [],
+  tokenNotFound: false,
 };
 
 const tokensSlice = createSlice({
@@ -26,8 +28,11 @@ const tokensSlice = createSlice({
         (_tokens) => _tokens.id === "2" || _tokens.id === "4"
       );
     },
+    setTokenNotFound(state, action: PayloadAction<boolean>) {
+      state.tokenNotFound = action.payload;
+    },
   },
 });
 
-export const { setHeroTokens } = tokensSlice.actions;
+export const { setHeroTokens, setTokenNotFound } = tokensSlice.actions;
 export default tokensSlice.reducer;

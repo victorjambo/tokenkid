@@ -5,6 +5,8 @@ import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import ERC20Contract from "@/contractClient/ERC20";
+import { setTokenNotFound } from "@/state/tokens/slice";
+import { useDispatch } from "react-redux";
 
 const defaultTokenInfo: ITokenKid = {
   tokenId: null,
@@ -18,6 +20,7 @@ const defaultTokenInfo: ITokenKid = {
 };
 
 export const fetchFromContract = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { tokenId } = router.query;
 
@@ -37,7 +40,12 @@ export const fetchFromContract = () => {
         tokenKidFactoryContract instanceof TokenKidFactoryContract
       ) {
         const token = await tokenKidFactoryContract.getMintedToken(+tokenId);
-        setTokeninfo(token);
+
+        if (token !== null) {
+          setTokeninfo(token);
+        } else {
+          dispatch(setTokenNotFound(true));
+        }
         setLoading(false);
       }
     });
