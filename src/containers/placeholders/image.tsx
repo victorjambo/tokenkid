@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ImageRender: React.FC<{ src: string; height?: string }> = ({
   src,
-  height = 96,
+  height = 72,
 }) => {
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -11,20 +11,20 @@ const ImageRender: React.FC<{ src: string; height?: string }> = ({
   };
 
   return (
-    <>
+    <div className={`h-${height}`}>
       <div
-        className={`animate-pulse bg-gray-400 rounded-t-md w-full h-${height} ${
+        className={`animate-pulse bg-gray-400 rounded-t-md w-full ${
           imgLoaded ? "hidden" : ""
         }`}
       />
       <img
-        className={`w-full rounded-t-md cursor-pointer overflow-hidden max-h-${height} ${
+        className={`w-full rounded-t-md cursor-pointer h-full object-contain bg-white ${
           imgLoaded ? "" : "hidden"
         }`}
         src={src}
         onLoad={handleImgLoad}
       />
-    </>
+    </div>
   );
 };
 
