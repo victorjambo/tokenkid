@@ -2,6 +2,7 @@ import { useContractsContext } from "@/context/contractsContext";
 import { AppState } from "@/state";
 import { closeModal, ModalType, openModal } from "@/state/modal/slice";
 import { setTxHash, setWalletError } from "@/state/wallet/slice";
+import { unpin } from "@/utils/ipfs";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
@@ -38,7 +39,13 @@ const DeleteToken: React.FC = () => {
     });
   };
 
-  const onReceipt = () => {
+  const onReceipt = async () => {
+    try {
+      await unpin(tokeninfo.tokenURI);
+    } catch (error) {
+      console.log({ error });
+    }
+
     dispatch(openModal(ModalType.SUCCESS));
     router.push("/");
   };
