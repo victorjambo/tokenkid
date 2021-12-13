@@ -26,7 +26,7 @@ const HeroTokens: React.FC = () => {
                 </div>
               </div>
             </div>
-            <Link href={`/assets/${token.id}`}>
+            <Link href={`/assets/${token.tokenId}`}>
               <span>
                 <ArrowCircleRightIcon className="cursor-pointer w-8 h-8 text-pink-primary hover:text-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
               </span>

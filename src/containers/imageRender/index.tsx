@@ -10,14 +10,14 @@ const ImageRender: React.FC<{ src: string; height?: string }> = ({
   };
 
   return (
-    <div className="h-72">
+    <div className="h-96">
       <div
         className={`animate-pulse bg-gray-400 rounded-t-md w-full h-full ${
           imgLoaded ? "hidden" : ""
         }`}
       />
       <img
-        className={`w-full rounded-t-md cursor-pointer h-full object-contain bg-white ${
+        className={`w-full rounded-t-md cursor-pointer h-full object-cover bg-white ${
           imgLoaded ? "" : "hidden"
         }`}
         src={src}

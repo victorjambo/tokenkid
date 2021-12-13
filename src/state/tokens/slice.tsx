@@ -12,7 +12,7 @@ const tokensSlice = createSlice({
   reducers: {
     setHeroTokens(state, action: PayloadAction<ITokenGraph[]>) {
       state.tokens = action.payload.filter(
-        (_tokens) => _tokens.id === "2" || _tokens.id === "4"
+        (_tokens) => _tokens.tokenId === "4" || _tokens.tokenId === "7"
       );
     },
     setTokenNotFound(state, action: PayloadAction<boolean>) {

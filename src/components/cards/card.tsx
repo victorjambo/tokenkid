@@ -14,7 +14,7 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
   return (
     <div className="text-white popup-hover">
       <div className="relative">
-        <Link href={`/assets/${token.id}`}>
+        <Link href={`/assets/${token.tokenId}`}>
           <span className="cursor-pointer">
             <ImageRender src={token._tokenURI} />
           </span>
@@ -39,7 +39,7 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
       <div className="flex flex-col justify-between bg-white text-black p-4 rounded-b-md space-y-3">
         <div className="flex flex-row border-1 rounded-md py-2 px-4 justify-between">
           <div className="hover:text-pink-primary font-bold">
-            <Link href={`/assets/${token.id}`}>{token._tokenName}</Link>
+            <Link href={`/assets/${token.tokenId}`}>{token._tokenName}</Link>
           </div>
           <div>{fromWei(token._price)} cUSD</div>
         </div>

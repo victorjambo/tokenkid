@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 
 const Footer: React.FC = () => {
   const router = useRouter();
-  console.log();
   
   return (
     <footer className={`w-full bg-white ${router.pathname === "/" ? "" : "fixed bottom-0"}`}>
