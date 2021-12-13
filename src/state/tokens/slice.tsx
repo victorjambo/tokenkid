@@ -28,7 +28,15 @@ const tokensSlice = createSlice({
       state.approved = action.payload;
     },
     setPriceHistory(state, action: PayloadAction<ITokenPriceHistory[]>) {
-      state.priceHistory = action.payload;
+      const _priceHistory = [...action.payload];
+
+      if (action.payload.length) {
+        _priceHistory.sort((a, b) =>
+          a.transferTime < b.transferTime ? 1 : -1
+        );
+      }
+
+      state.priceHistory = _priceHistory;
     },
   },
 });

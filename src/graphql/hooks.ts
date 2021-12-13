@@ -3,8 +3,8 @@ import { QueryResult, useQuery } from "@apollo/client";
 import { QUERY_TOKENS, QUERY_ACCOUNT_TOKENS } from "./queries";
 
 export const useQueryTokens = (
-  first: number = 100,
-  skip: number = 0
+  first = 100,
+  skip = 0
 ): QueryResult => {
   return useQuery(QUERY_TOKENS, {
     variables: {
@@ -16,8 +16,8 @@ export const useQueryTokens = (
 
 export const useQueryAccountTokens = (
   owner: string,
-  first: number = 100,
-  skip: number = 0
+  first = 100,
+  skip = 0
 ): QueryResult => {
   return useQuery(QUERY_ACCOUNT_TOKENS, {
     variables: {

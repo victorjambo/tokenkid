@@ -14,11 +14,12 @@ const DeleteToken: React.FC = () => {
 
   const { performActions } = useContractKit();
 
+  const { tokenKidFactoryContract } = useContractsContext();
+
   const {
     tokens: { tokeninfo },
   } = useSelector((state: AppState) => state);
 
-  const { tokenKidFactoryContract } = useContractsContext();
 
   const handleCancel = () => {
     dispatch(closeModal());

@@ -3,16 +3,10 @@ import GradientAvatar from "@/components/avatar";
 import { shortAddress } from "@/utils/shortAddress";
 import { fromWei } from "@/utils/weiConversions";
 import ImageRender from "@/containers/imageRender";
+import { ITokenGraph } from "@/state/tokens/types";
 
 interface ICards {
-  token: {
-    id: string;
-    owner: string;
-    tokenId: string;
-    _price: string;
-    _tokenName: string;
-    _tokenURI: string;
-  };
+  token: ITokenGraph;
   showCreator?: boolean;
 }
 
