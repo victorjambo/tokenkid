@@ -1,41 +1,16 @@
-import { useContractsContext } from "@/context/contractsContext";
-import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { Disclosure } from "@headlessui/react";
 import {
   ChevronDownIcon,
   CollectionIcon,
   SwitchVerticalIcon,
 } from "@heroicons/react/solid";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { humanizeTime } from "@/utils/humanizeTime";
 import { fromWei } from "@/utils/weiConversions";
+import { fetchFromContract } from "@/hooks/fetchFromContract";
 
 const PriceHistoryTable = () => {
-  const router = useRouter();
-  const { tokenId } = router.query;
-
-  const { tokenKidFactoryContract } = useContractsContext();
-
-  const { performActions } = useContractKit();
-
-  const [priceHistory, setPriceHistory] = useState(null);
-
-  const fetchTokenPriceHistory = useCallback(async () => {
-    await performActions(async () => {
-      if (
-        router.isReady &&
-        tokenKidFactoryContract instanceof TokenKidFactoryContract
-      ) {
-        const tokenPriceHistory =
-          await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
-        if (tokenPriceHistory !== null) {
-          setPriceHistory(tokenPriceHistory);
-        }
-      }
-    });
-  }, [tokenKidFactoryContract, router.isReady]);
+  const { priceHistory, fetchTokenPriceHistory } = fetchFromContract();
 
   useEffect(() => {
     void fetchTokenPriceHistory();

@@ -16,6 +16,7 @@ export const fetchFromContract = () => {
   const [tokeninfo, setTokeninfo] = useState<ITokenKid>(defaultTokenInfo);
   const [currentAllowance, setCurrentAllowance] = useState(null);
   const [approved, setApproved] = useState(null);
+  const [priceHistory, setPriceHistory] = useState(null);
 
   const { tokenKidFactoryContract, setLoading, ERC20 } = useContractsContext();
 
@@ -59,6 +60,21 @@ export const fetchFromContract = () => {
     });
   }, [tokenKidFactoryContract, router.isReady]);
 
+  const fetchTokenPriceHistory = useCallback(async () => {
+    await performActions(async () => {
+      if (
+        router.isReady &&
+        tokenKidFactoryContract instanceof TokenKidFactoryContract
+      ) {
+        const tokenPriceHistory =
+          await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
+        if (tokenPriceHistory !== null) {
+          setPriceHistory(tokenPriceHistory);
+        }
+      }
+    });
+  }, [tokenKidFactoryContract, router.isReady]);
+
   useEffect(() => {
     void fetchMintedToken();
     void fetchAllowance();
@@ -72,5 +88,7 @@ export const fetchFromContract = () => {
     fetchMintedToken,
     fetchAllowance,
     fetchApproved,
+    fetchTokenPriceHistory,
+    priceHistory,
   };
 };

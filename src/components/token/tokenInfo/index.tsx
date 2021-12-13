@@ -50,7 +50,7 @@ const TokenInfo: React.FC = () => {
     await changeTokenPrice(tokenPrice);
   };
 
-  const onReceipt = async (_receipt) => {
+  const onReceipt = async () => {
     setShowPriceInput(false);
     await fetchMintedToken();
   };
