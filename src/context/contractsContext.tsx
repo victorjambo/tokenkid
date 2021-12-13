@@ -13,7 +13,7 @@ import {
 import { useDispatch } from "react-redux";
 import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
-import { ITokenKid } from "@/state/wallet/types";
+import { ITokenInfo } from "@/state/tokens/types";
 import ERC20Contract from "@/contractClient/ERC20";
 import { tokenAddresses } from "@/utils/tokenAddresses";
 
@@ -22,7 +22,7 @@ interface ContractsProviderProps {
   handleDestroy: () => void;
   tokenKidFactoryContract: TokenKidFactoryContract;
   ERC20: ERC20Contract;
-  fetchMintedToken: (tokenId: number) => Promise<ITokenKid>;
+  fetchMintedToken: (tokenId: number) => Promise<ITokenInfo>;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
   contractAddress: string;

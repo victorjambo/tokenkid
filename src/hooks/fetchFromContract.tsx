@@ -1,22 +1,27 @@
 import { useContractsContext } from "@/context/contractsContext";
 import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
-import { ITokenKid } from "@/state/wallet/types";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import ERC20Contract from "@/contractClient/ERC20";
-import { defaultTokenInfo, setTokenNotFound } from "@/state/tokens/slice";
-import { useDispatch } from "react-redux";
+import {
+  setApproved,
+  setCurrentAllowance,
+  setPriceHistory,
+  setTokeninfo,
+  setTokenNotFound,
+} from "@/state/tokens/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "@/state";
 
 export const fetchFromContract = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { tokenId } = router.query;
 
-  const [tokeninfo, setTokeninfo] = useState<ITokenKid>(defaultTokenInfo);
-  const [currentAllowance, setCurrentAllowance] = useState(null);
-  const [approved, setApproved] = useState(null);
-  const [priceHistory, setPriceHistory] = useState(null);
+  const {
+    tokens: { tokeninfo, currentAllowance, approved, priceHistory },
+  } = useSelector((state: AppState) => state);
 
   const { tokenKidFactoryContract, setLoading, ERC20 } = useContractsContext();
 
@@ -32,7 +37,7 @@ export const fetchFromContract = () => {
         const token = await tokenKidFactoryContract.getMintedToken(+tokenId);
 
         if (token !== null) {
-          setTokeninfo(token);
+          dispatch(setTokeninfo(token));
         } else {
           dispatch(setTokenNotFound(true));
         }
@@ -44,7 +49,7 @@ export const fetchFromContract = () => {
   const fetchAllowance = useCallback(async () => {
     if (ERC20 instanceof ERC20Contract) {
       const _currentAllowance = await ERC20.getAllowance();
-      setCurrentAllowance(_currentAllowance / 10 ** 18);
+      dispatch(setCurrentAllowance(_currentAllowance / 10 ** 18));
     }
   }, [ERC20]);
 
@@ -55,7 +60,7 @@ export const fetchFromContract = () => {
         tokenKidFactoryContract instanceof TokenKidFactoryContract
       ) {
         const _approved = await tokenKidFactoryContract.getApproved(+tokenId);
-        setApproved(_approved);
+        dispatch(setApproved(_approved));
       }
     });
   }, [tokenKidFactoryContract, router.isReady]);
@@ -69,7 +74,7 @@ export const fetchFromContract = () => {
         const tokenPriceHistory =
           await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
         if (tokenPriceHistory !== null) {
-          setPriceHistory(tokenPriceHistory);
+          dispatch(setPriceHistory(tokenPriceHistory));
         }
       }
     });

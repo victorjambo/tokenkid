@@ -2,7 +2,7 @@ import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
 import { tokenAddresses } from "@/utils/tokenAddresses";
-import { ITokenKid, ITokenPriceHistory } from "@/state/wallet/types";
+import { ITokenInfo, ITokenPriceHistory } from "@/state/tokens/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 import { fromWei } from "@/utils/weiConversions";
 
@@ -86,7 +86,7 @@ class TokenKidFactoryContract {
     });
   };
 
-  getMintedToken = async (tokenId: number): Promise<ITokenKid> => {
+  getMintedToken = async (tokenId: number): Promise<ITokenInfo> => {
     try {
       const _token = await this.tokenKidFactory.methods
         .getMintedToken(tokenId)
@@ -110,7 +110,7 @@ class TokenKidFactoryContract {
 
   getTokenPriceHistory = async (
     tokenId: number
-  ): Promise<ITokenPriceHistory> => {
+  ): Promise<ITokenPriceHistory[]> => {
     try {
       const _tokenPriceHistory = await this.tokenKidFactory.methods
         .getTokenPriceHistory(tokenId)

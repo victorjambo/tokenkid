@@ -1,7 +1,6 @@
 import { useContractsContext } from "@/context/contractsContext";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { ModalType, openModal } from "@/state/modal/slice";
-import { setCurrentToken } from "@/state/tokens/slice";
 import { toWei } from "@/utils/weiConversions";
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
@@ -22,7 +21,8 @@ const TokenInfo: React.FC = () => {
 
   const { performActions, address } = useContractKit();
 
-  const { tokeninfo, fetchMintedToken } = fetchFromContract();
+  const { tokeninfo, fetchMintedToken, fetchTokenPriceHistory } =
+    fetchFromContract();
 
   const { owner, tokenName, price, tokenId } = tokeninfo;
 
@@ -53,6 +53,7 @@ const TokenInfo: React.FC = () => {
   const onReceipt = async () => {
     setShowPriceInput(false);
     await fetchMintedToken();
+    await fetchTokenPriceHistory();
   };
 
   const onError = (err) => {
@@ -61,7 +62,6 @@ const TokenInfo: React.FC = () => {
 
   const handleDeleteToken = () => {
     dispatch(openModal(ModalType.DELETE_TOKEN));
-    dispatch(setCurrentToken(tokeninfo));
   };
 
   return (

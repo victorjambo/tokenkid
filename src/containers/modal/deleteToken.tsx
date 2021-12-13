@@ -15,7 +15,7 @@ const DeleteToken: React.FC = () => {
   const { performActions } = useContractKit();
 
   const {
-    tokens: { currentToken: tokeninfo },
+    tokens: { tokeninfo },
   } = useSelector((state: AppState) => state);
 
   const { tokenKidFactoryContract } = useContractsContext();

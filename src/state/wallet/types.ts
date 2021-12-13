@@ -23,21 +23,3 @@ export const initialState: IWalletState = {
   walletError: "",
   txHash: "",
 };
-
-export interface ITokenKid {
-  tokenId: number;
-  tokenName: string;
-  owner: string;
-  previousOwner: string;
-  price: number;
-  tokenURI: string;
-  isOnSale: boolean;
-  tokenDesc: string;
-}
-
-export interface ITokenPriceHistory {
-  tokenId: number;
-  transferTime: number;
-  from: number;
-  to: number;
-}

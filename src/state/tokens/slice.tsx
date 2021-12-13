@@ -1,43 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ITokenKid } from "../wallet/types";
-
-export interface IToken {
-  id: string;
-  owner: string;
-  tokenId: string;
-  _price: string;
-  _tokenName: string;
-  _tokenURI: string;
-}
-
-interface IState {
-  tokens: IToken[];
-  tokenNotFound: boolean;
-  currentToken: ITokenKid,
-}
-
-export const defaultTokenInfo: ITokenKid = {
-  tokenId: null,
-  tokenName: "",
-  owner: "",
-  previousOwner: "",
-  price: 0,
-  tokenURI: "",
-  isOnSale: false,
-  tokenDesc: "",
-};
-
-const initialState: IState = {
-  tokens: [],
-  tokenNotFound: false,
-  currentToken: defaultTokenInfo,
-};
+import {
+  ITokenInfo,
+  initialState,
+  ITokenGraph,
+  ITokenPriceHistory,
+} from "./types";
 
 const tokensSlice = createSlice({
   name: "tokens",
   initialState,
   reducers: {
-    setHeroTokens(state, action: PayloadAction<IToken[]>) {
+    setHeroTokens(state, action: PayloadAction<ITokenGraph[]>) {
       state.tokens = action.payload.filter(
         (_tokens) => _tokens.id === "2" || _tokens.id === "4"
       );
@@ -45,11 +18,27 @@ const tokensSlice = createSlice({
     setTokenNotFound(state, action: PayloadAction<boolean>) {
       state.tokenNotFound = action.payload;
     },
-    setCurrentToken(state, action: PayloadAction<ITokenKid>) {
-      state.currentToken = action.payload;
+    setTokeninfo(state, action: PayloadAction<ITokenInfo>) {
+      state.tokeninfo = action.payload;
+    },
+    setCurrentAllowance(state, action: PayloadAction<string | number>) {
+      state.currentAllowance = action.payload;
+    },
+    setApproved(state, action: PayloadAction<string>) {
+      state.approved = action.payload;
+    },
+    setPriceHistory(state, action: PayloadAction<ITokenPriceHistory[]>) {
+      state.priceHistory = action.payload;
     },
   },
 });
 
-export const { setHeroTokens, setTokenNotFound, setCurrentToken } = tokensSlice.actions;
+export const {
+  setHeroTokens,
+  setTokenNotFound,
+  setTokeninfo,
+  setCurrentAllowance,
+  setApproved,
+  setPriceHistory,
+} = tokensSlice.actions;
 export default tokensSlice.reducer;
