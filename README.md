@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a79991d5-adbc-4345-857f-422b33ff6aca/deploy-status)](https://app.netlify.com/sites/tokenkid/deploys)
 # TokenKid
 
 TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
