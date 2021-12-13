@@ -5,14 +5,14 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
 > _This project hasn't been reviewed by other engineers. I might have missed some errors._ 😀
 
 ## Deployments
-1. Web3 App
+1. [Web3 App](http://tokenkid.netlify.com/)
 2. [Smart Contract](https://alfajores-blockscout.celo-testnet.org/address/0xd0Ad4A716108d6eF6e2D683865Fde412fAEdC26B/contracts)
-3. Subgraph
-    * [Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
-    * [Repo](https://github.com/victorjambo/tokenkid-subgraph)
+3. [Subgraph Hosted-service](https://thegraph.com/hosted-service/subgraph/victorjambo/tokenkid?selected=playground)
 
-## Docs
-1. [Contracts](https://github.com/victorjambo/tokenkid-contract)
+
+## Repos & Docs
+1. [Smart Contract](https://github.com/victorjambo/tokenkid-contract)
+2. [Subgraph](https://github.com/victorjambo/tokenkid-subgraph)
 
 ## Resources used to build this project
 
@@ -22,6 +22,7 @@ TokenKid is simple an NFT Marketplace built on [Celo](https://celo.org)
     * https://www.youtube.com/watch?v=dO-FkIySMys
     * https://www.youtube.com/watch?v=HfDgC2oNnwo
     * https://github.com/zkwarlock/the-graph-celo
+    * https://thegraph.com/docs/developer/assemblyscript-api
 2. [Tailwind](https://tailwindcss.com/)
     * https://torf.co/side-menu-crud-data-list.html
 3. Connecting to wallet with ContractKit
