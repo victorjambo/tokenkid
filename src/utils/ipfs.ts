@@ -18,7 +18,8 @@ export const ipfs = create({
 });
 
 export const unpin = async (uri: string) => {
-  const response = await fetch(IPFS_UNPIN_URL + uri, {
+  const url = IPFS_UNPIN_URL + uri.split("/")[4];
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       authorization: auth,
