@@ -1,6 +1,6 @@
 import { useContractKit } from "@celo-tools/use-contractkit";
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, GlobeAltIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { generateAddress } from "@/utils/generateAddress";
 import { classNames } from "@/utils/classNames";
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { AppState } from "@/state";
 import GradientAvatar from "../avatar";
 import { useContractsContext } from "@/context/contractsContext";
+import Icons from "../footer/icons";
 
 const ConnectWallet: React.FC = () => {
   const {
@@ -114,6 +115,9 @@ const ConnectWallet: React.FC = () => {
                   </button>
                 </div>
               )}
+            </Menu.Item>
+            <Menu.Item>
+              <Icons />
             </Menu.Item>
           </Menu.Items>
         </Transition>
