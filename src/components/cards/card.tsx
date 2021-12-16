@@ -21,13 +21,12 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
         </Link>
         {showCreator && (
           <div className="absolute top-6 left-5 rounded-lg text-black">
-            <div className="absolute inset-0 rounded-full border border-gray-200 bg-white" />
+            <div className="absolute inset-0 rounded-full border border-gray-500 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md" />
             <div className="flex flex-row font-medium py-2 pl-2 pr-4">
               <Link href={`/profile/${token.owner}`}>
-                <div className="flex flex-row items-center w-full z-10 text-center space-x-2 cursor-pointer hover:text-pink-primary">
+                <div className="flex flex-row items-center w-full z-10 text-center space-x-2 cursor-pointer hover:text-pink-primary text-white">
                   <GradientAvatar address={token.owner} />
                   <div className="text-sm">
-                    <span className="text-gray-500">Created by</span>{" "}
                     {shortAddress(token.owner)}
                   </div>
                 </div>
