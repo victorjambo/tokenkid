@@ -1,3 +1,4 @@
+import TagManager from "@/containers/pageHeader/tagManager";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
@@ -10,22 +11,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_G_TAG}`}
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_G_TAG}', {
-              page_path: window.location.pathname,
-            });
-          `,
-            }}
-          />
+          <TagManager />
         </Head>
         <body>
           <Main />

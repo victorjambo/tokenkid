@@ -7,7 +7,9 @@ import { AppState } from "@/state";
 import ImageRender from "@/containers/imageRender";
 
 const HeroTokens: React.FC = () => {
-  const {tokens: {tokens}} = useSelector((state: AppState) => state);
+  const {
+    tokens: { tokens },
+  } = useSelector((state: AppState) => state);
 
   return (
     <div className="w-1/2 flex flex-row space-x-4">
@@ -21,9 +23,11 @@ const HeroTokens: React.FC = () => {
               <GradientAvatar />
               <div className="flex flex-col pl-2">
                 <div className="font-bold">{token._tokenName}</div>
-                <div className="text-sm text-gray-400">
-                  Created by {shortAddress(token.owner)}
-                </div>
+                <Link href={`/profile/${token.owner}`}>
+                  <div className="text-sm text-gray-400 cursor-pointer">
+                    @ {shortAddress(token.owner)}
+                  </div>
+                </Link>
               </div>
             </div>
             <Link href={`/assets/${token.tokenId}`}>
