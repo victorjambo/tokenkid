@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
   const [tokens, setTokens] = useState(null);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !data) return;
     setTokens(data.tokens);
   }, [loading]);
 

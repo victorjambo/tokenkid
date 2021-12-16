@@ -13,7 +13,7 @@ const Cards: React.FC = () => {
   const [tokens, setTokens] = useState(null);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !data) return;
     setTokens(data.tokens);
     dispatch(setHeroTokens(data.tokens));
   }, [loading]);
