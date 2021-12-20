@@ -15,14 +15,15 @@ contract TokenKidFactory is ERC721URIStorage {
     Counters.Counter private _tokenIdCounter;
 
     struct TokenKid {
-        uint256 tokenId;
-        string tokenName;
         address payable owner;
         address payable previousOwner;
+        uint256 tokenId;
         uint256 price;
+        string tokenName;
         string tokenURI;
-        bool isOnSale;
         string tokenDesc;
+        bool isOnSale;
+
     }
 
     mapping(uint256 => TokenKid) public tokenKids;
@@ -85,15 +86,15 @@ contract TokenKidFactory is ERC721URIStorage {
 
         // update tokenKids mapping with newly minted token
         tokenKids[tokenId] = TokenKid(
-            tokenId,
-            _tokenName,
             payable(msg.sender), // owner
             payable(msg.sender), // previousOwner
+            tokenId,
             _price,
+            _tokenName,
             _tokenURI,
-            true,
-            _tokenDesc
-        );
+            _tokenDesc,
+            true
+            );
     }
 
     /// @notice Transfer ownership of ERC721 token and Transfer
@@ -253,7 +254,7 @@ contract TokenKidFactory is ERC721URIStorage {
     modifier onlyTokenOrContractOwner(uint256 _tokenId) {
         address tokenOwner = ownerOf(_tokenId);
         require(
-            tokenOwner == msg.sender && _contractOwner == msg.sender,
+            tokenOwner == msg.sender || _contractOwner == msg.sender,
             "NOT OWNER"
         );
         _;
