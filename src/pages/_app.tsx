@@ -12,6 +12,7 @@ import ContractsProvider from "@/context/contractsContext";
 import AppWrapper from "@/containers/AppWrapper";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/graphql/client";
+import RenderProvider from "@/components/connectWallet/renderProvider";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -23,6 +24,9 @@ const App = ({ Component, pageProps }) => {
         icon: "https://tokenkid.netlify.app/favicon.ico",
       }}
       network={Alfajores}
+      connectModal={{
+        RenderProvider,
+      }}
     >
       <Provider store={store}>
         <ContractsProvider>
