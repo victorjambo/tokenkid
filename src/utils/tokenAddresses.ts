@@ -24,4 +24,15 @@ export const tokenAddresses = {
       mCEUR: "0xe273ad7ee11dcfaa87383ad5977ee1504ac07568",
     },
   },
+  Goerli: {
+    tokenFactory: "0x65F53408425D3A2C52ECD494fF2d4273623F53a4", // https://goerli.etherscan.io/address/0x65F53408425D3A2C52ECD494fF2d4273623F53a4
+    ERC20Tokens: {
+      cUSD: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
+      cEUR: "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f",
+      cGLD: "0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9",
+      mCELO: "0x653cc2cc0be398614bad5d5328336dc79281e246",
+      mCUSD: "0x3a0ea4e0806805527c750ab9b34382642448468d",
+      mCEUR: "0x0d9b4311657003251d1efa085e74f761185f271c",
+    },
+  },
 };

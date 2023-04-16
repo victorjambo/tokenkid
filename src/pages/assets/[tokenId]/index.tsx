@@ -9,6 +9,10 @@ import TokenInfo from "@/components/token/tokenInfo";
 import ApproveToken from "@/components/token/approveToken";
 import BuyToken from "@/components/token/buyToken";
 import TokenActivity from "@/components/token/tokenActivity";
+import { IPFS_BASE_URL } from "@/utils/ipfs";
+import { useState, useEffect } from "react";
+
+const NEW_IPFS_BASE_URL = "https://ipfs.io/ipfs/";
 
 const Assets: React.FC = () => {
   const { loading } = useContractsContext();
@@ -17,6 +21,17 @@ const Assets: React.FC = () => {
 
   const { tokeninfo, approved, fetchApproved } = fetchFromContract();
 
+  const [imgSrc, setImgSrc] = useState(tokeninfo.tokenURI);
+
+  useEffect(() => {
+    if (tokeninfo.tokenURI.startsWith(IPFS_BASE_URL)) {
+      const str = tokeninfo.tokenURI.replace(IPFS_BASE_URL, NEW_IPFS_BASE_URL);
+      setImgSrc(str);
+    } else {
+      setImgSrc(tokeninfo.tokenURI);
+    }
+  }, [tokeninfo.tokenURI]);
+
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">
       <div className="w-1/2 flex flex-col sticky top-20 h-full">
@@ -24,7 +39,7 @@ const Assets: React.FC = () => {
           {loading ? (
             <div className="animate-pulse h-96 rounded-xl bg-gray-200" />
           ) : (
-            <img className="w-full rounded-xl" src={tokeninfo.tokenURI} />
+            <img className="w-full rounded-xl" src={imgSrc} />
           )}
         </div>
       </div>
