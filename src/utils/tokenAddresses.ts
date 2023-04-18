@@ -42,6 +42,7 @@ export const RPC_URL =
 
 export interface IToken {
   name: string;
+  shortName: string;
   contractAddress: `0x${string}`;
   chainId: number;
   ERC20Tokens: {
@@ -58,11 +59,13 @@ export interface IToken {
       address: string;
     };
   };
+  graphUrl?: string;
 }
 
 export const TOKENS: Record<number, IToken> = {
   5: {
     name: "Ethereum Goerli",
+    shortName: "goerli",
     contractAddress: "0x65F53408425D3A2C52ECD494fF2d4273623F53a4",
     chainId: 5,
     ERC20Tokens: {
@@ -79,9 +82,12 @@ export const TOKENS: Record<number, IToken> = {
         address: "address",
       },
     },
+    graphUrl:
+      "https://api.thegraph.com/subgraphs/name/victorjambo/tokenkid-goerli",
   },
   44787: {
     name: "Celo Alfajores",
+    shortName: "alfajores",
     contractAddress: "0xd0Ad4A716108d6eF6e2D683865Fde412fAEdC26B",
     chainId: 5,
     ERC20Tokens: {
@@ -98,9 +104,11 @@ export const TOKENS: Record<number, IToken> = {
         address: "address",
       },
     },
+    graphUrl: "https://api.thegraph.com/subgraphs/name/victorjambo/tokenkid",
   },
   137: {
     name: "Polygon",
+    shortName: "polygon",
     contractAddress: "0x100", // TODO
     chainId: 137,
     ERC20Tokens: {
@@ -120,6 +128,7 @@ export const TOKENS: Record<number, IToken> = {
   },
   1: {
     name: "Ethereum",
+    shortName: "mainnet",
     contractAddress: "0x100", // TODO
     chainId: 1,
     ERC20Tokens: {

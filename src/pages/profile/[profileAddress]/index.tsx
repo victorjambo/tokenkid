@@ -1,13 +1,12 @@
 import GradientAvatar from "@/components/avatar";
-import { useQueryAccountTokens } from "@/graphql/hooks";
 import { shortAddress } from "@/utils/shortAddress";
 import { CollectionIcon, ExternalLinkIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import Card from "@/components/cards/card";
 import Spinner from "@/components/spinner";
 import { getFirstOrString } from "@/utils/stringUtils";
 import { useWalletContext } from "@/context/wallet";
+import { useQueryAccountTokensV2 } from "@/hooks/fetchBackend";
 
 const Profile: React.FC = () => {
   const router = useRouter();
@@ -22,14 +21,7 @@ const Profile: React.FC = () => {
     },
   } = useWalletContext();
 
-  const { data, loading } = useQueryAccountTokens(profileAddress as string);
-
-  const [tokens, setTokens] = useState(null);
-
-  useEffect(() => {
-    if (loading || !data) return;
-    setTokens(data.tokens);
-  }, [loading]);
+  const { tokens, loading } = useQueryAccountTokensV2(profileAddress);
 
   return (
     <div className="py-24 w-full">

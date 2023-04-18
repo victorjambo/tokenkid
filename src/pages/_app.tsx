@@ -6,7 +6,6 @@ import Navbar from "@/containers/nav";
 import Modal from "@/containers/modal";
 import Footer from "@/components/footer";
 import PageHeader from "@/containers/pageHeader";
-import AppWrapper from "@/containers/AppWrapper";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/graphql/client";
 import { createClient, WagmiConfig } from "wagmi";
@@ -17,7 +16,7 @@ import WalletProvider from "@/context/wallet";
 const wagmiClient = createClient(
   getDefaultClient({
     appName: "TokenKid",
-    alchemyId: "PykRvt7NeOYIUQny-SE8s_-fGjvG1B2P",
+    alchemyId: "PykRvt7NeOYIUQny-SE8s_-fGjvG1B2P", // TODO
     chains: [mainnet, polygon, goerli, celoAlfajores],
   })
 );
