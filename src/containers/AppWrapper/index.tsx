@@ -1,5 +1,4 @@
 import { AppState } from "@/state";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { ExclamationIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import { useSelector } from "react-redux";
 const AppWrapper: React.FC = ({ children }) => {
   const router = useRouter();
 
-  const { walletType } = useContractKit();
+  const walletType = "MetaMask"; // TODO
 
   const {
     tokens: { tokenNotFound },

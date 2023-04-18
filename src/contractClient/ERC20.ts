@@ -1,26 +1,24 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
-import { tokenAddresses } from "@/utils/tokenAddresses";
+import { RPC_URL, tokenAddresses } from "@/utils/tokenAddresses";
 import { ERC20_ABI } from "../abi/ERC20";
 
 class ERC20Contract {
   private token: string;
   private contractAddress: string;
-  private getConnectedKit: () => any;
   public ERC20: Contract;
+  address: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c"; // TODO
 
-  constructor(name: string, getConnectedKit: () => any) {
+  constructor(name: string) {
     this.token = tokenAddresses[name].ERC20Tokens.cUSD;
-    this.getConnectedKit = getConnectedKit;
     this.contractAddress = tokenAddresses[name].tokenFactory;
     this.initialize();
   }
 
   initialize = async () => {
     try {
-      const kit = await this.getConnectedKit();
-      const web3 = kit?.connection?.web3 as Web3;
+      const web3 = new Web3(RPC_URL);
       this.ERC20 = new web3.eth.Contract(ERC20_ABI, this.token);
     } catch (error) {
       this.ERC20 = null;
@@ -34,11 +32,10 @@ class ERC20Contract {
     onError: (arg0: any) => void,
     onTransactionHash?: (arg0: string) => void
   ) => {
-    const kit = await this.getConnectedKit();
     await new Promise((resolve) => {
       this.ERC20.methods
         .approve(this.contractAddress, amount)
-        .send({ from: kit.defaultAccount })
+        .send({ from: this.address })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash(transactionHash);
         })
@@ -55,9 +52,8 @@ class ERC20Contract {
 
   getAllowance = async () => {
     try {
-      const kit = await this.getConnectedKit();
       return await this.ERC20.methods
-        .allowance(kit.defaultAccount, this.contractAddress)
+        .allowance(this.address, this.contractAddress)
         .call();
     } catch (error) {
       return null;

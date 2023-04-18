@@ -1,30 +1,28 @@
 import Web3 from "web3";
 import BN from "bn.js";
 import { Contract } from "web3-eth-contract";
-import { tokenAddresses } from "@/utils/tokenAddresses";
+import { RPC_URL, tokenAddresses } from "@/utils/tokenAddresses";
 import { ITokenInfo, ITokenPriceHistory } from "@/state/tokens/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 import { fromWei } from "@/utils/weiConversions";
 
 class TokenKidFactoryContract {
   private token: string;
-  private getConnectedKit: () => any;
   public tokenKidFactory: Contract;
 
-  constructor(name: string, getConnectedKit: () => any) {
+  constructor(name: string) {
     this.token = tokenAddresses[name].tokenFactory;
-    this.getConnectedKit = getConnectedKit;
     this.initialize();
   }
 
   initialize = async () => {
     try {
-      const kit = await this.getConnectedKit();
-      const web3 = kit?.connection?.web3 as Web3;
+      const web3 = new Web3(RPC_URL);
       this.tokenKidFactory = new web3.eth.Contract(
         TOKEN_KID_FACTORY_ABI,
         this.token
       );
+      console.log(this.tokenKidFactory);
     } catch (error) {
       this.tokenKidFactory = null;
       console.error;
@@ -40,11 +38,11 @@ class TokenKidFactoryContract {
     onError: (arg0: any) => void,
     onTransactionHash?: (arg0: string) => void
   ) => {
-    const kit = await this.getConnectedKit();
+    const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c"; // TODO
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .safeMint(tokenName, price, tokenURI, tokenDesc)
-        .send({ from: kit.defaultAccount })
+        .send({ from: address })
         .on("transactionHash", (transactionHash) => {
           onTransactionHash && onTransactionHash(transactionHash);
         })

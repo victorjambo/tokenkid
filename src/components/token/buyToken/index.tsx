@@ -4,7 +4,6 @@ import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { classNames } from "@/utils/classNames";
 import { tokenAddresses } from "@/utils/tokenAddresses";
 import { toWei } from "@/utils/weiConversions";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 
@@ -13,10 +12,7 @@ const BuyToken: React.FC = () => {
   const [loadingAllowance, setLoadingAllowance] = useState(false);
   const [loadingBuyToken, setLoadingBuyToken] = useState(false);
 
-  const {
-    performActions,
-    network: { name },
-  } = useContractKit();
+  const name = "Alfajores"; // TODO
 
   const { tokeninfo, currentAllowance, fetchAllowance } = fetchFromContract();
 
@@ -29,19 +25,17 @@ const BuyToken: React.FC = () => {
 
   const buyToken = async () => {
     setLoadingBuyToken(true);
-    await performActions(async (kit) => {
-      const _tokenId = +tokeninfo.tokenId;
-      const priceInWei = toWei(tokeninfo.price);
-      const cUSDToken = tokenAddresses[name].ERC20Tokens.cUSD;
-      await tokenKidFactoryContract.buyToken(
-        _tokenId,
-        priceInWei,
-        cUSDToken,
-        kit.defaultAccount,
-        onReceipt,
-        onError,
-      );
-    });
+    const _tokenId = +tokeninfo.tokenId;
+    const priceInWei = toWei(tokeninfo.price);
+    const cUSDToken = tokenAddresses[name].ERC20Tokens.cUSD;
+    await tokenKidFactoryContract.buyToken(
+      _tokenId,
+      priceInWei,
+      cUSDToken,
+      "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
+      onReceipt,
+      onError
+    );
   };
 
   const onReceipt = () => {
@@ -72,7 +66,9 @@ const BuyToken: React.FC = () => {
       >
         <span className="flex flex-row items-center space-x-2 justify-center">
           <span>Set Allowance</span>
-          {loadingAllowance && <Spinner className="text-current animate-spin-slow w-5 h-5" />}
+          {loadingAllowance && (
+            <Spinner className="text-current animate-spin-slow w-5 h-5" />
+          )}
         </span>
       </button>
       <button
@@ -87,7 +83,9 @@ const BuyToken: React.FC = () => {
       >
         <span className="flex flex-row items-center space-x-2 justify-center">
           <span>Buy Token</span>
-          {loadingBuyToken && <Spinner className="text-current animate-spin-slow w-5 h-5" />}
+          {loadingBuyToken && (
+            <Spinner className="text-current animate-spin-slow w-5 h-5" />
+          )}
         </span>
       </button>
       <ReactTooltip effect="solid" id="set-allowance">

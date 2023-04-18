@@ -3,7 +3,6 @@ import { AppState } from "@/state";
 import { closeModal, ModalType, openModal } from "@/state/modal/slice";
 import { setTxHash, setWalletError } from "@/state/wallet/slice";
 import { unpin } from "@/utils/ipfs";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,14 +11,11 @@ const DeleteToken: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { performActions } = useContractKit();
-
   const { tokenKidFactoryContract } = useContractsContext();
 
   const {
     tokens: { tokeninfo },
   } = useSelector((state: AppState) => state);
-
 
   const handleCancel = () => {
     dispatch(closeModal());
@@ -28,16 +24,15 @@ const DeleteToken: React.FC = () => {
   const handleDelete = async () => {
     dispatch(openModal(ModalType.LOADING));
 
-    await performActions(async (kit) => {
-      const _tokenId = +tokeninfo.tokenId;
-      await tokenKidFactoryContract.burnToken(
-        _tokenId,
-        kit.defaultAccount,
-        onReceipt,
-        onError,
-        onTransaction
-      );
-    });
+    const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c";
+    const _tokenId = +tokeninfo.tokenId;
+    await tokenKidFactoryContract.burnToken(
+      _tokenId,
+      address,
+      onReceipt,
+      onError,
+      onTransaction
+    );
   };
 
   const onReceipt = async () => {

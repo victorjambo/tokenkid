@@ -1,6 +1,6 @@
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useContractKit } from "@celo-tools/use-contractkit"; // TODO
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon, GlobeAltIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { generateAddress } from "@/utils/generateAddress";
 import { classNames } from "@/utils/classNames";
@@ -11,7 +11,25 @@ import GradientAvatar from "../avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import Icons from "../footer/icons";
 
+const CONNECTION = {
+  UNAUTHENTICATED: {
+    account: null,
+    address: null,
+    initialised: true,
+    name: "Alfajores",
+    walletType: "Unauthenticated",
+  },
+  CONNECTED: {
+    address: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
+    account: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
+    initialised: true,
+    name: "Alfajores",
+    walletType: "MetaMask",
+  },
+};
+
 const ConnectWallet: React.FC = () => {
+  // const { account, address, initialised, name, walletType } = CONNECTION.CONNECTED;
   const {
     address,
     account,

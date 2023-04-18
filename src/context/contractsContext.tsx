@@ -11,11 +11,15 @@ import {
   SetStateAction,
 } from "react";
 import { useDispatch } from "react-redux";
-import { StableToken } from "@celo/contractkit";
 import { setAccountBalances } from "@/state/wallet/slice";
 import { ITokenInfo } from "@/state/tokens/types";
 import ERC20Contract from "@/contractClient/ERC20";
 import { tokenAddresses } from "@/utils/tokenAddresses";
+
+enum StableToken {
+  cUSD = "cUSD",
+  cEUR = "cEUR"
+}
 
 interface ContractsProviderProps {
   handleConnection: () => void;
@@ -40,7 +44,6 @@ const ContractsProvider: React.FC = ({ children }) => {
     destroy,
     network: { name },
     walletType,
-    getConnectedKit,
   } = useContractKit();
 
   const [loading, setLoading] = useState(false);
@@ -53,9 +56,9 @@ const ContractsProvider: React.FC = ({ children }) => {
     if (walletType !== "Unauthenticated") {
       // Initialize contracts
       setTokenKidFactoryContract(
-        new TokenKidFactoryContract(name, getConnectedKit)
+        new TokenKidFactoryContract(name)
       );
-      setERC20(new ERC20Contract(name, getConnectedKit));
+      setERC20(new ERC20Contract(name));
     } else {
       setTokenKidFactoryContract(null);
       setERC20(null);

@@ -2,7 +2,6 @@ import Link from "next/link";
 import GradientAvatar from "@/components/avatar";
 import { useContractsContext } from "@/context/contractsContext";
 import { shortAddress } from "@/utils/shortAddress";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { ZERO_ADDRESS } from "@/utils/constants";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import TokenInfo from "@/components/token/tokenInfo";
@@ -17,7 +16,7 @@ const NEW_IPFS_BASE_URL = "https://ipfs.io/ipfs/";
 const Assets: React.FC = () => {
   const { loading } = useContractsContext();
 
-  const { address } = useContractKit();
+  const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c";
 
   const { tokeninfo, approved, fetchApproved } = fetchFromContract();
 
@@ -62,7 +61,9 @@ const Assets: React.FC = () => {
                 <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
               ) : (
                 <Link href={`/profile/${tokeninfo.owner}`}>
-                  <span className="cursor-pointer">{shortAddress(tokeninfo.owner)}</span>
+                  <span className="cursor-pointer">
+                    {shortAddress(tokeninfo.owner)}
+                  </span>
                 </Link>
               )}
               {tokeninfo.owner && tokeninfo.owner === address && (

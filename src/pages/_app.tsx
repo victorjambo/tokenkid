@@ -15,17 +15,17 @@ import client from "@/graphql/client";
 
 const App = ({ Component, pageProps }) => {
   return (
-    <ContractKitProvider
-      dapp={{
-        name: "TokenKid",
-        description: "NFT Marketplace",
-        url: "https://tokenkid.netlify.app/",
-        icon: "https://tokenkid.netlify.app/favicon.ico",
-      }}
-      network={Alfajores}
-    >
+    // <ContractKitProvider
+    //   dapp={{
+    //     name: "TokenKid",
+    //     description: "NFT Marketplace",
+    //     url: "https://tokenkid.netlify.app/",
+    //     icon: "https://tokenkid.netlify.app/favicon.ico",
+    //   }}
+    //   network={Alfajores}
+    // >
       <Provider store={store}>
-        <ContractsProvider>
+        {/* <ContractsProvider> */}
           <ApolloProvider client={client}>
             <PageHeader />
             <div className="fixed top-0 inset-x-0 bg-opacity-50 z-20 backdrop-filter backdrop-blur-xl">
@@ -39,9 +39,9 @@ const App = ({ Component, pageProps }) => {
               <Modal />
             </AppWrapper>
           </ApolloProvider>
-        </ContractsProvider>
+        {/* </ContractsProvider> */}
       </Provider>
-    </ContractKitProvider>
+    // </ContractKitProvider>
   );
 };
 

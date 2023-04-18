@@ -36,3 +36,5 @@ export const tokenAddresses = {
     },
   },
 };
+
+export const RPC_URL = "https://celo-mainnet.infura.io/v3/472f14ceadff4381b88efde2365064b0";
