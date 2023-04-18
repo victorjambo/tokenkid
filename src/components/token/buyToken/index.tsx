@@ -2,6 +2,7 @@ import Spinner from "@/components/spinner";
 import { useWalletContext } from "@/context/wallet";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { classNames } from "@/utils/classNames";
+import { TOKENS } from "@/utils/tokenAddresses";
 import { toWei } from "@/utils/weiConversions";
 import { useState } from "react";
 import ReactTooltip from "react-tooltip";
@@ -18,6 +19,7 @@ const BuyToken: React.FC = () => {
   const [loadingBuyToken, setLoadingBuyToken] = useState(false);
 
   const { currentAllowance, fetchAllowance, tokeninfo } = fetchFromContract();
+  const tokenName = TOKENS[5].ERC20Tokens.name; // TODO
 
   const setAllowance = async () => {
     setLoadingAllowance(true);
@@ -97,7 +99,7 @@ const BuyToken: React.FC = () => {
         </span>
       </button>
       <ReactTooltip effect="solid" id="set-allowance">
-        ERC-20 allowance to transfer {ERC20Tokens.name}
+        ERC-20 allowance to transfer {tokenName}
       </ReactTooltip>
     </>
   );

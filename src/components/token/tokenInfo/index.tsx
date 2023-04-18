@@ -1,6 +1,7 @@
 import { useWalletContext } from "@/context/wallet";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { ModalType, openModal } from "@/state/modal/slice";
+import { TOKENS } from "@/utils/tokenAddresses";
 import { toWei } from "@/utils/weiConversions";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { useState } from "react";
@@ -23,6 +24,8 @@ const TokenInfo: React.FC = () => {
 
   const { loading, tokeninfo, fetchMintedToken, fetchTokenPriceHistory } =
     fetchFromContract();
+
+  const tokenName = TOKENS[5].ERC20Tokens.name; // TODO
 
   const {
     register,
@@ -125,7 +128,7 @@ const TokenInfo: React.FC = () => {
               </div>
             </form>
           ) : (
-            <span>{tokeninfo?.price}&nbsp; {currentToken?.ERC20Tokens.name}</span>
+            <span>{tokeninfo?.price}&nbsp; {tokenName}</span>
           )}
         </div>
       </div>

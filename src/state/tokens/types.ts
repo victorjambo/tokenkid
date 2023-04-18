@@ -23,6 +23,7 @@ export interface ITokenGraph {
   _price: string;
   _tokenName: string;
   _tokenURI: string;
+  chainId: number;
 }
 
 interface IState {

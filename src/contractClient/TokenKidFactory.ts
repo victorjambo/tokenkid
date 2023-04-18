@@ -38,7 +38,7 @@ class TokenKidFactoryContract {
     onError: (arg0: any) => void,
     onTransactionHash?: (arg0: string) => void
   ) => {
-    const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c"; // TODO
+    const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c";
     await new Promise((resolve) => {
       this.tokenKidFactory.methods
         .safeMint(tokenName, price, tokenURI, tokenDesc)

@@ -7,6 +7,7 @@ import Activity from "@/components/activity";
 import { ICreateStates, IReceipt } from "@/types";
 import { toWei } from "@/utils/weiConversions";
 import { useWalletContext } from "@/context/wallet";
+import { TOKENS } from "@/utils/tokenAddresses";
 
 type Inputs = {
   tokenName: string;
@@ -43,7 +44,9 @@ const Create: React.FC = () => {
   const [showActivity, setShowActivity] = useState(false);
   const [showWall, setShowWall] = useState(false);
 
-  const { tokenKidContract, currentToken } = useWalletContext();
+  const { tokenKidContract } = useWalletContext();
+
+  const tokenName = TOKENS[5].ERC20Tokens.name; // TODO
 
   const {
     register,
@@ -196,7 +199,7 @@ const Create: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="tokenPrice">
-                      Price <span className="italic text-gray-400">({currentToken?.ERC20Tokens.name})</span>
+                      Price <span className="italic text-gray-400">({tokenName})</span>
                     </label>
                     <input
                       id="tokenPrice"

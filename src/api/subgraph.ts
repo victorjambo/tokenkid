@@ -94,7 +94,7 @@ export interface GraphToken {
   _tokenName: string;
   _price: string;
   _tokenURI: string;
-  chainId?: number;
+  chainId: number;
 }
 
 interface GraphResponse {
