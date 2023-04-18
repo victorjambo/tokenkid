@@ -5,37 +5,45 @@ import { fromWei } from "@/utils/weiConversions";
 import ContractBase from "./base";
 
 class TokenKidContract extends ContractBase {
-  constructor(chainId: number) {
-    super(chainId, TOKEN_KID_FACTORY_ABI);
+  constructor(contractAddress: `0x${string}`) {
+    super(contractAddress, TOKEN_KID_FACTORY_ABI);
   }
 
   safeMint = async (
     tokenName: string,
-    price: number | BN,
+    price: number | string | BN,
     tokenURI: string,
     tokenDesc: string
   ) => {
-    const safeMint = await this.write("safeMint", [
+    return await this.write("safeMint", [
       tokenName,
       price,
       tokenURI,
       tokenDesc,
     ]);
-    console.log({ safeMint });
   };
 
-  buyToken = async (tokenId: number) => {
-    const buyToken = await this.write("buyToken", [tokenId]);
-    console.log({ buyToken });
+  buyToken = async (
+    tokenId: number,
+    price: number,
+    token: `0x${string}`,
+    from: `0x${string}`
+  ) => {
+    return await this.write("buyToken", [tokenId, token], {
+      from,
+      value: price,
+    });
   };
 
   getMintedToken = async (tokenId: number): Promise<ITokenInfo> => {
     try {
       const _token = await this.read("getMintedToken", [tokenId]);
-      console.log({ _token });
+      const _tokenId = _token[0]?._isBigNumber
+        ? _token[0].toNumber()
+        : _token[0];
 
       return {
-        tokenId: _token[0],
+        tokenId: _tokenId,
         tokenName: _token[1],
         owner: _token[2],
         previousOwner: _token[3],
@@ -52,75 +60,52 @@ class TokenKidContract extends ContractBase {
 
   getTokenPriceHistory = async (
     tokenId: number
-  ): Promise<ITokenPriceHistory[]> => {
+  ): Promise<ITokenPriceHistory[] | null> => {
     try {
-      const _tokenPriceHistory = await this.read("getTokenPriceHistory", [
+      return (await this.read("getTokenPriceHistory", [
         tokenId,
-      ]);
-      console.log({ _tokenPriceHistory });
-
-      return _tokenPriceHistory;
+      ])) as ITokenPriceHistory[];
     } catch (error) {
       console.log({ error }); // TODO: handle this
       return null;
     }
   };
 
-  changeTokenPrice = async (tokenId: number) => {
-    const changeTokenPrice = await this.write("changeTokenPrice", [tokenId]);
-    console.log({ changeTokenPrice });
-  };
+  changeTokenPrice = async (tokenId: number, price: number | string | BN) =>
+    await this.write("changeTokenPrice", [tokenId, price]);
 
-  toggleOnSale = async (tokenId: number) => {
-    const toggleOnSale = await this.write("toggleOnSale", [tokenId]);
-    console.log({ toggleOnSale });
-  };
+  toggleOnSale = async (tokenId: number) =>
+    await this.write("toggleOnSale", [tokenId]);
 
-  burnToken = async (tokenId: number) => {
-    const burnToken = await this.write("burnToken", [tokenId]);
-    console.log({ burnToken });
-  };
+  burnToken = async (tokenId: number) =>
+    await this.write("burnToken", [tokenId]);
 
-  getApproved = async (tokenId: number): Promise<any> => {
+  getApproved = async (tokenId: number): Promise<`0x${string}` | null> => {
     try {
-      const res = await this.read("getApproved", [tokenId]);
-      console.log({ res });
-      return res;
+      return (await this.read("getApproved", [tokenId])) as `0x${string}`;
     } catch (error) {
       console.log({ error }); // TODO: handle this
       return null;
     }
   };
 
-  isApprovedForAll = async (owner: string): Promise<any> => {
+  isApprovedForAll = async (owner: `0x${string}`): Promise<boolean | null> => {
     try {
-      const res = await this.read("isApprovedForAll", [
+      return (await this.read("isApprovedForAll", [
         owner,
         this.contractAddress,
-      ]);
-      console.log({ res });
-      return res;
+      ])) as boolean;
     } catch (error) {
       console.log({ error }); // TODO: handle this
       return null;
     }
   };
 
-  approve = async (tokenId: number) => {
-    const approve = await this.write("approve", [
-      this.contractAddress,
-      tokenId,
-    ]);
-    console.log({ approve });
-  };
+  approve = async (tokenId: number) =>
+    await this.write("approve", [this.contractAddress, tokenId]);
 
-  setApprovalForAll = async (_approved: boolean) => {
-    const setApprovalForAll = await this.write("setApprovalForAll", [
-      this.contractAddress,
-      _approved,
-    ]);
-    console.log({ setApprovalForAll });
-  };
+  setApprovalForAll = async (_approved: boolean) =>
+    await this.write("setApprovalForAll", [this.contractAddress, _approved]);
 }
 
 export default TokenKidContract;

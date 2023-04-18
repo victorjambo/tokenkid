@@ -1,12 +1,12 @@
 import PageHeader from "@/containers/pageHeader";
 import { useState } from "react";
-import { ipfs, IPFS_BASE_URL } from "@/utils/ipfs";
-import { useContractsContext } from "@/context/contractsContext";
+import { ipfs, NEW_IPFS_BASE_URL } from "@/utils/ipfs";
 import { classNames } from "@/utils/classNames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Activity from "@/components/activity";
 import { ICreateStates, IReceipt } from "@/types";
 import { toWei } from "@/utils/weiConversions";
+import { useWalletContext } from "@/context/wallet";
 
 type Inputs = {
   tokenName: string;
@@ -43,7 +43,7 @@ const Create: React.FC = () => {
   const [showActivity, setShowActivity] = useState(false);
   const [showWall, setShowWall] = useState(false);
 
-  const { tokenKidFactoryContract } = useContractsContext();
+  const { tokenKidContract, currentToken } = useWalletContext();
 
   const {
     register,
@@ -57,24 +57,27 @@ const Create: React.FC = () => {
     setShowActivity(true);
 
     // upload image to infura ipfs
-    // const cidPath = "QmPHjS67XiuMkWmuaV5gkjV7i8ksicEtVr4592HeApyFix";
+    // const cidPath = "QmTrwdNtajY9RhZyXLSKN7F6SrQHWcL1wXES8VzvaU73LX";
     const cidPath = await uploadImgToInfuraIPFFS(tokenImage[0]);
-    const tokenURI = `${IPFS_BASE_URL}${cidPath}/`;
+    const tokenURI = `${NEW_IPFS_BASE_URL}${cidPath}/`;
 
     // Waiting for transaction Hash
     updateState("txHash", "loading", true);
 
-    const priceInWei = toWei(tokenPrice);
+    const priceInWei = toWei(tokenPrice).toString();
 
-    await tokenKidFactoryContract.safeMint(
+    const { hash, wait } = await tokenKidContract.safeMint(
       tokenName,
       priceInWei,
       tokenURI,
-      tokenDesc,
-      onReceipt,
-      onTransactionError,
-      onTransactionHash
+      tokenDesc
     );
+
+    onTransactionHash(hash);
+
+    await wait()
+      .then((res) => onReceipt(res))
+      .catch((err) => onTransactionError(err));
   };
 
   const uploadImgToInfuraIPFFS = async (image) => {
@@ -193,7 +196,7 @@ const Create: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="tokenPrice">
-                      Price <span className="italic text-gray-400">(cUSD)</span>
+                      Price <span className="italic text-gray-400">({currentToken?.ERC20Tokens.name})</span>
                     </label>
                     <input
                       id="tokenPrice"

@@ -4,6 +4,7 @@ import Alert from "@/components/alert";
 import { ArrowRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { ICreateStates, IReceipt } from "@/types";
+import { useWalletContext } from "@/context/wallet";
 
 interface IProps {
   show: boolean;
@@ -24,7 +25,13 @@ const Activity: React.FC<IProps> = ({
   txHash,
   receipt,
 }) => {
+  const { currentToken } = useWalletContext();
+
+  const baseUrl = currentToken?.blockExplorer.baseUrl;
+  const transaction = currentToken?.blockExplorer.resources.transaction;
+
   const tokenId = receipt?.events?.Transfer?.returnValues?.tokenId;
+
   return (
     <Transition
       show={show}
@@ -62,7 +69,7 @@ const Activity: React.FC<IProps> = ({
                 : "Transaction Approved "}
               {states.txHash.done && txHash && (
                 <a
-                  href={`https://alfajores-blockscout.celo-testnet.org/tx/${txHash}`}
+                  href={`${baseUrl}/${transaction}/${txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-700"

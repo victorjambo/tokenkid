@@ -1,4 +1,4 @@
-import { useContractsContext } from "@/context/contractsContext";
+import { useWalletContext } from "@/context/wallet";
 import { AppState } from "@/state";
 import { closeModal, ModalType, openModal } from "@/state/modal/slice";
 import { setTxHash, setWalletError } from "@/state/wallet/slice";
@@ -11,7 +11,7 @@ const DeleteToken: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { tokenKidFactoryContract } = useContractsContext();
+  const { tokenKidContract } = useWalletContext();
 
   const {
     tokens: { tokeninfo },
@@ -24,15 +24,12 @@ const DeleteToken: React.FC = () => {
   const handleDelete = async () => {
     dispatch(openModal(ModalType.LOADING));
 
-    const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c";
     const _tokenId = +tokeninfo.tokenId;
-    await tokenKidFactoryContract.burnToken(
-      _tokenId,
-      address,
-      onReceipt,
-      onError,
-      onTransaction
-    );
+    const { hash, wait } = await tokenKidContract.burnToken(_tokenId);
+    dispatch(setTxHash(hash));
+    await wait()
+      .then(() => onReceipt())
+      .catch((err) => onError(err));
   };
 
   const onReceipt = async () => {
@@ -44,10 +41,6 @@ const DeleteToken: React.FC = () => {
 
     dispatch(openModal(ModalType.SUCCESS));
     router.push("/");
-  };
-
-  const onTransaction = (_txHash) => {
-    dispatch(setTxHash(_txHash));
   };
 
   const onError = (_error) => {

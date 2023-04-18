@@ -1,5 +1,6 @@
 import { create } from "ipfs-http-client";
 
+export const NEW_IPFS_BASE_URL = "https://ipfs.io/ipfs/";
 export const IPFS_BASE_URL = "https://ipfs.infura.io/ipfs/";
 export const IPFS_UNPIN_URL = "https://ipfs.infura.io:5001/api/v0/pin/rm?arg=";
 

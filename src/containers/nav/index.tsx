@@ -1,5 +1,5 @@
+import ConnectWallet from "@/components/connectWallet";
 import Link from "next/link";
-// import ConnectWallet from "@/components/connectWallet";
 
 const Navbar: React.FC = () => {
   return (
@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
             </div>
           </Link>
           <div className="flex items-center">
-            {/* <ConnectWallet /> */}
+            <ConnectWallet />
           </div>
         </div>
       </div>

@@ -1,7 +1,5 @@
-import { IPFS_BASE_URL } from "@/utils/ipfs";
+import { IPFS_BASE_URL, NEW_IPFS_BASE_URL } from "@/utils/ipfs";
 import React, { useState, useEffect } from "react";
-
-const NEW_IPFS_BASE_URL = "https://ipfs.io/ipfs/";
 
 const ImageRender: React.FC<{ src: string; height?: string }> = ({ src }) => {
   const [imgLoaded, setImgLoaded] = useState(false);

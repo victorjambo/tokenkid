@@ -1,84 +1,71 @@
-import { useContractsContext } from "@/context/contractsContext";
-import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
-import { useContractKit } from "@celo-tools/use-contractkit";
 import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ERC20Contract from "@/contractClient/ERC20";
-import {
-  setApproved,
-  setCurrentAllowance,
-  setPriceHistory,
-  setTokeninfo,
-  setTokenNotFound,
-} from "@/state/tokens/slice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState } from "@/state";
+import { fromWei } from "@/utils/weiConversions";
+import { useAccount } from "wagmi";
+import { useWalletContext } from "@/context/wallet";
+import TokenKidContract from "@/contractClient/TokenKidContract";
+import { getFirstOrString } from "@/utils/stringUtils";
+import { ITokenInfo } from "@/state/tokens/types";
 
 export const fetchFromContract = () => {
-  const dispatch = useDispatch();
+  const { address } = useAccount();
   const router = useRouter();
-  const { tokenId } = router.query;
+  const tokenId = getFirstOrString(router.query.tokenId);
+
+  const [tokeninfo, setTokeninfo] = useState<ITokenInfo | null>(null);
+  const [tokenNotFound, setTokenNotFound] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
-    tokens: { tokeninfo, currentAllowance, approved, priceHistory },
-  } = useSelector((state: AppState) => state);
-
-  const { tokenKidFactoryContract, setLoading, ERC20 } = useContractsContext();
-
-  const { performActions } = useContractKit();
+    setCurrentAllowance,
+    tokenKidContract,
+    ERC20,
+    setApproved,
+    setPriceHistory,
+    currentAllowance,
+    approved,
+    priceHistory,
+  } = useWalletContext();
 
   const fetchMintedToken = useCallback(async () => {
     setLoading(true);
-    await performActions(async () => {
-      if (
-        router.isReady &&
-        tokenKidFactoryContract instanceof TokenKidFactoryContract
-      ) {
-        const token = await tokenKidFactoryContract.getMintedToken(+tokenId);
+    if (router.isReady && tokenKidContract instanceof TokenKidContract) {
+      const token = await tokenKidContract.getMintedToken(+tokenId);
 
-        if (token !== null) {
-          dispatch(setTokeninfo(token));
-        } else {
-          dispatch(setTokenNotFound(true));
-        }
-        setLoading(false);
+      if (token !== null) {
+        setTokeninfo(token);
+      } else {
+        setTokenNotFound(true);
       }
-    });
-  }, [tokenKidFactoryContract, router.isReady]);
+      setLoading(false);
+    }
+  }, [tokenKidContract, router.isReady]);
 
   const fetchAllowance = useCallback(async () => {
     if (ERC20 instanceof ERC20Contract) {
-      const _currentAllowance = await ERC20.getAllowance();
-      dispatch(setCurrentAllowance(_currentAllowance / 10 ** 18));
+      const _currentAllowance = await ERC20.getAllowance(address);
+      setCurrentAllowance(fromWei(_currentAllowance));
     }
   }, [ERC20]);
 
   const fetchApproved = useCallback(async () => {
-    await performActions(async () => {
-      if (
-        router.isReady &&
-        tokenKidFactoryContract instanceof TokenKidFactoryContract
-      ) {
-        const _approved = await tokenKidFactoryContract.getApproved(+tokenId);
-        dispatch(setApproved(_approved));
-      }
-    });
-  }, [tokenKidFactoryContract, router.isReady]);
+    if (router.isReady && tokenKidContract instanceof TokenKidContract) {
+      const _approved = await tokenKidContract.getApproved(+tokenId);
+      setApproved(_approved);
+    }
+  }, [tokenKidContract, router.isReady]);
 
   const fetchTokenPriceHistory = useCallback(async () => {
-    await performActions(async () => {
-      if (
-        router.isReady &&
-        tokenKidFactoryContract instanceof TokenKidFactoryContract
-      ) {
-        const tokenPriceHistory =
-          await tokenKidFactoryContract.getTokenPriceHistory(+tokenId);
-        if (tokenPriceHistory !== null) {
-          dispatch(setPriceHistory(tokenPriceHistory));
-        }
+    if (router.isReady && tokenKidContract instanceof TokenKidContract) {
+      const tokenPriceHistory = await tokenKidContract.getTokenPriceHistory(
+        +tokenId
+      );
+      if (tokenPriceHistory !== null) {
+        setPriceHistory(tokenPriceHistory);
       }
-    });
-  }, [tokenKidFactoryContract, router.isReady]);
+    }
+  }, [tokenKidContract, router.isReady]);
 
   useEffect(() => {
     void fetchMintedToken();
@@ -87,6 +74,8 @@ export const fetchFromContract = () => {
   }, [fetchMintedToken, fetchAllowance, fetchApproved]);
 
   return {
+    loading,
+    tokenNotFound,
     tokeninfo,
     currentAllowance,
     approved,

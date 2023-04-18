@@ -1,46 +1,32 @@
-import { AppState } from "@/state";
+import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { ExclamationIcon } from "@heroicons/react/solid";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useAccount } from "wagmi";
 
 const AppWrapper: React.FC = ({ children }) => {
-  const router = useRouter();
-
-  const walletType = "MetaMask"; // TODO
-
-  const {
-    tokens: { tokenNotFound },
-  } = useSelector((state: AppState) => state);
-
-  const [showConnectToWallet, setShowConnectToWallet] = useState(false);
-
-  const protectedRoutes = ["/create", "/assets/[tokenId]"];
-
-  useEffect(() => {
-    if (
-      walletType === "Unauthenticated" &&
-      protectedRoutes.includes(router.pathname)
-    ) {
-      setShowConnectToWallet(true);
-    } else {
-      setShowConnectToWallet(false);
-    }
-  }, [walletType, router.pathname]);
+  const { status } = useAccount();
+  const { tokenNotFound, loading, tokeninfo } = fetchFromContract();
 
   return (
     <>
-      {showConnectToWallet || tokenNotFound ? (
+      {tokenNotFound || loading || status === "reconnecting" ? (
         <div className="flex items-center justify-center h-screen" id="one">
           <div className="flex flex-col text-black">
-            <ExclamationIcon className="w-52 h-52 text-red-400" />
+            {!(loading || status === "reconnecting") && (
+              <ExclamationIcon className="w-52 h-52 text-red-400" />
+            )}
             <div className="text-3xl">
-              {tokenNotFound ? "Token Not Found" : "Connect To Wallet"}
+              {tokenNotFound
+                ? "Token Not Found"
+                : loading || status === "reconnecting"
+                ? "Loading"
+                : "Connect To Wallet"}
             </div>
           </div>
         </div>
-      ) : (
+      ) : tokeninfo ? (
         children
+      ) : (
+        <div />
       )}
     </>
   );

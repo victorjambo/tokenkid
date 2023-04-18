@@ -4,6 +4,7 @@ import { shortAddress } from "@/utils/shortAddress";
 import { fromWei } from "@/utils/weiConversions";
 import ImageRender from "@/containers/imageRender";
 import { ITokenGraph } from "@/state/tokens/types";
+import { useWalletContext } from "@/context/wallet";
 
 interface ICards {
   token: ITokenGraph;
@@ -11,6 +12,8 @@ interface ICards {
 }
 
 const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
+  const { currentToken } = useWalletContext();
+
   return (
     <div className="text-white popup-hover">
       <div className="relative">
@@ -40,7 +43,7 @@ const Card: React.FC<ICards> = ({ token, showCreator = true }) => {
           <div className="hover:text-pink-primary font-bold">
             <Link href={`/assets/${token.tokenId}`}>{token._tokenName}</Link>
           </div>
-          <div>{fromWei(token._price)} cUSD</div>
+          <div>{fromWei(token._price)} {currentToken?.ERC20Tokens.name}</div>
         </div>
         <div className="flex flex-wrap flex-row items-center space-x-2">
           <div className="flex flex-row">

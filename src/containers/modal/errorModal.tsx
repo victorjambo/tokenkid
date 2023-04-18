@@ -1,3 +1,4 @@
+import { useWalletContext } from "@/context/wallet";
 import { AppState } from "@/state";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import React from "react";
@@ -8,13 +9,22 @@ const ErrorModal: React.FC = () => {
     wallet: { walletError, txHash },
   } = useSelector((state: AppState) => state);
 
+  const {
+    currentToken: {
+      blockExplorer: {
+        baseUrl,
+        resources: { transaction },
+      },
+    },
+  } = useWalletContext();
+
   return (
     <div className="flex flex-col justify-center items-center space-y-4">
       <InformationCircleIcon className="w-20 h-20 text-rose-400" />
       <span className="text-xl">Oops!!! Something went wrong</span>
       {txHash && (
         <a
-          href={`https://alfajores-blockscout.celo-testnet.org/tx/${txHash}`}
+          href={`${baseUrl}/${transaction}/${txHash}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 hover:text-blue-700"

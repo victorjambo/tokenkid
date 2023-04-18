@@ -1,145 +1,37 @@
-import { useContractKit } from "@celo-tools/use-contractkit"; // TODO
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment } from "react";
-import { generateAddress } from "@/utils/generateAddress";
-import { classNames } from "@/utils/classNames";
-import { shortAddress } from "@/utils/shortAddress";
-import { useSelector } from "react-redux";
-import { AppState } from "@/state";
 import GradientAvatar from "../avatar";
-import { useContractsContext } from "@/context/contractsContext";
-import Icons from "../footer/icons";
-
-const CONNECTION = {
-  UNAUTHENTICATED: {
-    account: null,
-    address: null,
-    initialised: true,
-    name: "Alfajores",
-    walletType: "Unauthenticated",
-  },
-  CONNECTED: {
-    address: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
-    account: "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c",
-    initialised: true,
-    name: "Alfajores",
-    walletType: "MetaMask",
-  },
-};
+import { ConnectKitButton } from "connectkit";
 
 const ConnectWallet: React.FC = () => {
-  // const { account, address, initialised, name, walletType } = CONNECTION.CONNECTED;
-  const {
-    address,
-    account,
-    initialised,
-    network: { name },
-    walletType,
-  } = useContractKit();
-
-  const { handleConnection, handleDestroy } = useContractsContext();
-
-  const {
-    wallet: { accountBalances },
-  } = useSelector((state: AppState) => state);
-
-  const _address = generateAddress(account, address);
-
   return (
     <div className="flex-shrink-0 flex flex-row space-x-4 items-center">
-      <button
-        onClick={handleConnection}
-        type="button"
-        className={`${
-          account ? "" : "px-4 py-2"
-        } relative inline-flex items-center border border-transparent text-sm font-medium rounded-full text-white bg-pink-primary shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-lightblue`}
-      >
-        {initialised && account ? (
-          <div className="flex flex-row items-center">
-            <GradientAvatar {...{ size: "w-10 h-10", ..._address }} />
-            <span className="px-4">{shortAddress(address)}</span>
-          </div>
-        ) : (
-          <>
-            <img
-              className="-ml-1 mr-2 h-5 w-5"
-              src="/images/icons/wallet.svg"
-              alt=""
-            />
-            <span>Connect Wallet</span>
-          </>
-        )}
-      </button>
-
-      <Menu as="div" className="relative">
-        <div>
-          <Menu.Button
-            className={`${
-              initialised && account ? "" : "hidden"
-            } flex text-sm rounded-full border focus:outline-none focus:ring-2 focus:ring-blue-lightblue`}
-          >
-            <ChevronDownIcon className="rounded-full w-8 h-8 text-pink-primary" />
-          </Menu.Button>
-        </div>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <Menu.Item>
-              <div className="py-4 px-4 space-y-2">
-                <div className="text-sm flex flex-row items-center space-x-2 text-gray-700">
-                  <GradientAvatar {...{ size: "w-5 h-5", ..._address }} />
-                  <span className="">{shortAddress(address)}</span>
+      <ConnectKitButton.Custom>
+        {({ isConnected, show, truncatedAddress, ensName, address }) => {
+          return (
+            <button
+              onClick={show}
+              className={`${
+                isConnected ? "" : "px-4 py-2"
+              } relative inline-flex items-center border border-transparent text-sm font-medium rounded-full text-white bg-pink-primary shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-lightblue`}
+            >
+              {isConnected ? (
+                <div className="flex flex-row items-center">
+                  <GradientAvatar {...{ size: "w-10 h-10", address }} />
+                  <span className="px-4">{ensName ?? truncatedAddress}</span>
                 </div>
-                <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">CELO:</span>{" "}
-                  {accountBalances.celo}
-                </div>
-                <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">cUSD:</span>{" "}
-                  {accountBalances.cUSD}
-                </div>
-                <div className="text-lg text-blue-lightblue">
-                  <span className="text-xs text-gray-500">cEUR:</span>{" "}
-                  {accountBalances.cEUR}
-                </div>
-                <div className="text-sm text-blue-lightblue">
-                  <span className="text-xs text-gray-500">Network:</span> {name}
-                </div>
-                <div className="text-sm text-blue-lightblue">
-                  <span className="text-xs text-gray-500">Wallet:</span>{" "}
-                  {walletType}
-                </div>
-              </div>
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <div>
-                  <button
-                    onClick={handleDestroy}
-                    className={classNames(
-                      active ? "bg-gray-100" : "",
-                      "w-full block px-4 py-2 text-sm text-gray-700 text-left"
-                    )}
-                  >
-                    Disconnect
-                  </button>
-                </div>
+              ) : (
+                <>
+                  <img
+                    className="-ml-1 mr-2 h-5 w-5"
+                    src="/images/icons/wallet.svg"
+                    alt=""
+                  />
+                  <span>Connect Wallet</span>
+                </>
               )}
-            </Menu.Item>
-            <Menu.Item>
-              <Icons />
-            </Menu.Item>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+            </button>
+          );
+        }}
+      </ConnectKitButton.Custom>
     </div>
   );
 };

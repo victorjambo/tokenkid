@@ -7,26 +7,28 @@ import {
   prepareWriteContract,
 } from "@wagmi/core";
 import { AbiItem } from "web3-utils";
-import { NETWORKS } from "@/utils/network";
 import BN from "bn.js";
 
 class ContractBase {
-  public contractAddress: string;
-  public abi: AbiItem[];
+  public contractAddress: `0x${string}`;
+  protected abi: AbiItem[];
 
-  constructor(chainId: number, abi: AbiItem[]) {
+  constructor(contractAddress: `0x${string}`, abi: AbiItem[]) {
     this.abi = abi;
-    this.contractAddress = NETWORKS[chainId].contractAddress;
+    this.contractAddress = contractAddress;
   }
 
-  async getContract() {
+  protected async getContract() {
     return await getContract({
       address: this.contractAddress,
       abi: this.abi,
     });
   }
 
-  async read(functionName: string, args?: Array<string | number | boolean>) {
+  protected async read(
+    functionName: string,
+    args?: Array<string | number | boolean>
+  ) {
     return await readContract({
       address: this.contractAddress,
       abi: this.abi,
@@ -35,22 +37,27 @@ class ContractBase {
     });
   }
 
-  async send(to: string, value) {
+  protected async send(to: string, value) {
     const config = await prepareSendTransaction({
       request: { to, ...(value && { value }) },
     });
     return await sendTransaction(config);
   }
 
-  async write(
+  protected async write(
     functionName: string,
-    args?: Array<string | number | boolean | BN>
+    args?: Array<string | number | boolean | BN>,
+    overrides?: {
+      from: `0x${string}`;
+      value: number;
+    }
   ) {
     const config = await prepareWriteContract({
       address: this.contractAddress,
       abi: this.abi,
       functionName,
       ...(args && { args }),
+      ...(overrides && { overrides }),
     });
     return await writeContract(config);
   }

@@ -1,4 +1,4 @@
-import { useContractsContext } from "@/context/contractsContext";
+import { useWalletContext } from "@/context/wallet";
 import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { ModalType, openModal } from "@/state/modal/slice";
 import { toWei } from "@/utils/weiConversions";
@@ -6,6 +6,7 @@ import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { useAccount } from "wagmi";
 
 type Inputs = {
   tokenPrice: number;
@@ -16,14 +17,12 @@ const TokenInfo: React.FC = () => {
 
   const [showPriceInput, setShowPriceInput] = useState(false);
 
-  const { loading, tokenKidFactoryContract } = useContractsContext();
+  const { tokenKidContract, currentToken } = useWalletContext();
 
-  const address = "0x8d5d1CC09Cef15463A3759Bce99C23d19Cc97b6c";
+  const { address } = useAccount();
 
-  const { tokeninfo, fetchMintedToken, fetchTokenPriceHistory } =
+  const { loading, tokeninfo, fetchMintedToken, fetchTokenPriceHistory } =
     fetchFromContract();
-
-  const { owner, tokenName, price, tokenId } = tokeninfo;
 
   const {
     register,
@@ -32,15 +31,14 @@ const TokenInfo: React.FC = () => {
   } = useForm<Inputs>();
 
   const changeTokenPrice = async (_price: number) => {
-    // TODO
     const priceInWei = toWei(_price);
-    await tokenKidFactoryContract.changeTokenPrice(
-      +tokenId,
-      priceInWei,
-      address,
-      onReceipt,
-      onError
+    const { wait } = await tokenKidContract.changeTokenPrice(
+      +tokeninfo.tokenId,
+      priceInWei
     );
+    await wait()
+      .then(() => onReceipt())
+      .catch((err) => onError(err));
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -67,24 +65,24 @@ const TokenInfo: React.FC = () => {
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Name</span>
-          {owner && owner === address && (
+          {tokeninfo && tokeninfo.owner === address && (
             <button onClick={handleDeleteToken}>
               <TrashIcon className="w-5 h-5 text-rose-400 hover:text-rose-700" />
             </button>
           )}
         </div>
         <div className="text-lg font-semibold">
-          {loading ? (
+          {loading||!tokeninfo ? (
             <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
           ) : (
-            tokenName
+            tokeninfo.tokenName
           )}
         </div>
       </div>
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Price</span>
-          {owner && owner === address && (
+          {tokeninfo && tokeninfo.owner === address && (
             <button onClick={() => setShowPriceInput(!showPriceInput)}>
               <PencilAltIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />
             </button>
@@ -127,7 +125,7 @@ const TokenInfo: React.FC = () => {
               </div>
             </form>
           ) : (
-            <span>{price}&nbsp; cUSD</span>
+            <span>{tokeninfo?.price}&nbsp; {currentToken?.ERC20Tokens.name}</span>
           )}
         </div>
       </div>

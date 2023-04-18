@@ -6,10 +6,21 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Card from "@/components/cards/card";
 import Spinner from "@/components/spinner";
+import { getFirstOrString } from "@/utils/stringUtils";
+import { useWalletContext } from "@/context/wallet";
 
 const Profile: React.FC = () => {
   const router = useRouter();
-  const { profileAddress } = router.query;
+  const profileAddress = getFirstOrString(router.query.profileAddress);
+
+  const {
+    currentToken: {
+      blockExplorer: {
+        baseUrl,
+        resources: { address },
+      },
+    },
+  } = useWalletContext();
 
   const { data, loading } = useQueryAccountTokens(profileAddress as string);
 
@@ -42,9 +53,7 @@ const Profile: React.FC = () => {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href={`https://alfajores-blockscout.celo-testnet.org/address/${
-                  profileAddress as string
-                }`}
+                href={`${baseUrl}/${address}/${profileAddress}`}
               >
                 <div className="flex justify-center items-center cursor-pointer mt-5 text-green-400 hover:text-green-600">
                   <span>{shortAddress(profileAddress as string)}</span>
