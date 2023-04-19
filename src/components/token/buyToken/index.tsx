@@ -1,12 +1,16 @@
 import Spinner from "@/components/spinner";
 import { useWalletContext } from "@/context/wallet";
-import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { classNames } from "@/utils/classNames";
-import { TOKENS } from "@/utils/tokenAddresses";
 import { toWei } from "@/utils/weiConversions";
 import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { useAccount } from "wagmi";
+import { useRouter } from "next/router";
+import { getFirstOrString } from "@/utils/stringUtils";
+import {
+  useCurrentAllowance,
+  useMintedToken,
+} from "@/hooks/fetchContractDetails";
 
 const BuyToken: React.FC = () => {
   const {
@@ -18,12 +22,19 @@ const BuyToken: React.FC = () => {
   const [loadingAllowance, setLoadingAllowance] = useState(false);
   const [loadingBuyToken, setLoadingBuyToken] = useState(false);
 
-  const { currentAllowance, fetchAllowance, tokeninfo } = fetchFromContract();
-  const tokenName = TOKENS[5].ERC20Tokens.name; // TODO
+  const router = useRouter();
+  const tokenId = getFirstOrString(router.query.tokenId);
+  const chain = getFirstOrString(router.query.chain);
+
+  const { mintedToken } = useMintedToken(tokenId, chain);
+  const { fetchAllowance, currentAllowance } = useCurrentAllowance(
+    tokenId,
+    chain
+  );
 
   const setAllowance = async () => {
     setLoadingAllowance(true);
-    const priceInWei = toWei(tokeninfo.price).toString();
+    const priceInWei = toWei(mintedToken?.price).toString();
     const { wait } = await ERC20.setAllowance(priceInWei);
     await fetchAllowance();
     await wait()
@@ -33,8 +44,8 @@ const BuyToken: React.FC = () => {
 
   const buyToken = async () => {
     setLoadingBuyToken(true);
-    const _tokenId = +tokeninfo.tokenId;
-    const priceInWei = toWei(tokeninfo.price).toNumber();
+    const _tokenId = +mintedToken?.tokenId;
+    const priceInWei = toWei(mintedToken?.price).toNumber();
 
     const { wait } = await tokenKidContract.buyToken(
       _tokenId,
@@ -64,7 +75,7 @@ const BuyToken: React.FC = () => {
       <button
         className={classNames(
           "bg-blue-lightblue rounded-full px-6 py-3 text-white text-center font-semibold",
-          +currentAllowance >= +tokeninfo?.price
+          +currentAllowance >= +mintedToken?.price
             ? "bg-gray-400 cursor-not-allowed"
             : ""
         )}
@@ -72,7 +83,7 @@ const BuyToken: React.FC = () => {
         data-tip=""
         data-for="set-allowance"
         data-offset="{'top': 24}"
-        disabled={+currentAllowance >= +tokeninfo?.price}
+        disabled={+currentAllowance >= +mintedToken?.price}
       >
         <span className="flex flex-row items-center space-x-2 justify-center">
           <span>Set Allowance</span>
@@ -84,11 +95,11 @@ const BuyToken: React.FC = () => {
       <button
         className={classNames(
           "rounded-full px-6 py-3 text-white text-center font-semibold",
-          +currentAllowance < +tokeninfo?.price
+          +currentAllowance < +mintedToken?.price
             ? "bg-gray-400 cursor-not-allowed"
             : "bg-pink-primary"
         )}
-        disabled={+currentAllowance < +tokeninfo?.price}
+        disabled={+currentAllowance < +mintedToken?.price}
         onClick={buyToken}
       >
         <span className="flex flex-row items-center space-x-2 justify-center">
@@ -99,7 +110,7 @@ const BuyToken: React.FC = () => {
         </span>
       </button>
       <ReactTooltip effect="solid" id="set-allowance">
-        ERC-20 allowance to transfer {tokenName}
+        ERC-20 allowance to transfer {mintedToken?.tokenName}
       </ReactTooltip>
     </>
   );

@@ -14,13 +14,16 @@ import { useTokenApproved, useMintedToken } from "@/hooks/fetchContractDetails";
 import { getFirstOrString } from "@/utils/stringUtils";
 import { useRouter } from "next/router";
 
-const Asset: React.FC<{ loading: boolean; token: GraphToken }> = ({ loading, token }) => {
+const Asset: React.FC<{ loading: boolean; token: GraphToken }> = ({
+  loading,
+  token,
+}) => {
   const router = useRouter();
   const { address } = useAccount();
   const tokenId = getFirstOrString(router.query.tokenId);
   const chain = getFirstOrString(router.query.chain);
-  const approved = useTokenApproved(tokenId, chain);
-  const mintedToken = useMintedToken(tokenId, chain);
+  const { approved } = useTokenApproved(tokenId, chain);
+  const { mintedToken } = useMintedToken(tokenId, chain);
 
   return (
     <div className="container m-auto py-24 flex flex-row space-x-6">

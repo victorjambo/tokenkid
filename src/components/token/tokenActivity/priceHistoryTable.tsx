@@ -4,17 +4,17 @@ import {
   CollectionIcon,
   SwitchVerticalIcon,
 } from "@heroicons/react/solid";
-import { useEffect } from "react";
 import { humanizeTime } from "@/utils/humanizeTime";
 import { fromWei } from "@/utils/weiConversions";
-import { fetchFromContract } from "@/hooks/fetchFromContract";
+import { useTokenPriceHistory } from "@/hooks/fetchContractDetails";
+import { useRouter } from "next/router";
+import { getFirstOrString } from "@/utils/stringUtils";
 
 const PriceHistoryTable = () => {
-  const { priceHistory, fetchTokenPriceHistory } = fetchFromContract();
-
-  useEffect(() => {
-    void fetchTokenPriceHistory();
-  }, [fetchTokenPriceHistory]);
+  const router = useRouter();
+  const tokenId = getFirstOrString(router.query.tokenId);
+  const chain = getFirstOrString(router.query.chain);
+  const { priceHistory } = useTokenPriceHistory(tokenId, chain);
 
   return (
     <Disclosure defaultOpen={true}>

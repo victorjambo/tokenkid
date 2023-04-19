@@ -1,17 +1,22 @@
 import { useWalletContext } from "@/context/wallet";
-import { fetchFromContract } from "@/hooks/fetchFromContract";
+import { useTokenApproved } from "@/hooks/fetchContractDetails";
 import { classNames } from "@/utils/classNames";
+import { getFirstOrString } from "@/utils/stringUtils";
+import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
 
 const ApproveToken: React.FC = () => {
-  const { tokenKidContract } = useWalletContext();
+  const router = useRouter();
+  const tokenId = getFirstOrString(router.query.tokenId);
+  const chain = getFirstOrString(router.query.chain);
+  const { fetchApproved } = useTokenApproved(tokenId, chain);
 
-  const { tokeninfo, fetchApproved } = fetchFromContract();
+  const { tokenKidContract } = useWalletContext();
 
   // Refetch Approved after approving token
   const approveToken = async () => {
-    const _tokenId = +tokeninfo.tokenId;
-    const { wait } = await tokenKidContract.approve(_tokenId);
+    if (!tokenId) return;
+    const { wait } = await tokenKidContract.approve(+tokenId);
     await wait()
       .then(() => fetchApproved())
       .catch((err) => console.log({ err }));

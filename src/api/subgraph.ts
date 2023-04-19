@@ -6,7 +6,7 @@ import {
   QUERY_ACCOUNT_TOKENS,
 } from "@/graphql/queries";
 import { print } from "graphql/language/printer";
-import { TOKENS } from "@/utils/tokenAddresses";
+import { TOKENS } from "@/utils/tokens";
 import { SUPPORTED_CHAIN_IDS } from "@/utils/constants";
 import { CHAIN_IDS, GraphToken, GraphTokensResponse, GraphTokenResponse } from "@/types";
 
@@ -62,7 +62,7 @@ class Subgraph extends HTTPDataSource {
 
     const tokens = body.data.tokens.map((token) => {
       token.id = `${chainName}-${token.id}`;
-      token.chainId = TOKENS[chainId].chainId;
+      token.chainId = chainId;
       return token;
     });
 

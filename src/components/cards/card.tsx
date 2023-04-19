@@ -4,7 +4,7 @@ import { shortAddress } from "@/utils/shortAddress";
 import { fromWei } from "@/utils/weiConversions";
 import ImageRender from "@/containers/imageRender";
 import { ITokenGraph } from "@/state/tokens/types";
-import { TOKENS } from "@/utils/tokenAddresses";
+import { TOKENS } from "@/utils/tokens";
 
 interface ICards {
   token: ITokenGraph;

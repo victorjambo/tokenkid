@@ -10,7 +10,7 @@ import React, {
   SetStateAction,
   useMemo,
 } from "react";
-import { TOKENS, IToken } from "@/utils/tokenAddresses";
+import { TOKENS, IToken } from "@/utils/tokens";
 
 interface ITokenInfo {
   tokenId: number;

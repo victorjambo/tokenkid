@@ -1,9 +1,13 @@
 import { useWalletContext } from "@/context/wallet";
-import { fetchFromContract } from "@/hooks/fetchFromContract";
+import {
+  useMintedToken,
+  useTokenPriceHistory,
+} from "@/hooks/fetchContractDetails";
 import { ModalType, openModal } from "@/state/modal/slice";
-import { TOKENS } from "@/utils/tokenAddresses";
+import { getFirstOrString } from "@/utils/stringUtils";
 import { toWei } from "@/utils/weiConversions";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/solid";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -14,18 +18,20 @@ type Inputs = {
 };
 
 const TokenInfo: React.FC = () => {
+  const router = useRouter();
+  const tokenId = getFirstOrString(router.query.tokenId);
+  const chain = getFirstOrString(router.query.chain);
+
   const dispatch = useDispatch();
 
   const [showPriceInput, setShowPriceInput] = useState(false);
 
-  const { tokenKidContract, currentToken } = useWalletContext();
+  const { tokenKidContract } = useWalletContext();
 
   const { address } = useAccount();
 
-  const { loading, tokeninfo, fetchMintedToken, fetchTokenPriceHistory } =
-    fetchFromContract();
-
-  const tokenName = TOKENS[5].ERC20Tokens.name; // TODO
+  const { fetchMintedToken, mintedToken } = useMintedToken(tokenId, chain);
+  const { fetchTokenPriceHistory } = useTokenPriceHistory(tokenId, chain);
 
   const {
     register,
@@ -36,7 +42,7 @@ const TokenInfo: React.FC = () => {
   const changeTokenPrice = async (_price: number) => {
     const priceInWei = toWei(_price);
     const { wait } = await tokenKidContract.changeTokenPrice(
-      +tokeninfo.tokenId,
+      +mintedToken?.tokenId,
       priceInWei
     );
     await wait()
@@ -68,33 +74,25 @@ const TokenInfo: React.FC = () => {
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Name</span>
-          {tokeninfo && tokeninfo.owner === address && (
+          {mintedToken && mintedToken.owner === address && (
             <button onClick={handleDeleteToken}>
               <TrashIcon className="w-5 h-5 text-rose-400 hover:text-rose-700" />
             </button>
           )}
         </div>
-        <div className="text-lg font-semibold">
-          {loading||!tokeninfo ? (
-            <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
-          ) : (
-            tokeninfo.tokenName
-          )}
-        </div>
+        <div className="text-lg font-semibold">{mintedToken?.tokenName}</div>
       </div>
       <div className="flex flex-col">
         <div className="text-sm text-gray-400 flex flex-row">
           <span className="pr-2">Token Price</span>
-          {tokeninfo && tokeninfo.owner === address && (
+          {mintedToken && mintedToken.owner === address && (
             <button onClick={() => setShowPriceInput(!showPriceInput)}>
               <PencilAltIcon className="w-5 h-5 text-gray-400 hover:text-gray-500" />
             </button>
           )}
         </div>
         <div className="text-lg font-semibold">
-          {loading ? (
-            <div className="animate-pulse h-5 rounded-xl bg-gray-200" />
-          ) : showPriceInput ? (
+          {showPriceInput ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col space-y-2">
                 <input
@@ -128,7 +126,9 @@ const TokenInfo: React.FC = () => {
               </div>
             </form>
           ) : (
-            <span>{tokeninfo?.price}&nbsp; {tokenName}</span>
+            <span>
+              {mintedToken?.price}&nbsp; {mintedToken?.tokenName}
+            </span>
           )}
         </div>
       </div>

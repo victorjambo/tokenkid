@@ -7,7 +7,7 @@ import Activity from "@/components/activity";
 import { ICreateStates, IReceipt } from "@/types";
 import { toWei } from "@/utils/weiConversions";
 import { useWalletContext } from "@/context/wallet";
-import { TOKENS } from "@/utils/tokenAddresses";
+import { TOKENS } from "@/utils/tokens";
 
 type Inputs = {
   tokenName: string;

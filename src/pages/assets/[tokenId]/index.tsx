@@ -14,7 +14,7 @@ const Assets: React.FC = () => {
   const { loading, token, error } = useQueryToken(tokenId, chain);
 
   return (
-    <div>
+    <div className="flex justify-center items-center w-full">
       {!token && (error || loading || status === "reconnecting") ? (
         <ErrorContainer
           {...{ loading: loading || status === "reconnecting", msg: error }}
