@@ -1,9 +1,9 @@
 import Head from "next/head";
 
-const PageHeader: React.FC<{ title?: string }> = ({ title }) => {
+const PageHeader: React.FC = () => {
   return (
     <Head>
-      <title>{title && title + " | "}TokenKid</title>
+      <title>TokenKid</title>
       <link rel="shortcut icon" href="/images/logo.svg" />
 
       <meta

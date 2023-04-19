@@ -1,11 +1,9 @@
-module.exports = {
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-    };
-    return config;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ["ipfs.io"],
   },
-  target: "experimental-serverless-trace",
 };
+
+module.exports = nextConfig;

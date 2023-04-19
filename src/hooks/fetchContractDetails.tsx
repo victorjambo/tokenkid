@@ -58,6 +58,12 @@ export const useMintedToken = (tokenId: string, chain: string) => {
 
       if (token !== null) {
         setMintedToken(token);
+      } else {
+        const _token = await TokenKidContract.getMintedTokenWithProvider(
+          +tokenId,
+          currentToken?.contractAddress
+        );
+        setMintedToken(_token);
       }
     }
   }, [tokenId]);

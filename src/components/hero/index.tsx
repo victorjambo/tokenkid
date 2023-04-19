@@ -35,11 +35,11 @@ const Hero: React.FC<{ assetRef: MutableRefObject<HTMLDivElement> }> = ({
             >
               Explore
             </button>
-            <Link href="/create">
-              <span className="cursor-pointer px-6 py-3 rounded-lg hover:bg-pink-primary bg-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                Create
-              </span>
-            </Link>
+            <div className="cursor-pointer px-6 py-3 rounded-lg hover:bg-pink-primary bg-blue-lightblue transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+              <Link href="/create">
+                <span>Create</span>
+              </Link>
+            </div>
           </div>
         </div>
         <HeroTokens />

@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
             <div className="flex flex-row items-center space-x-2 cursor-pointer">
               <div className="py-2 h-full w-full">
                 <img
-                  className="h-full w-full"
+                  className="h-10 w-10"
                   src="/images/logo.svg"
                   alt="TK"
                 />

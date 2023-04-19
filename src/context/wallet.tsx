@@ -53,7 +53,7 @@ const WalletContext = createContext<Partial<WalletProviderProps>>({});
 export const useWalletContext = (): Partial<WalletProviderProps> =>
   useContext(WalletContext);
 
-const WalletProvider: React.FC = ({ children }) => {
+const WalletProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { isConnected } = useAccount();
   const chainId = useChainId();
 

@@ -23,6 +23,7 @@ const wagmiClient = createClient(
 
 const App = ({ Component, pageProps }) => {
   return (
+    <div>
     <WagmiConfig client={wagmiClient}>
       <ConnectKitProvider>
         <Provider store={store}>
@@ -42,6 +43,7 @@ const App = ({ Component, pageProps }) => {
         </Provider>
       </ConnectKitProvider>
     </WagmiConfig>
+    </div>
   );
 };
 
