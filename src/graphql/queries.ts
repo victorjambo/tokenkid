@@ -13,6 +13,19 @@ export const QUERY_TOKENS = gql`
   }
 `;
 
+export const QUERY_TOKEN = gql`
+  query Token($id: Int) {
+    token(id: $id, subgraphError: allow) {
+      _price
+      _tokenName
+      _tokenURI
+      id
+      owner
+      tokenId
+    }
+  }
+`;
+
 export const QUERY_ACCOUNT_TOKENS = gql`
   query Tokens($skip: Int, $first: Int, $where: Token_filter) {
     tokens(skip: $skip, first: $first, where: $where) {

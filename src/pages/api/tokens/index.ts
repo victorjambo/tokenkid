@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import Subgraph, { GraphToken } from "@/api/subgraph";
+import Subgraph from "@/api/subgraph";
+import { GraphToken } from "@/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

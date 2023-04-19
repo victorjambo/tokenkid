@@ -1,9 +1,8 @@
-// const { data, loading } = useQueryTokens();
-
-import { GraphToken } from "@/api/subgraph";
+import { GraphToken } from "@/types";
+import { SUPPORTED_CHAIN_IDS } from "@/utils/constants";
 import { useCallback, useEffect, useState } from "react";
 
-export const useQueryTokensV2 = () => {
+export const useQueryTokens = () => {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<GraphToken[]>([]);
 
@@ -20,7 +19,6 @@ export const useQueryTokensV2 = () => {
         setLoading(false);
         console.log(err);
       });
-    
   }, []);
 
   useEffect(() => {
@@ -30,7 +28,7 @@ export const useQueryTokensV2 = () => {
   return { tokens, loading };
 };
 
-export const useQueryAccountTokensV2 = (profileAddress: string) => {
+export const useQueryAccountTokens = (profileAddress: string) => {
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<GraphToken[]>([]);
 
@@ -49,7 +47,6 @@ export const useQueryAccountTokensV2 = (profileAddress: string) => {
         setLoading(false);
         console.log(err);
       });
-    
   }, []);
 
   useEffect(() => {
@@ -57,4 +54,48 @@ export const useQueryAccountTokensV2 = (profileAddress: string) => {
   }, [fetchTokens]);
 
   return { tokens, loading };
+};
+
+export const useQueryToken = (tokenId: string, chain: string) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState<GraphToken>(null);
+
+  const fetchToken = useCallback(async () => {
+    if (!tokenId) return;
+    setLoading(true);
+
+    let chainId = "5";
+    if (chain && (SUPPORTED_CHAIN_IDS as number[]).includes(+chain)) {
+      chainId = chain;
+    }
+
+    await fetch(`/api/token/${tokenId}?chain=${chainId}`)
+      .then((res) => res.json())
+      .then((_token: GraphToken) => {
+        setLoading(false);
+        if ((_token as any)?.error) {
+          setError(ErrorMessages.TOKEN_NOT_FOUND);
+        } else {
+          setToken(_token);
+          setError(ErrorMessages.Default);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        setError(ErrorMessages.TOKEN_NOT_FOUND);
+      });
+  }, [tokenId]);
+
+  useEffect(() => {
+    void fetchToken();
+  }, [fetchToken]);
+
+  return { token, loading, error };
+};
+
+const ErrorMessages = {
+  Default: "",
+  TOKEN_NOT_FOUND: "Token Not Found",
 };

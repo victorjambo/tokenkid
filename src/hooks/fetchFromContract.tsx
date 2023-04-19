@@ -69,7 +69,7 @@ export const fetchFromContract = () => {
 
   useEffect(() => {
     void fetchMintedToken();
-    void fetchAllowance();
+    // void fetchAllowance();
     void fetchApproved();
   }, [fetchMintedToken, fetchAllowance, fetchApproved]);
 

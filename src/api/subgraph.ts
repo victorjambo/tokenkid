@@ -1,15 +1,25 @@
 import { Pool } from "undici";
 import { HTTPDataSource } from "memoizing-apollo-datasource-http";
-import { QUERY_TOKENS, QUERY_ACCOUNT_TOKENS } from "@/graphql/queries";
+import {
+  QUERY_TOKEN,
+  QUERY_TOKENS,
+  QUERY_ACCOUNT_TOKENS,
+} from "@/graphql/queries";
 import { print } from "graphql/language/printer";
 import { TOKENS } from "@/utils/tokenAddresses";
+import { SUPPORTED_CHAIN_IDS } from "@/utils/constants";
+import { CHAIN_IDS, GraphToken, GraphTokensResponse, GraphTokenResponse } from "@/types";
 
 const BASE_URL = "https://api.thegraph.com";
-const SUPPORTED_CHAIN_IDS: CHAIN_IDS[] = [5, 44787];
 
 const QUERY_TYPE = {
   Tokens: QUERY_TOKENS,
   AccountTokens: QUERY_ACCOUNT_TOKENS,
+};
+
+const requestCache = {
+  maxTtl: 10, // cache for up to 10 seconds
+  maxTtlIfError: 20, // or 20 seconds if error
 };
 
 class Subgraph extends HTTPDataSource {
@@ -34,7 +44,7 @@ class Subgraph extends HTTPDataSource {
     const chainURI = TOKENS[chainId].graphUrl;
     const chainName = TOKENS[chainId].shortName;
 
-    const { body } = await this.post<GraphResponse>(chainURI, {
+    const { body } = await this.post<GraphTokensResponse>(chainURI, {
       body: {
         query: print(queryType),
         variables: {
@@ -42,10 +52,7 @@ class Subgraph extends HTTPDataSource {
           skip: 0,
           ...(where && { where }),
         },
-        requestCache: {
-          maxTtl: 10, // cache for up to 10 seconds
-          maxTtlIfError: 20, // or 20 seconds if error
-        },
+        requestCache,
       },
     });
 
@@ -83,26 +90,32 @@ class Subgraph extends HTTPDataSource {
 
     return response.flat();
   }
+
+  public async getTokenById(
+    tokenId: number,
+    chainId: CHAIN_IDS
+  ): Promise<GraphToken> {
+    const chainURI = TOKENS[chainId]?.graphUrl;
+
+    const { body } = await this.post<GraphTokenResponse>(chainURI, {
+      body: {
+        query: print(QUERY_TOKEN),
+        variables: {
+          id: tokenId,
+        },
+        requestCache,
+      },
+    });
+
+    if (!body.data || body.data.token == null) {
+      return null;
+    }
+
+    return {
+      ...body.data.token,
+      chainId,
+    };
+  }
 }
 
 export default Subgraph;
-
-export interface GraphToken {
-  id: string;
-  tokenId: string;
-  owner: string;
-  _tokenName: string;
-  _price: string;
-  _tokenURI: string;
-  chainId: number;
-}
-
-interface GraphResponse {
-  status: string;
-  statusText: string;
-  data: {
-    tokens: GraphToken[];
-  };
-}
-
-type CHAIN_IDS = 5 | 44787;

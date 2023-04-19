@@ -55,3 +55,44 @@ export interface ICreateStates {
     error: boolean;
   };
 }
+
+
+export interface GraphToken {
+  id: string;
+  tokenId: string;
+  owner: string;
+  _tokenName: string;
+  _price: string;
+  _tokenURI: string;
+  chainId: number;
+}
+
+/* 
+  previousOwner: string;
+  isOnSale: boolean;
+  tokenDesc: string;
+*/
+
+export interface GraphResponse {
+  status: string;
+  statusText: string;
+}
+
+export interface GraphTokensResponse extends GraphResponse {
+  status: string;
+  statusText: string;
+  data: {
+    tokens: GraphToken[];
+  };
+}
+
+export interface GraphTokenResponse extends GraphResponse {
+  status: string;
+  statusText: string;
+  data: {
+    token: GraphToken;
+  };
+}
+
+export type CHAIN_IDS = 5 | 44787;
+

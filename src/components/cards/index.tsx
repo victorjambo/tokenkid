@@ -1,10 +1,10 @@
 import { ITokenGraph } from "@/state/tokens/types";
 import Spinner from "../spinner";
 import Card from "./card";
-import { useQueryTokensV2 } from "@/hooks/fetchBackend";
+import { useQueryTokens } from "@/hooks/fetchBackend";
 
 const Cards: React.FC = () => {
-  const { tokens, loading } = useQueryTokensV2();
+  const { tokens, loading } = useQueryTokens();
 
   return (
     <>

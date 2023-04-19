@@ -6,7 +6,7 @@ import Card from "@/components/cards/card";
 import Spinner from "@/components/spinner";
 import { getFirstOrString } from "@/utils/stringUtils";
 import { useWalletContext } from "@/context/wallet";
-import { useQueryAccountTokensV2 } from "@/hooks/fetchBackend";
+import { useQueryAccountTokens } from "@/hooks/fetchBackend";
 
 const Profile: React.FC = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
     },
   } = useWalletContext();
 
-  const { tokens, loading } = useQueryAccountTokensV2(profileAddress);
+  const { tokens, loading } = useQueryAccountTokens(profileAddress);
 
   return (
     <div className="py-24 w-full">

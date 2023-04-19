@@ -2,6 +2,7 @@ import { fetchFromContract } from "@/hooks/fetchFromContract";
 import { ExclamationIcon } from "@heroicons/react/solid";
 import { useAccount } from "wagmi";
 
+// TODO:
 const AppWrapper: React.FC = ({ children }) => {
   const { status } = useAccount();
   const { tokenNotFound, loading, tokeninfo } = fetchFromContract();
