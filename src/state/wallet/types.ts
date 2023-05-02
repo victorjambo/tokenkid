@@ -1,5 +1,3 @@
-import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
-
 export interface IAccountBalances {
   celo: string;
   cUSD: string;
@@ -8,7 +6,6 @@ export interface IAccountBalances {
 
 export interface IWalletState {
   accountBalances: IAccountBalances;
-  contracts: TokenKidFactoryContract;
   walletError: string;
   txHash: string;
 }
@@ -19,7 +16,6 @@ export const initialState: IWalletState = {
     cUSD: "0",
     cEUR: "0",
   },
-  contracts: null,
   walletError: "",
   txHash: "",
 };

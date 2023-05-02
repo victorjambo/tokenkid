@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import TokenKidFactoryContract from "@/contractClient/TokenKidFactory";
 import { initialState, IAccountBalances } from "./types";
 
 const walletSlice = createSlice({
@@ -8,9 +7,6 @@ const walletSlice = createSlice({
   reducers: {
     setAccountBalances(state, action: PayloadAction<IAccountBalances>) {
       state.accountBalances = action.payload;
-    },
-    setContracts(state, action: PayloadAction<TokenKidFactoryContract>) {
-      state.contracts = action.payload;
     },
     setWalletError(state, action: PayloadAction<string>) {
       state.walletError = action.payload;
@@ -21,6 +17,6 @@ const walletSlice = createSlice({
   },
 });
 
-export const { setAccountBalances, setContracts, setWalletError, setTxHash } =
+export const { setAccountBalances, setWalletError, setTxHash } =
   walletSlice.actions;
 export default walletSlice.reducer;

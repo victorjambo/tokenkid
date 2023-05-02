@@ -3,12 +3,11 @@ import { ITokenInfo, ITokenPriceHistory } from "@/state/tokens/types";
 import { TOKEN_KID_FACTORY_ABI } from "../abi/TokenKidFactory";
 import { fromWei } from "@/utils/weiConversions";
 import ContractBase from "./base";
-import { RPC_URL } from "@/utils/tokens";
 import { ethers } from "ethers";
 
 class TokenKidContract extends ContractBase {
   constructor(contractAddress: `0x${string}`) {
-    super(contractAddress, TOKEN_KID_FACTORY_ABI);
+    super(contractAddress, TOKEN_KID_FACTORY_ABI as any);
   }
 
   safeMint = async (
@@ -39,7 +38,7 @@ class TokenKidContract extends ContractBase {
 
   getMintedToken = async (tokenId: number): Promise<ITokenInfo> => {
     try {
-      const _token: Array<string | BN | boolean | number> = await this.read(
+      const _token = await this.read(
         "getMintedToken",
         [tokenId]
       );

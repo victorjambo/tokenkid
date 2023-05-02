@@ -1,6 +1,4 @@
-import { AbiItem } from "web3-utils";
-
-export const TOKEN_KID_FACTORY_ABI: AbiItem[] = [
+export const TOKEN_KID_FACTORY_ABI = [
   {
     inputs: [],
     stateMutability: "nonpayable",

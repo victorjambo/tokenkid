@@ -1,4 +1,3 @@
-import PageHeader from "@/containers/pageHeader";
 import { useState } from "react";
 import { ipfs, NEW_IPFS_BASE_URL } from "@/utils/ipfs";
 import { classNames } from "@/utils/classNames";
@@ -140,7 +139,6 @@ const Create: React.FC = () => {
 
   return (
     <>
-      <PageHeader title="Create" />
       <div className="bg-white-back w-full pt-24 pb-96">
         <div className="container m-auto">
           <div className="flex flex-row mb-6 space-x-20">
@@ -199,7 +197,10 @@ const Create: React.FC = () => {
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="tokenPrice">
-                      Price <span className="italic text-gray-400">({tokenName})</span>
+                      Price{" "}
+                      <span className="italic text-gray-400">
+                        ({tokenName})
+                      </span>
                     </label>
                     <input
                       id="tokenPrice"
