@@ -7,6 +7,7 @@ interface AlertProps {
   closable?: boolean;
   title?: string;
   variant?: "success" | "primary" | "warning" | "error" | "default" | "info";
+  children: JSX.Element | string;
 }
 
 const colorMap = {
